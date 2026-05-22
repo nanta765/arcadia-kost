@@ -54,5 +54,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/chat/active', [ChatController::class, 'getOrCreateChat'])->name('chat.active');
     Route::get('/chat/{chat}/messages', [ChatController::class, 'getMessages'])->name('chat.messages');
     Route::post('/chat/{chat}/message', [ChatController::class, 'sendMessage'])->name('chat.send');
+    Route::get('/api/staff/chats', [ChatController::class, 'getStaffChats'])->name('staff.chats');
 });
 

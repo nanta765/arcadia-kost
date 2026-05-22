@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Chat;
 use App\Models\ChatMessage;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class ChatController extends Controller
 {
@@ -15,7 +17,7 @@ class ChatController extends Controller
     public function getOrCreateChat()
     {
         $user = Auth::user();
-        
+
         // Find an open chat session
         $chat = Chat::where('customer_id', $user->id)
             ->where('status', 'open')
@@ -131,5 +133,72 @@ class ChatController extends Controller
                 'formatted_time' => $message->created_at->format('H:i'),
             ],
         ]);
+    }
+
+    /**
+     * Get list of chats for staff/owner.
+     */
+    public function getStaffChats()
+    {
+        $user = Auth::user();
+
+        // Only staff and owner can access this
+        if (!in_array($user->role, ['owner', 'staff'])) {
+            return response()->json(['error' => 'Unauthorized.'], 403);
+        }
+
+        // Get chats where the user is staff, or chats that are open and have no staff (available)
+        $chats = Chat::where(function ($query) use ($user) {
+            $query->where('staff_id', $user->id)
+                  ->orWhere(function ($q) {
+                      $q->whereNull('staff_id')
+                        ->where('status', 'open');
+                  });
+        })
+        ->with(['customer', 'staff'])
+        ->latest('updated_at')
+        ->get()
+        ->map(function ($chat) use ($user) {
+            // Determine partner (the other party)
+            if ($user->role === 'customer') {
+                // For customer, partner is staff (if assigned) or null
+                $partner = $chat->staff;
+            } else {
+                // For staff/owner, partner is customer
+                $partner = $chat->customer;
+            }
+
+            // Get last message
+            $lastMessage = $chat->messages()->latest('created_at')->first();
+
+            // Count unread messages for the user
+            $unreadCount = 0;
+            if ($user->role === 'customer') {
+                // Customer: unread messages from staff
+                $unreadCount = $chat->messages()
+                    ->where('sender_id', '!=', $user->id)
+                    ->where('is_read', false)
+                    ->count();
+            } else {
+                // Staff/Owner: unread messages from customer
+                $unreadCount = $chat->messages()
+                    ->where('sender_id', $chat->customer_id)
+                    ->where('is_read', false)
+                    ->count();
+            }
+
+            return [
+                'id' => $chat->id,
+                'partner_id' => $partner ? $partner->id : null,
+                'partner_name' => $partner ? $partner->name : null,
+                'partner_initials' => $partner ? strtoupper(substr($partner->name, 0, 1)) : '?',
+                'is_online' => false, // Simplified; could be based on last seen
+                'last_message_time' => $lastMessage ? $lastMessage->created_at->format('H:i') : null,
+                'last_message_preview' => $lastMessage ? Str::limit($lastMessage->message, 30) : null,
+                'unread_count' => $unreadCount,
+            ];
+        });
+
+        return response()->json(['chats' => $chats]);
     }
 }
