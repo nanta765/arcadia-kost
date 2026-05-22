@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ config('app.name', 'Arcadia') }}</title>
     
     <!-- Tailwind CSS CDN -->
@@ -38,6 +39,9 @@
 <body class="antialiased font-body bg-gradient-to-br from-cream-50 to-tan-50 dark:from-zinc-900 dark:to-zinc-800">
     {{ $slot }}
     
+    {{-- Chat Widget for customers --}}
+    <x-chat-widget />
+
     @livewireScripts
     @filamentScripts
 </body>

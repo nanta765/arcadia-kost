@@ -6,6 +6,7 @@ use App\Models\RoomType;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\ServiceRequestController;  
+use App\Http\Controllers\ChatController;
 
 // Route::get('/', function () {
 //     return view('dashboard');
@@ -31,7 +32,7 @@ require __DIR__ . '/auth.php';
 Route::middleware(['auth', 'verified'])->group(function () {
     // Route Dashboard Katalog
     Route::get('/dashboard', function () {
-        $roomTypes = \App\Models\RoomType::all();
+        $roomTypes = RoomType::all();
         return view('dashboard', compact('roomTypes'));
     })->name('dashboard');
 
@@ -48,4 +49,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/booking/{booking}/review', [ReviewController::class, 'store'])->name('review.store');
     Route::get('/booking/{booking}/service-request', [ServiceRequestController::class, 'create'])->name('service.create');
     Route::post('/booking/{booking}/service-request', [ServiceRequestController::class, 'store'])->name('service.store');
+
+    // Chat routes
+    Route::get('/chat/active', [ChatController::class, 'getOrCreateChat'])->name('chat.active');
+    Route::get('/chat/{chat}/messages', [ChatController::class, 'getMessages'])->name('chat.messages');
+    Route::post('/chat/{chat}/message', [ChatController::class, 'sendMessage'])->name('chat.send');
 });
+
