@@ -8,14 +8,14 @@
     <title>Arcadia Kost Lombok — Hunian Nyaman di Pulau Seribu Masjid</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     fontFamily: {
-                        sans: ['Outfit', 'sans-serif'],
-                        serif: ['Playfair Display', 'serif'],
+                        sans: ['Poppins', 'sans-serif'],
+                        serif: ['Poppins', 'sans-serif'],
                     },
                     colors: {
                         lmk: {
@@ -39,7 +39,7 @@
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         html { scroll-behavior: smooth; }
-        body { font-family: 'Outfit', sans-serif; background: #e2e3e7; color: #171410; overflow-x: hidden; }
+        body { font-family: 'Poppins', sans-serif; background: #e2e3e7; color: #171410; overflow-x: hidden; }
 
         /* Sasak motif stripe */
         .sasak-stripe {
@@ -64,7 +64,7 @@
             max-width: 1200px; margin: 0 auto; padding: 0 2rem;
             height: 66px; display: flex; align-items: center; justify-content: space-between;
         }
-        .nav-logo { font-family:'Playfair Display',serif; font-size:1.4rem; font-weight:700; color:#1E3528; text-decoration:none; }
+        .nav-logo { font-family:'Poppins',sans-serif; font-size:1.4rem; font-weight:700; color:#1E3528; text-decoration:none; }
         .nav-logo span { color:#A65437; }
         .nav-links { display:flex; gap:4px; list-style:none; }
         .nav-links a { padding:0.4rem 1rem; border-radius:100px; font-size:0.8rem; font-weight:500; color:#8A7F72; text-decoration:none; transition:all 0.2s; }
@@ -82,14 +82,14 @@
         /* Section label */
         .stag { display:inline-flex; align-items:center; gap:0.5rem; font-size:0.7rem; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:#A65437; margin-bottom:0.6rem; }
         .stag::before { content:''; display:block; width:20px; height:1.5px; background:#A65437; }
-        .stitle { font-family:'Playfair Display',serif; font-size:clamp(1.8rem,3vw,2.6rem); font-weight:700; color:#171410; line-height:1.2; margin-bottom:0.6rem; }
+        .stitle { font-family:'Poppins',sans-serif; font-size:clamp(1.8rem,3vw,2.6rem); font-weight:700; color:#171410; line-height:1.2; margin-bottom:0.6rem; }
         .ssub { font-size:0.92rem; color:#8A7F72; font-weight:300; line-height:1.8; max-width:460px; }
 
         /* Hero */
         .hero { max-width:1200px; margin:0 auto; padding:5rem 2rem 4rem; display:grid; grid-template-columns:1fr 1fr; gap:4rem; align-items:center; }
         .hero-eyebrow { display:inline-flex; align-items:center; gap:0.6rem; font-size:0.7rem; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:#A65437; margin-bottom:1.2rem; }
         .hero-eyebrow::before { content:''; width:22px; height:1.5px; background:#A65437; display:block; }
-        .hero h1 { font-family:'Playfair Display',serif; font-size:clamp(2.8rem,4.5vw,4rem); font-weight:700; line-height:1.15; color:#171410; margin-bottom:1.2rem; }
+        .hero h1 { font-family:'Poppins',sans-serif; font-size:clamp(2.8rem,4.5vw,4rem); font-weight:700; line-height:1.15; color:#171410; margin-bottom:1.2rem; }
         .hero h1 em { font-style:italic; color:#A65437; }
         .hero-desc { font-size:0.98rem; color:#8A7F72; font-weight:300; line-height:1.8; margin-bottom:2rem; max-width:400px; }
 
@@ -100,7 +100,7 @@
         .hero-photo-sm { position:absolute; bottom:-20px; left:-20px; width:150px; aspect-ratio:4/3; border-radius:14px; overflow:hidden; border:4px solid #e2e3e7; box-shadow:0 8px 24px rgba(0,0,0,0.12); }
         .hero-photo-sm img { width:100%; height:100%; object-fit:cover; }
         .hero-price { position:absolute; top:20px; right:-14px; background:#A65437; color:#fff; padding:1rem 1.2rem; border-radius:14px; text-align:center; box-shadow:0 8px 24px rgba(42,107,114,0.3); }
-        .hero-price .num { font-family:'Playfair Display',serif; font-size:1.5rem; font-weight:700; line-height:1; }
+        .hero-price .num { font-family:'Poppins',sans-serif; font-size:1.5rem; font-weight:700; line-height:1; }
         .hero-price .lbl { font-size:0.62rem; opacity:0.7; letter-spacing:0.06em; text-transform:uppercase; margin-top:3px; }
         /* Sasak diamond ornament */
         .sasak-ornament { position:absolute; bottom:0; right:0; width:72px; height:72px; border-radius:0 0 20px 0; background:#A65437; display:flex; align-items:center; justify-content:center; }
@@ -110,7 +110,7 @@
         .stats-inner { max-width:1200px; margin:0 auto; padding:0 2rem; display:grid; grid-template-columns:repeat(4,1fr); }
         .stat-cell { padding:2rem 1.5rem; border-right:0.5px solid rgba(255,255,255,0.1); text-align:center; }
         .stat-cell:last-child { border-right:none; }
-        .stat-num { font-family:'Playfair Display',serif; font-size:2.2rem; color:#C9A252; line-height:1; margin-bottom:4px; }
+        .stat-num { font-family:'Poppins',sans-serif; font-size:2.2rem; color:#C9A252; line-height:1; margin-bottom:4px; }
         .stat-lbl { font-size:0.68rem; color:rgba(255,255,255,0.4); letter-spacing:0.1em; text-transform:uppercase; }
 
         /* Bento about */
@@ -145,8 +145,8 @@
         .rgal-sm { border-radius:12px; overflow:hidden; }
         .rgal-main img, .rgal-sm img { width:100%; height:100%; object-fit:cover; }
         .room-badge { display:inline-block; padding:0.3rem 1rem; background:rgba(42,107,114,0.1); border:1px solid rgba(42,107,114,0.3); color:#A65437; border-radius:100px; font-size:0.68rem; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; margin-bottom:1.2rem; }
-        .room-name { font-family:'Playfair Display',serif; font-size:2.2rem; color:#171410; margin-bottom:0.6rem; }
-        .room-price { font-family:'Playfair Display',serif; font-size:2.8rem; color:#A65437; line-height:1; }
+        .room-name { font-family:'Poppins',sans-serif; font-size:2.2rem; color:#171410; margin-bottom:0.6rem; }
+        .room-price { font-family:'Poppins',sans-serif; font-size:2.8rem; color:#A65437; line-height:1; }
         .room-specs { display:grid; grid-template-columns:repeat(3,1fr); background:#F5EFE4; border-radius:14px; border:0.5px solid #E2D9CC; overflow:hidden; margin-bottom:1.75rem; }
         .rspec { padding:1.1rem; border-right:0.5px solid #E2D9CC; }
         .rspec:last-child { border-right:none; }
@@ -173,12 +173,12 @@
         .testi-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
         .tcard { background:#fff; border-radius:16px; padding:1.75rem; border:0.5px solid #E2D9CC; transition:transform 0.25s; }
         .tcard:hover { transform:translateY(-2px); }
-        .tcard-q { font-family:'Playfair Display',serif; font-size:1.05rem; font-style:italic; color:#171410; line-height:1.7; margin-bottom:1.25rem; }
+        .tcard-q { font-family:'Poppins',sans-serif; font-size:1.05rem; font-style:italic; color:#171410; line-height:1.7; margin-bottom:1.25rem; }
         .tavatar { width:34px; height:34px; border-radius:50%; background:#A65437; display:flex; align-items:center; justify-content:center; font-size:0.72rem; font-weight:600; color:#fff; flex-shrink:0; }
 
         /* CTA */
         .cta-wrap { background:#1E3528; position:relative; overflow:hidden; }
-        .cta-deco { position:absolute; top:50%; right:4%; transform:translateY(-50%); font-family:'Playfair Display',serif; font-size:15rem; color:rgba(255,255,255,0.03); pointer-events:none; white-space:nowrap; line-height:1; }
+        .cta-deco { position:absolute; top:50%; right:4%; transform:translateY(-50%); font-family:'Poppins',sans-serif; font-size:15rem; color:rgba(255,255,255,0.03); pointer-events:none; white-space:nowrap; line-height:1; }
         .cta-inner { max-width:1200px; margin:0 auto; padding:5rem 2rem; position:relative; z-index:1; }
 
         /* Footer */
@@ -458,7 +458,7 @@
             @endphp
             @foreach($rules as $r)
             <div class="rule-card">
-                <div style="font-family:'Playfair Display',serif;font-size:2.2rem;color:#E2D9CC;line-height:1;margin-bottom:1rem;">{{ $r['no'] }}</div>
+                <div style="font-family:'Poppins',sans-serif;font-size:2.2rem;color:#E2D9CC;line-height:1;margin-bottom:1rem;">{{ $r['no'] }}</div>
                 <div style="font-size:0.92rem;font-weight:500;margin-bottom:6px;">{{ $r['t'] }}</div>
                 <div style="font-size:0.8rem;color:#8A7F72;line-height:1.7;">{{ $r['d'] }}</div>
             </div>
@@ -518,7 +518,7 @@
                 <h2 class="stitle">Kata penghuni<br>kami</h2>
             </div>
             <div class="hidden md:flex items-center gap-2" style="color:#C9A252;">
-                <span style="font-family:'Playfair Display',serif;font-size:2.4rem;">4.9</span>
+                <span style="font-family:'Poppins',sans-serif;font-size:2.4rem;">4.9</span>
                 <div>
                     <div style="font-size:0.82rem;">★★★★★</div>
                     <div style="font-size:0.72rem;color:#8A7F72;">80+ ulasan</div>
@@ -568,7 +568,7 @@
                     @foreach([['lbl'=>'WhatsApp','val'=>'0812-3456-7890'],['lbl'=>'Instagram','val'=>'@arcadiakost.id'],['lbl'=>'Email','val'=>'info@arcadiakost.id'],['lbl'=>'Alamat','val'=>'Cakranegara, Mataram, NTB']] as $c)
                     <div style="border-bottom:0.5px solid rgba(255,255,255,0.08);padding-bottom:0.85rem;">
                         <div style="color:rgba(255,255,255,0.3);font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:3px;">{{ $c['lbl'] }}</div>
-                        <div style="color:#fff;font-family:'Playfair Display',serif;font-size:1.1rem;">{{ $c['val'] }}</div>
+                        <div style="color:#fff;font-family:'Poppins',sans-serif;font-size:1.1rem;">{{ $c['val'] }}</div>
                     </div>
                     @endforeach
                 </div>
@@ -582,7 +582,7 @@
     <div class="footer-inner">
         <div class="footer-grid">
             <div>
-                <div style="font-family:'Playfair Display',serif;font-size:1.6rem;color:#fff;margin-bottom:0.75rem;">Arcadia<span style="color:#A65437;">.</span></div>
+                <div style="font-family:'Poppins',sans-serif;font-size:1.6rem;color:#fff;margin-bottom:0.75rem;">Arcadia<span style="color:#A65437;">.</span></div>
                 <p style="font-size:0.8rem;color:rgba(255,255,255,0.3);line-height:1.8;max-width:240px;">Hunian modern yang nyaman dan strategis di Kota Mataram, Lombok, NTB.</p>
                 <div class="sasak-stripe" style="margin-top:1.2rem;width:72px;border-radius:4px;"></div>
             </div>

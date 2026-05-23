@@ -39,10 +39,11 @@ class BookingController extends Controller
             return back()->with('error', 'Mohon maaf, semua kamar untuk tipe ini sedang penuh.');
         }
 
-        // Hitung tanggal selesai dan total harga
+        // Hitung tanggal selesai dan total harga (selalu 1 bulan)
         $startDate = Carbon::parse($request->start_date);
-        $endDate = $startDate->copy()->addMonths((int) $request->duration);
-        $totalPrice = $roomType->price * (int) $request->duration;
+        $duration = 1;
+        $endDate = $startDate->copy()->addMonths($duration);
+        $totalPrice = $roomType->price * $duration;
 
         // Simpan ke database bookings
         Booking::create([
@@ -50,7 +51,7 @@ class BookingController extends Controller
             'room_id' => $availableRoom->id,
             'start_date' => $request->start_date,
             'end_date' => $endDate,
-            'duration_months' => (int) $request->duration, // <-- TAMBAHKAN BARIS INI
+            'duration_months' => $duration, // <-- FIXED TO 1 MONTH
             'total_price' => $totalPrice,
             'status' => 'pending',
         ]);
@@ -81,11 +82,14 @@ class BookingController extends Controller
             abort(403, 'Akses tidak sah.');
         }
 
+        // Harga bulanan yang harus dibayar saat pertama kali
+        $monthlyPrice = $booking->total_price / max($booking->duration_months, 1);
+
         // Detail Rekening Pemilik Kost
         $namaBank = "BCA";
         $noRekening = "1234567890";
         $atasNama = "Kost Arca Manajemen";
-        $nominal = "Rp " . number_format($booking->total_price, 0, ',', '.');
+        $nominal = "Rp " . number_format($monthlyPrice, 0, ',', '.');
 
         // Menyusun teks informasi yang akan muncul saat QR di-scan
         $qrContent = "TRANSFER MANUAL KOST ARCA\n";
@@ -93,7 +97,8 @@ class BookingController extends Controller
         $qrContent .= "No. Rek: {$noRekening}\n";
         $qrContent .= "A.N: {$atasNama}\n";
         $qrContent .= "Nominal: {$nominal}\n";
-        $qrContent .= "Booking ID: #{$booking->id}";
+        $qrContent .= "Booking ID: #{$booking->id}\n";
+        $qrContent .= "Keterangan: Pembayaran Bulan Pertama";
 
         // Generate QR Code berbentuk SVG mentah
         $qrCode = QrCode::size(220)
@@ -154,5 +159,34 @@ class BookingController extends Controller
         ]);
 
         return redirect()->back()->with('success', 'Permintaan Anda telah dikirim ke Staff Kost!');
+    }
+
+    public function extend(Request $request, Booking $booking)
+    {
+        // Pastikan hanya pemilik booking yang bisa perpanjang
+        if ($booking->user_id !== Auth::id()) {
+            abort(403, 'Akses tidak sah.');
+        }
+
+        // Buat booking baru melanjutkan tanggal selesai yang lama
+        $newStartDate = Carbon::parse($booking->end_date);
+        $duration = 1;
+        $newEndDate = $newStartDate->copy()->addMonths($duration);
+        
+        // Meload room dan roomType untuk mendapatkan harga
+        $booking->load('room.roomType');
+        $totalPrice = $booking->room->roomType->price * $duration;
+
+        Booking::create([
+            'user_id' => Auth::id(),
+            'room_id' => $booking->room_id,
+            'start_date' => $newStartDate,
+            'end_date' => $newEndDate,
+            'duration_months' => $duration,
+            'total_price' => $totalPrice,
+            'status' => 'pending',
+        ]);
+
+        return redirect()->route('my-bookings')->with('success', 'Perpanjangan sewa berhasil dibuat. Silakan lakukan pembayaran untuk bulan berikutnya.');
     }
 }

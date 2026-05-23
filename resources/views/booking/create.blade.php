@@ -59,16 +59,7 @@
                               <p class="text-xs text-gray-500 mt-1">Pilih tanggal kapan Anda akan mulai menempati kamar.</p>
                           </div>
 
-                          <!-- Input Durasi Sewa -->
-                          <div class="mb-8">
-                              <label for="duration" class="block mb-2 text-sm font-medium text-gray-900">Durasi Sewa (Bulan)</label>
-                              <div class="flex items-center">
-                                  <input type="number" id="duration" name="duration" min="1" value="1" required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-l-lg focus:ring-gray-900 focus:border-gray-900 block w-full p-2.5">
-                                  <span class="inline-flex items-center px-4 text-sm text-gray-900 bg-gray-200 border border-l-0 border-gray-300 rounded-r-lg py-2.5 font-medium">
-                                      Bulan
-                                  </span>
-                              </div>
-                          </div>
+                          <input type="hidden" name="duration" value="1">
 
                           <!-- Tombol Submit -->
                           <button type="submit" class="w-full text-white bg-gray-900 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-3.5 text-center transition-colors">

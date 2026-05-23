@@ -61,8 +61,11 @@
                                       <p class="text-sm text-gray-500 mt-1">Nomor Kamar: <span class="font-bold text-gray-800">{{ $booking->room->room_number }}</span></p>
                                   </div>
                                   <div class="text-right">
-                                      <p class="text-sm text-gray-500">Total Tagihan</p>
+                                      <p class="text-sm text-gray-500">Total Tagihan (Semua Bulan)</p>
                                       <p class="text-lg font-bold text-blue-600">Rp {{ number_format($booking->total_price, 0, ',', '.') }}</p>
+                                      @if($booking->duration_months > 1)
+                                      <p class="text-xs text-gray-500 mt-1">Tagihan Bulan Pertama: Rp {{ number_format($booking->total_price / max($booking->duration_months, 1), 0, ',', '.') }}</p>
+                                      @endif
                                   </div>
                               </div>
 
@@ -82,12 +85,21 @@
 
                           <!-- Footer Card: Aksi -->
                           @if($booking->status == 'pending')
-<div class="px-6 py-4 bg-white border-t border-gray-100">
-    <a href="{{ route('booking.pay', $booking->id) }}" class="block text-center w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 rounded-lg text-sm transition-colors">
-        Bayar Sekarang via Midtrans
-    </a>
-</div>
-@endif
+                              <div class="px-6 py-4 bg-white border-t border-gray-100 flex flex-col gap-2">
+                                  <a href="{{ route('booking.pay', $booking->id) }}" class="block text-center w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 rounded-lg text-sm transition-colors">
+                                      Bayar Sekarang
+                                  </a>
+                              </div>
+                          @elseif($booking->status == 'active')
+                              <div class="px-6 py-4 bg-white border-t border-gray-100 flex flex-col gap-2">
+                                  <form action="{{ route('booking.extend', $booking->id) }}" method="POST">
+                                      @csrf
+                                      <button type="submit" class="block text-center w-full bg-green-600 hover:bg-green-700 text-white font-medium py-2 rounded-lg text-sm transition-colors">
+                                          Perpanjang Sewa (1 Bulan)
+                                      </button>
+                                  </form>
+                              </div>
+                          @endif
 
                       </div>
                   @endforeach

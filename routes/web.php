@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Models\RoomType;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\ReviewController;
-use App\Http\Controllers\ServiceRequestController;  
+use App\Http\Controllers\ServiceRequestController;
 use App\Http\Controllers\ChatController;
 
 // Route::get('/', function () {
@@ -44,6 +44,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/my-bookings', [BookingController::class, 'myBookings'])->name('my-bookings');
     Route::get('/booking/{booking}/pay', [BookingController::class, 'pay'])->name('booking.pay');
     Route::post('/booking/{booking}/upload-proof', [BookingController::class, 'uploadProof'])->name('booking.upload_proof');
+    Route::post('/booking/{booking}/extend', [BookingController::class, 'extend'])->name('booking.extend');
 
     Route::get('/booking/{booking}/review', [ReviewController::class, 'create'])->name('review.create');
     Route::post('/booking/{booking}/review', [ReviewController::class, 'store'])->name('review.store');

@@ -5,6 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pembayaran Kost Arca</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
 </head>
 <body class="bg-slate-50 font-sans text-slate-800">
 
@@ -21,10 +34,15 @@
         @endif
 
         <div class="mt-6 text-center">
-            <p class="text-sm text-slate-500">Total yang harus ditransfer:</p>
+            <p class="text-sm text-slate-500">Total yang harus ditransfer (Pembayaran Bulan Pertama):</p>
             <h2 class="text-3xl font-black text-indigo-600 mt-1">
-                Rp {{ number_format($booking->total_price, 0, ',', '.') }}
+                Rp {{ number_format($booking->total_price / max($booking->duration_months, 1), 0, ',', '.') }}
             </h2>
+            @if($booking->duration_months > 1)
+            <div class="mt-2 text-xs text-slate-400">
+                Total keseluruhan pesanan untuk {{ $booking->duration_months }} bulan adalah Rp {{ number_format($booking->total_price, 0, ',', '.') }}
+            </div>
+            @endif
             <div class="inline-block mt-2 px-3 py-1 bg-amber-50 text-amber-700 rounded-full text-xs font-semibold">
                 Status: {{ $booking->status == 'review' ? 'Menunggu Konfirmasi' : 'Belum Dibayar' }}
             </div>

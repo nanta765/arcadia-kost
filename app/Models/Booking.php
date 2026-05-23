@@ -26,4 +26,14 @@ class Booking extends Model
     {
         return $this->hasOne(Review::class);
     }
+
+    protected static function booted()
+    {
+        static::deleted(function ($booking) {
+            // Ketika booking dihapus, kembalikan status kamar menjadi available
+            if ($booking->room) {
+                $booking->room->update(['status' => 'available']);
+            }
+        });
+    }
 }

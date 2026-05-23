@@ -22,8 +22,8 @@
                         gold: {400:'#FBBF24',500:'#F59E0B'}
                     },
                     fontFamily: {
-                        display: ['Playfair Display', 'serif'],
-                        body: ['Inter', 'sans-serif']
+                        display: ['Poppins', 'sans-serif'],
+                        body: ['Poppins', 'sans-serif']
                     },
                     backdropBlur: {xs: '2px'}
                 }
@@ -32,7 +32,7 @@
     </script>
     
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     
     @livewireStyles
     @filamentStyles

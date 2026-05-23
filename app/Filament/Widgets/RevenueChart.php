@@ -10,15 +10,27 @@ class RevenueChart extends ChartWidget
 
     protected function getData(): array
     {
+        $data = [];
+        $labels = [];
+
+        for ($i = 1; $i <= 12; $i++) {
+            $revenue = \App\Models\MonthlyRevenue::where('year', date('Y'))
+                ->where('month', $i)
+                ->value('total_revenue') ?? 0;
+            
+            $data[] = $revenue;
+            $labels[] = \Carbon\Carbon::create()->month($i)->translatedFormat('M');
+        }
+
         return [
             'datasets' => [
                 [
                     'label' => 'Revenue',
-                    'data' => [10, 20, 30, 40],
+                    'data' => $data,
                 ],
             ],
 
-            'labels' => ['Jan', 'Feb', 'Mar', 'Apr'],
+            'labels' => $labels,
         ];
     }
 
