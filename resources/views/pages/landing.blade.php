@@ -133,7 +133,7 @@
         </div>
     </section>
 
-    <section class="py-24 bg-white font-sans text-[#0A0A0A]">
+    <section id="about" class="py-24 bg-white font-sans text-[#0A0A0A]">
     <div class="max-w-7xl mx-auto px-6 md:px-12">
         
         <div class="grid grid-cols-1 md:grid-cols-12 gap-6 auto-rows-[minmax(240px,auto)]">
