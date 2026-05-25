@@ -45,7 +45,7 @@
         </div>
 
         <div class="hidden md:flex items-center gap-4">
-          <a href="{{ route('my-bookings') }}"
+          <a href="{{ route('booking.my-bookings') }}"
             class="font-bold text-xs uppercase tracking-widest text-slate-500 hover:text-arcadia">
             My Bookings
           </a>
@@ -74,7 +74,7 @@
       <a href="#facilities" class="block font-bold text-xs uppercase tracking-widest text-slate-400">Amenities</a>
       <a href="#location" class="block font-bold text-xs uppercase tracking-widest text-slate-400">Location</a>
       <div class="pt-4 border-t border-slate-100 flex flex-col gap-3">
-        <a href="{{ route('my-bookings') }}"
+        <a href="{{ route('booking.my-bookings') }}"
           class="w-full text-center py-3 font-bold text-xs uppercase tracking-widest text-slate-600">
           My Bookings
         </a>
@@ -152,7 +152,7 @@
             class="px-8 py-4 bg-white hover:bg-slate-100 text-arcadia font-bold rounded-lg text-xs uppercase tracking-widest shadow-lg transition-all">
             Lihat Katalog Kamar
           </a>
-          <a href="{{ route('my-bookings') }}"
+          <a href="{{ route('booking.my-bookings') }}"
             class="px-8 py-4 border-2 border-white/60 hover:bg-white/10 text-white font-bold rounded-lg text-xs uppercase tracking-widest transition-all">
             Riwayat Booking
           </a>
@@ -447,7 +447,7 @@
         <div class="space-y-4">
           <h4 class="text-slate-800 font-extrabold text-xs uppercase tracking-widest">Menu</h4>
           <ul class="space-y-2 text-xs">
-            <li><a href="{{ route('my-bookings') }}" class="hover:text-arcadia">My Bookings</a></li>
+            <li><a href="{{ route('booking.my-bookings') }}" class="hover:text-arcadia">My Bookings</a></li>
             <li><a href="#" class="hover:text-arcadia">Panduan (FAQ)</a></li>
             <li><a href="#" class="hover:text-arcadia">Kebijakan Privasi</a></li>
             <li><a href="#" class="hover:text-arcadia">Syarat & Ketentuan</a></li>

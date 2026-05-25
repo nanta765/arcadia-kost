@@ -135,9 +135,8 @@
     </header>
 
     <main class="max-w-7xl mx-auto px-container-padding py-section-gap-mobile md:py-section-gap-desktop">
-        <form action="{{ route('checkout.process') }}" method="POST" enctype="multipart/form-data" id="checkout-form">
+        <form action="{{ route('booking.checkout', $booking) }}" method="POST" enctype="multipart/form-data" id="checkout-form">
             @csrf
-            <input type="hidden" name="booking_id" value="{{ $booking->id }}">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
                 
                 <div class="lg:col-span-7 space-y-8">

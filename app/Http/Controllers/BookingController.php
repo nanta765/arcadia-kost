@@ -117,16 +117,13 @@ class BookingController extends Controller
     }
 
     // 2. Mengolah Upload Gambar Bukti Transfer
-    public function processCheckout(Request $request)
+    public function processCheckout(Request $request, Booking $booking)
     {
-        $booking = Booking::findOrFail($request->booking_id);
-
         if ($booking->user_id !== Auth::id()) {
             abort(403);
         }
 
         $request->validate([
-            'booking_id' => 'required|exists:bookings,id',
             'payment_method' => 'required|in:qr,bank_transfer',
             'payment_receipt' => 'nullable|file|mimes:png,jpg,jpeg,pdf|max:3072',
         ]);
@@ -144,40 +141,8 @@ class BookingController extends Controller
             $booking->update(['status' => 'review']);
         }
 
-        return redirect()->route('my-bookings')
+        return redirect()->route('booking.my-bookings')
             ->with('success', 'Pembayaran berhasil diproses! Silakan tunggu konfirmasi Admin.');
-    }
-
-    public function uploadProof(Request $request, Booking $booking)
-    {
-        if ($booking->user_id !== Auth::id()) {
-            abort(403);
-        }
-
-        // Validasi ketat file gambar resi
-        $request->validate([
-            'proof_of_payment' => 'required|image|mimes:jpeg,png,jpg|max:3072', // Maksimal 3MB
-        ]);
-
-        if ($request->hasFile('proof_of_payment')) {
-            // Hapus foto lama jika user mengunggah ulang resi baru
-            if ($booking->proof_of_payment) {
-                Storage::disk('public')->delete($booking->proof_of_payment);
-            }
-
-            // Simpan gambar baru ke folder storage/app/public/proofs
-            $path = $request->file('proof_of_payment')->store('proofs', 'public');
-
-            // Update data di database dan ubah status menjadi review (menunggu konfirmasi admin)
-            $booking->update([
-                'proof_of_payment' => $path,
-                'status' => 'review',
-            ]);
-
-            return redirect()->back()->with('success', 'Bukti pembayaran berhasil dikirim! Silakan tunggu konfirmasi Admin.');
-        }
-
-        return redirect()->back()->with('error', 'Gagal mengunggah file.');
     }
 
     public function storeRequest(Request $request, Booking $booking)

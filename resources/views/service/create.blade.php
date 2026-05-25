@@ -203,7 +203,7 @@
         </div>
 
         <div class="mt-6 text-center">
-            <a href="{{ route('my-bookings') }}" class="inline-flex items-center gap-1 text-on-surface-variant hover:text-primary font-label-sm text-label-sm transition-colors">
+            <a href="{{ route('booking.my-bookings') }}" class="inline-flex items-center gap-1 text-on-surface-variant hover:text-primary font-label-sm text-label-sm transition-colors">
                 <span class="material-symbols-outlined text-sm">arrow_back</span>
                 Kembali ke My Bookings
             </a>

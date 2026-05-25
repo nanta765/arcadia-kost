@@ -46,6 +46,6 @@ class ServiceRequestController extends Controller
             'status' => 'pending', // Otomatis masuk antrean
         ]);
 
-        return redirect()->route('my-bookings')->with('success', 'Permintaan layanan berhasil dikirim! Staf kami akan segera datang.');
+        return redirect()->route('booking.my-bookings')->with('success', 'Permintaan layanan berhasil dikirim! Staf kami akan segera datang.');
     }
 }
