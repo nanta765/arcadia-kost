@@ -137,10 +137,10 @@
         const scrollToBottom = () => { messagesEl.scrollTop = messagesEl.scrollHeight; };
         const escapeHtml = (unsafe) => (unsafe || '').toString().replace(/[&<"'>]/g, (m) => ({'&': '&amp;','<': '&lt;','>': '&gt;','"': '&quot;',"'": '&#039;'})[m]);
 
-        // 1. Memuat Daftar Chat Panel Kiri (Memanggil endpoint /api/staff/chats)
+        // 1. Memuat Daftar Chat Panel Kiri (Memanggil endpoint /chat/staff)
         async function fetchChatList() {
             try {
-                const response = await fetch('/api/staff/chats', {
+                const response = await fetch('/chat/staff', {
                     headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': getCSRF() }
                 });
                 if (!response.ok) throw new Error('Network error');

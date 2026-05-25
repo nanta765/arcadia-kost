@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Review extends Model
 {
@@ -14,6 +13,7 @@ class Review extends Model
         'room_id',
         'rating',
         'comment',
+        'is_visible',
     ];
 
     public function booking(): BelongsTo
@@ -29,5 +29,10 @@ class Review extends Model
     public function room(): BelongsTo
     {
         return $this->belongsTo(Room::class);
+    }
+
+    public function scopeVisible($query)
+    {
+        return $query->where('is_visible', true);
     }
 }

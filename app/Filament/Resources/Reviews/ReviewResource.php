@@ -15,9 +15,11 @@ use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 
 // Import Table Components
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ToggleColumn;
 
 // Import Actions sesuai struktur yang terbukti berhasil
 use Filament\Actions\ViewAction;
@@ -61,6 +63,10 @@ class ReviewResource extends Resource
                         ->label('Komentar')
                         ->columnSpanFull()
                         ->disabled(),
+
+                    Toggle::make('is_visible')
+                        ->label('Tampilkan di Landing Page')
+                        ->columnSpanFull(),
                 ])->columns(2)
             ]);
     }
@@ -94,6 +100,10 @@ class ReviewResource extends Resource
                     ->label('Komentar')
                     ->limit(40)
                     ->searchable(),
+
+                ToggleColumn::make('is_visible')
+                    ->label('Tampil')
+                    ->sortable(),
 
                 TextColumn::make('created_at')
                     ->date('d M Y')

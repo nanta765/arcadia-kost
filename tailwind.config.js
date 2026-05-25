@@ -16,6 +16,10 @@ export default {
                 secondary: '#745942',
                 'text-primary': '#111111',
                 'text-secondary': '#5E5A56',
+                arcadia: {
+                    DEFAULT: '#0f766e',
+                    hover: '#115e59',
+                },
             },
 
             fontFamily: {

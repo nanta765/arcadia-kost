@@ -60,14 +60,17 @@ class BookingController extends Controller
         $availableRoom->update(['status' => 'occupied']);
 
         // Arahkan kembali ke dashboard dengan pesan sukses
-        return redirect()->route('dashboard')->with('success', 'Booking berhasil! Anda mendapatkan ' . $availableRoom->room_number);
+        $booking = Booking::where('user_id', Auth::id())->latest()->first();
+
+        return redirect()->route('booking.pay', $booking)
+            ->with('success', 'Booking berhasil! Silakan selesaikan pembayaran.');
     }
 
     public function myBookings()
     {
         // Ambil data booking milik user ini, urutkan dari yang terbaru
         // Kita juga memuat (eager load) relasi 'room' dan 'room.roomType' agar tidak memberatkan database
-        $bookings = Booking::with(['room', 'room.roomType'])
+        $bookings = Booking::with(['room', 'room.roomType', 'review'])
             ->where('user_id', Auth::id())
             ->orderBy('created_at', 'desc')
             ->get();
@@ -77,39 +80,74 @@ class BookingController extends Controller
 
     public function pay(Booking $booking)
     {
-        // Validasi pengaman agar tidak diintip user lain
         if ($booking->user_id !== Auth::id()) {
             abort(403, 'Akses tidak sah.');
         }
 
-        // Harga bulanan yang harus dibayar saat pertama kali
-        $monthlyPrice = $booking->total_price / max($booking->duration_months, 1);
+        $booking->load('room.roomType');
 
-        // Detail Rekening Pemilik Kost
-        $namaBank = "BCA";
-        $noRekening = "1234567890";
-        $atasNama = "Kost Arca Manajemen";
-        $nominal = "Rp " . number_format($monthlyPrice, 0, ',', '.');
+        $roomName = $booking->room->roomType->name . ' - ' . $booking->room->room_number;
+        $duration = $booking->duration_months . ' Month(s)';
+        $monthlyRent = $booking->total_price;
+        $deposit = 0;
+        $serviceFee = 0;
+        $totalAmount = $booking->total_price;
 
-        // Menyusun teks informasi yang akan muncul saat QR di-scan
-        $qrContent = "TRANSFER MANUAL KOST ARCA\n";
-        $qrContent .= "Bank: {$namaBank}\n";
-        $qrContent .= "No. Rek: {$noRekening}\n";
-        $qrContent .= "A.N: {$atasNama}\n";
-        $qrContent .= "Nominal: {$nominal}\n";
-        $qrContent .= "Booking ID: #{$booking->id}\n";
-        $qrContent .= "Keterangan: Pembayaran Bulan Pertama";
+        // Bank info & QR
+        $bankName = 'BCA';
+        $bankAccount = '1234567890';
+        $bankHolder = 'Kost Arca Manajemen';
 
-        // Generate QR Code berbentuk SVG mentah
+        $qrContent = "TRANSFER KOST ARCA\n";
+        $qrContent .= "Bank: {$bankName}\n";
+        $qrContent .= "No. Rek: {$bankAccount}\n";
+        $qrContent .= "A.N: {$bankHolder}\n";
+        $qrContent .= "Nominal: Rp " . number_format($totalAmount, 0, ',', '.') . "\n";
+        $qrContent .= "Booking ID: #{$booking->id}";
+
         $qrCode = QrCode::size(220)
             ->backgroundColor(255, 255, 255)
-            ->color(44, 62, 80) // Warna gelap yang elegan
+            ->color(0, 38, 42)
             ->generate($qrContent);
 
-        return view('booking.payment', compact('booking', 'qrCode', 'noRekening', 'atasNama', 'namaBank'));
+        return view('booking.payment', compact(
+            'booking', 'roomName', 'duration', 'monthlyRent', 'deposit', 'serviceFee',
+            'totalAmount', 'qrCode', 'bankName', 'bankAccount', 'bankHolder'
+        ));
     }
 
     // 2. Mengolah Upload Gambar Bukti Transfer
+    public function processCheckout(Request $request)
+    {
+        $booking = Booking::findOrFail($request->booking_id);
+
+        if ($booking->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        $request->validate([
+            'booking_id' => 'required|exists:bookings,id',
+            'payment_method' => 'required|in:qr,bank_transfer',
+            'payment_receipt' => 'nullable|file|mimes:png,jpg,jpeg,pdf|max:3072',
+        ]);
+
+        if ($request->hasFile('payment_receipt')) {
+            if ($booking->proof_of_payment) {
+                Storage::disk('public')->delete($booking->proof_of_payment);
+            }
+            $path = $request->file('payment_receipt')->store('proofs', 'public');
+            $booking->update([
+                'proof_of_payment' => $path,
+                'status' => 'review',
+            ]);
+        } else {
+            $booking->update(['status' => 'review']);
+        }
+
+        return redirect()->route('my-bookings')
+            ->with('success', 'Pembayaran berhasil diproses! Silakan tunggu konfirmasi Admin.');
+    }
+
     public function uploadProof(Request $request, Booking $booking)
     {
         if ($booking->user_id !== Auth::id()) {
@@ -187,6 +225,9 @@ class BookingController extends Controller
             'status' => 'pending',
         ]);
 
-        return redirect()->route('my-bookings')->with('success', 'Perpanjangan sewa berhasil dibuat. Silakan lakukan pembayaran untuk bulan berikutnya.');
+        $newBooking = Booking::where('user_id', Auth::id())->latest()->first();
+
+        return redirect()->route('booking.pay', $newBooking)
+            ->with('success', 'Perpanjangan sewa berhasil dibuat. Silakan selesaikan pembayaran.');
     }
 }

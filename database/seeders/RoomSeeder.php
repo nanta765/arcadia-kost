@@ -17,21 +17,21 @@ class RoomSeeder extends Seeder
         // 1. Buat Tipe Kamarnya dulu
         $standardType = RoomType::create([
             'name' => 'Standard Room',
-            'description' => 'Kost premium dengan fasilitas lengkap dan lingkungan yang nyaman untuk mahasiswa maupun pekerja.
+            'description' => 'Premium boarding with complete facilities and a comfortable environment for students and professionals.
 
-Fasilitas kamar:
+Room amenities:
 - AC
 - Water heater
-- Meja
-- Lemari
+- Desk
+- Wardrobe
 
-Fasilitas umum:
-- Dapur bersama
+Shared facilities:
+- Communal kitchen
 - Rooftop area
-- CCTV aktif 24 jam
-- Penjaga kost 24 jam
+- 24/7 CCTV surveillance
+- 24/7 on-site staff
 
-Cocok untuk penghuni yang mencari tempat tinggal modern, aman, dan nyaman dengan akses fasilitas yang lengkap.',
+Perfect for residents seeking a modern, safe, and comfortable living space with full access to premium amenities.',
             'price' => 1750000,
         ]);
 

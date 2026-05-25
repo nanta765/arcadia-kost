@@ -1,60 +1,76 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
-use Illuminate\Support\Facades\Route;
-use App\Models\RoomType;
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\BookingPageController;
+use App\Http\Controllers\ChatController;
+use App\Http\Controllers\LandingPageController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\ServiceRequestController;
-use App\Http\Controllers\ChatController;
+use App\Models\Room;
+use App\Models\Review;
+use App\Models\RoomType;
+use Illuminate\Support\Facades\Route;
 
-// Route::get('/', function () {
-//     return view('dashboard');
-// });
+// ── Public ──────────────────────────────────────────────
+Route::get('/', LandingPageController::class)->name('home');
 
-Route::get('/', function () {
-    return view('pages.home');
-})->name('home');
+// ── Breeze auth routes ─────────────────────────────────
+require __DIR__ . '/auth.php';
 
-Route::get('/dashboard', function () {
-    $roomTypes = RoomType::all();
-    return view('dashboard', compact('roomTypes'));
-})->middleware(['auth', 'verified'])->name('dashboard');
-
+// ── Authenticated (profile) ─────────────────────────────
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__ . '/auth.php';
-
+// ── Verified ────────────────────────────────────────────
 Route::middleware(['auth', 'verified'])->group(function () {
-    // Route Dashboard Katalog
+    // Dashboard
     Route::get('/dashboard', function () {
-        $roomTypes = RoomType::all();
-        return view('dashboard', compact('roomTypes'));
+        return view('pages.home-nanta', [
+            'roomTypes'      => RoomType::with('rooms')->get(),
+            'availableRooms' => Room::where('status', 'available')->count(),
+            'averageRating'  => round(Review::avg('rating') ?? 0, 1),
+            'totalReviews'   => Review::count(),
+        ]);
     })->name('dashboard');
 
-    // Route untuk menampilkan Form Booking
-    Route::get('/booking/{roomType}', [BookingController::class, 'create'])->name('booking.create');
+    // Booking — new main booking page
+    Route::get('/book', [BookingPageController::class, 'show'])->name('booking.page');
+    Route::post('/book/{room}', [BookingPageController::class, 'store'])->name('booking.store-room');
 
-    // Route untuk memproses Data Booking (Tombol Submit)
-    Route::post('/booking/{roomType}', [BookingController::class, 'store'])->name('booking.store');
+    // Bookings
+    Route::controller(BookingController::class)->group(function () {
+        Route::get('/booking/{roomType}', 'create')->name('booking.create');
+        Route::post('/booking/{roomType}', 'store')->name('booking.store');
+        Route::get('/booking/{booking}/pay', 'pay')->name('booking.pay');
+        Route::post('/booking/{booking}/upload-proof', 'uploadProof')->name('booking.upload_proof');
+        Route::post('/booking/{booking}/extend', 'extend')->name('booking.extend');
+        Route::post('/checkout/process', 'processCheckout')->name('checkout.process');
+    });
+
     Route::get('/my-bookings', [BookingController::class, 'myBookings'])->name('my-bookings');
-    Route::get('/booking/{booking}/pay', [BookingController::class, 'pay'])->name('booking.pay');
-    Route::post('/booking/{booking}/upload-proof', [BookingController::class, 'uploadProof'])->name('booking.upload_proof');
-    Route::post('/booking/{booking}/extend', [BookingController::class, 'extend'])->name('booking.extend');
 
-    Route::get('/booking/{booking}/review', [ReviewController::class, 'create'])->name('review.create');
-    Route::post('/booking/{booking}/review', [ReviewController::class, 'store'])->name('review.store');
-    Route::get('/booking/{booking}/service-request', [ServiceRequestController::class, 'create'])->name('service.create');
-    Route::post('/booking/{booking}/service-request', [ServiceRequestController::class, 'store'])->name('service.store');
+    // Reviews
+    Route::controller(ReviewController::class)->group(function () {
+        Route::get('/booking/{booking}/review', 'create')->name('review.create');
+        Route::post('/booking/{booking}/review', 'store')->name('review.store');
+    });
 
-    // Chat routes
-    Route::get('/chat/active', [ChatController::class, 'getOrCreateChat'])->name('chat.active');
-    Route::get('/chat/{chat}/messages', [ChatController::class, 'getMessages'])->name('chat.messages');
-    Route::post('/chat/{chat}/message', [ChatController::class, 'sendMessage'])->name('chat.send');
-    Route::get('/api/staff/chats', [ChatController::class, 'getStaffChats'])->name('staff.chats');
+    // Service requests
+    Route::controller(ServiceRequestController::class)->group(function () {
+        Route::get('/booking/{booking}/service-request', 'create')->name('service.create');
+        Route::post('/booking/{booking}/service-request', 'store')->name('service.store');
+    });
+
+    // Chat (customer)
+    Route::prefix('chat')->name('chat.')->controller(ChatController::class)->group(function () {
+        Route::get('/active', 'getOrCreateChat')->name('active');
+        Route::get('/{chat}/messages', 'getMessages')->name('messages');
+        Route::post('/{chat}/message', 'sendMessage')->name('send');
+        Route::get('/staff', 'getStaffChats')->name('staff');
+    });
 });
 

@@ -54,6 +54,6 @@ class ReviewController extends Controller
         ]);
 
         // Asumsi nama route untuk halaman My Bookings adalah 'my-bookings'
-        return redirect('/my-bookings')->with('success', 'Terima kasih! Ulasan Anda berhasil disimpan dan akan sangat membantu calon penghuni lainnya.');
+        return redirect()->route('my-bookings')->with('success', 'Terima kasih! Ulasan Anda berhasil disimpan.');
     }
 }
