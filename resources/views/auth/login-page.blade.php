@@ -164,6 +164,13 @@
     </main>
 
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var mode = document.getElementById('auth-mode').value;
+            if (mode === 'register') {
+                toggleAuth('register');
+            }
+        });
+
         function togglePassword(inputId, btn) {
             const input = document.getElementById(inputId);
             const icon = btn.querySelector('.material-symbols-outlined');

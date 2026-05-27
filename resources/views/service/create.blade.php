@@ -1,155 +1,105 @@
 <!DOCTYPE html>
-<html class="light" lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="utf-8">
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>{{ config('app.name', 'Kos Arcadia') }} - Permintaan Layanan</title>
-
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Be+Vietnam+Pro:wght@400;500;600&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
-
-    <style>
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-        }
-    </style>
-
-    <script id="tailwind-config">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arcadia Kost — Service Request</title>
+    <link rel="icon" href="{{ asset('images/arcadia-logo.jpg') }}" type="image/jpeg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL,GRAD,opsz@300,0,0,24" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script>
         tailwind.config = {
-            darkMode: "class",
             theme: {
                 extend: {
-                    "colors": {
-                        "primary-fixed-dim": "#aacdd1",
-                        "surface-bright": "#fbf9f5",
-                        "on-error": "#ffffff",
-                        "surface-variant": "#e4e2de",
-                        "secondary": "#456554",
-                        "on-primary-container": "#84a6ab",
-                        "background": "#fbf9f5",
-                        "error": "#ba1a1a",
-                        "on-background": "#1b1c1a",
-                        "surface-container-low": "#f5f3ef",
-                        "primary": "#00262a",
-                        "surface-container-lowest": "#ffffff",
-                        "on-secondary-container": "#4b6b5a",
-                        "tertiary": "#2e1f07",
-                        "inverse-on-surface": "#f2f0ed",
-                        "on-secondary-fixed": "#012114",
-                        "secondary-fixed-dim": "#accfba",
-                        "surface-container": "#efeeea",
-                        "tertiary-fixed": "#fbdeb9",
-                        "tertiary-container": "#46341a",
-                        "surface-dim": "#dbdad6",
-                        "on-error-container": "#93000a",
-                        "surface-container-highest": "#e4e2de",
-                        "on-primary": "#ffffff",
-                        "on-secondary-fixed-variant": "#2e4d3e",
-                        "error-container": "#ffdad6",
-                        "surface-container-high": "#eae8e4",
-                        "on-surface-variant": "#414849",
-                        "on-secondary": "#ffffff",
-                        "on-tertiary-container": "#b69c7b",
-                        "outline": "#717879",
-                        "on-primary-fixed": "#001f23",
-                        "primary-container": "#1a3c40",
-                        "surface-tint": "#436468",
-                        "on-tertiary": "#ffffff",
-                        "on-surface": "#1b1c1a",
-                        "inverse-surface": "#30312e",
-                        "inverse-primary": "#aacdd1",
-                        "on-tertiary-fixed-variant": "#564428",
-                        "primary-fixed": "#c5e9ee",
-                        "outline-variant": "#c1c8c9",
-                        "tertiary-fixed-dim": "#dec29f",
-                        "secondary-container": "#c7ebd6",
-                        "surface": "#fbf9f5",
-                        "on-primary-fixed-variant": "#2b4c50",
-                        "secondary-fixed": "#c7ebd6",
-                        "on-tertiary-fixed": "#271903"
+                    colors: {
+                        primary: "#0A0A0A",
+                        canvas: "#FFFFFF",
+                        surface: "#F3F4F6",
+                        "border-subtle": "#E5E7EB",
+                        "text-secondary": "#4B5563"
                     },
-                    "borderRadius": {
-                        "DEFAULT": "0.25rem",
-                        "lg": "0.5rem",
-                        "xl": "0.75rem",
-                        "full": "9999px"
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
                     },
-                    "spacing": {
-                        "section-gap-mobile": "40px",
-                        "base": "8px",
-                        "gutter": "16px",
-                        "container-padding": "24px",
-                        "section-gap-desktop": "80px"
-                    },
-                    "fontFamily": {
-                        "headline-lg": ["Montserrat"],
-                        "display-lg": ["Montserrat"],
-                        "headline-lg-mobile": ["Montserrat"],
-                        "headline-md": ["Montserrat"],
-                        "body-lg": ["Be Vietnam Pro"],
-                        "body-md": ["Be Vietnam Pro"],
-                        "label-lg": ["Be Vietnam Pro"],
-                        "label-sm": ["Be Vietnam Pro"]
-                    },
-                    "fontSize": {
-                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
-                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
-                        "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
-                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
-                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
-                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
-                        "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600"}],
-                        "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}]
+                    spacing: {
+                        'section': '120px',
                     }
-                },
-            },
+                }
+            }
         }
     </script>
+    <style>
+        .footer-stroke-draw {
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation: drawIn 4s ease-in-out forwards;
+        }
+        @keyframes drawIn {
+            to { stroke-dashoffset: 0; }
+        }
+    </style>
 </head>
-<body class="bg-background text-on-surface font-body-md">
+<body class="bg-canvas text-primary font-sans antialiased">
 
-    <header class="docked full-width top-0 sticky z-50 bg-surface/80 backdrop-blur-md shadow-sm shadow-primary/5 border-b border-outline-variant/30">
-        <nav class="flex justify-between items-center w-full px-container-padding py-4 max-w-7xl mx-auto">
-            <div class="flex items-center gap-8">
-                <a href="{{ url('/') }}" class="font-display-lg text-display-lg font-bold text-primary tracking-tight">Kos Arcadia</a>
-                <div class="hidden md:flex items-center gap-6">
-                    <a class="font-label-lg text-label-lg text-on-surface-variant hover:text-primary transition-colors" href="{{ url('/') }}">Home</a>
-                    <a class="font-label-lg text-label-lg text-on-surface-variant hover:text-primary transition-colors" href="{{ route('booking.page') }}">Rooms</a>
-                    <a class="font-label-lg text-label-lg text-on-surface-variant hover:text-primary transition-colors" href="{{ url('/') }}#facility">Amenities</a>
-                    <a class="font-label-lg text-label-lg text-on-surface-variant hover:text-primary transition-colors" href="{{ url('/') }}#location">Location</a>
-                </div>
+    {{-- Navbar — same as landing page --}}
+    <nav id="navbar" class="fixed top-0 w-full bg-white/40 backdrop-blur-xl border-b border-white/20 shadow-sm shadow-black/5 z-50 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-6 md:px-12 h-20 flex items-center justify-between">
+            <div class="flex items-center">
+                @if(file_exists(public_path('images/arcadia-logo-no-bg.png')))
+                <img src="{{ asset('images/arcadia-logo-no-bg.png') }}" alt="Arcadia" class="h-14 md:h-16 w-auto">
+                @else
+                <span class="font-sans font-semibold tracking-widest uppercase text-sm">Arca</span>
+                @endif
             </div>
-            <div class="flex items-center gap-4">
-                <a href="{{ route('booking.page') }}" class="hidden md:flex px-6 py-2 bg-primary text-on-primary font-label-lg text-label-lg rounded-full hover:bg-primary-container transition-all active:scale-95">Book Now</a>
-                <a href="{{ route('dashboard') }}" class="w-10 h-10 rounded-full bg-surface-container overflow-hidden border border-outline-variant/30 flex items-center justify-center">
-                    <span class="material-symbols-outlined text-primary">person</span>
+            <div class="hidden md:flex items-center gap-2 text-sm font-medium">
+                <a href="{{ route('dashboard') }}" class="px-4 py-2 rounded-full bg-white/30 backdrop-blur-sm border border-white/40 text-primary hover:bg-white/50 transition-all">Dashboard</a>
+                <a href="{{ url('/') }}" class="px-4 py-2 rounded-full bg-white/30 backdrop-blur-sm border border-white/40 text-primary hover:bg-white/50 transition-all">Home</a>
+                <a href="{{ route('booking.page') }}" class="px-4 py-2 rounded-full bg-white/30 backdrop-blur-sm border border-white/40 text-primary hover:bg-white/50 transition-all">Bookings</a>
+            </div>
+            <div class="flex items-center gap-3">
+                @if(auth()->user()->profile_photo)
+                <a href="{{ route('dashboard') }}" class="rounded-full overflow-hidden border-2 border-white/40 hover:border-white/80 transition-all" style="width: 38px; height: 38px;" title="Dashboard">
+                    <img src="{{ asset('storage/' . auth()->user()->profile_photo) }}" alt="Profile" class="w-full h-full object-cover">
                 </a>
+                @else
+                <a href="{{ route('dashboard') }}" class="flex items-center justify-center rounded-full bg-white/30 backdrop-blur-sm border-2 border-white/40 text-primary hover:border-white/80 transition-all" style="width: 38px; height: 38px;" title="Dashboard">
+                    <span class="material-symbols-outlined text-xl">person</span>
+                </a>
+                @endif
+                <form method="POST" action="{{ route('logout') }}" class="inline">
+                    @csrf
+                    <button type="submit" class="px-5 py-2 rounded-full border border-border-subtle text-sm font-medium text-text-secondary hover:bg-white/50 hover:text-primary transition-all">
+                        Logout
+                    </button>
+                </form>
             </div>
-        </nav>
-    </header>
+        </div>
+    </nav>
 
-    <main class="max-w-lg mx-auto px-container-padding py-section-gap-mobile md:py-section-gap-desktop">
+    <main class="max-w-lg mx-auto px-6 pt-28 pb-10">
         <div class="mb-8">
-            <h1 class="font-headline-lg text-headline-lg text-primary mb-2">Permintaan Layanan</h1>
-            <p class="text-on-surface-variant font-body-md">Staf kami siap membantu kendala di kamar Anda.</p>
+            <h1 class="text-2xl font-bold text-primary mb-2">Service Request</h1>
+            <p class="text-text-secondary text-sm">Our staff is ready to help with any issues in your room.</p>
         </div>
 
         {{-- Room info card --}}
-        <div class="bg-primary-container/20 border border-primary-fixed-dim/30 rounded-2xl p-5 mb-6 flex items-center justify-between">
+        <div class="bg-surface border border-border-subtle rounded-2xl p-5 mb-6 flex items-center justify-between">
             <div>
-                <p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Kamar Anda</p>
-                <p class="font-headline-md text-headline-md text-primary">{{ $booking->room->room_number }}</p>
+                <p class="text-xs text-text-secondary uppercase tracking-wider">Your Room</p>
+                <p class="text-lg font-bold text-primary">{{ $booking->room->room_number }}</p>
             </div>
-            <div class="px-4 py-2 bg-secondary-container text-on-secondary-container font-label-sm text-label-sm rounded-full flex items-center gap-1">
+            <div class="px-4 py-2 bg-green-50 text-green-700 text-xs font-medium rounded-full flex items-center gap-1">
                 <span class="material-symbols-outlined text-sm">check_circle</span>
-                Aktif
+                Active
             </div>
         </div>
 
         @if ($errors->any())
-        <div class="mb-6 p-4 bg-error-container text-on-error-container rounded-xl font-label-sm">
+        <div class="mb-6 p-4 bg-red-50 text-red-600 rounded-xl text-xs">
             <ul class="list-disc pl-4">
                 @foreach ($errors->all() as $error)
                     <li>{{ $error }}</li>
@@ -158,121 +108,176 @@
         </div>
         @endif
 
-        <div class="bg-surface-container-lowest rounded-2xl border border-outline-variant/20 shadow-sm p-6">
+        <div class="bg-white rounded-2xl border border-border-subtle shadow-sm p-6">
             <form action="{{ route('service.store', $booking->id) }}" method="POST">
                 @csrf
 
                 <div class="mb-6">
-                    <label class="block font-label-lg text-label-lg text-primary mb-4">Apa yang bisa kami bantu?</label>
+                    <label class="block text-sm font-semibold text-primary mb-4">What can we help with?</label>
                     <div class="grid grid-cols-2 gap-3">
                         <label class="cursor-pointer group">
                             <input type="radio" name="type" value="cleaning" class="sr-only peer" required {{ old('type') == 'cleaning' ? 'checked' : '' }}>
-                            <div class="p-5 rounded-xl border-2 border-outline-variant/30 bg-surface-container-low text-center peer-checked:border-secondary peer-checked:bg-secondary-container/20 transition-all">
-                                <span class="material-symbols-outlined text-3xl text-on-surface-variant peer-checked:text-secondary mb-2">mop</span>
-                                <div class="font-label-lg text-label-lg text-on-surface peer-checked:text-secondary transition-colors">Bersihkan Kamar</div>
+                            <div class="p-5 rounded-xl border-2 border-border-subtle bg-surface text-center peer-checked:border-primary peer-checked:bg-primary/5 transition-all">
+                                <span class="material-symbols-outlined text-3xl text-text-secondary peer-checked:text-primary mb-2">mop</span>
+                                <div class="text-sm font-semibold text-primary">Room Cleaning</div>
                             </div>
                         </label>
 
                         <label class="cursor-pointer group">
                             <input type="radio" name="type" value="repair" class="sr-only peer" required {{ old('type') == 'repair' ? 'checked' : '' }}>
-                            <div class="p-5 rounded-xl border-2 border-outline-variant/30 bg-surface-container-low text-center peer-checked:border-tertiary peer-checked:bg-tertiary-container/10 transition-all">
-                                <span class="material-symbols-outlined text-3xl text-on-surface-variant peer-checked:text-tertiary mb-2">build</span>
-                                <div class="font-label-lg text-label-lg text-on-surface peer-checked:text-tertiary transition-colors">Perbaikan Fasilitas</div>
+                            <div class="p-5 rounded-xl border-2 border-border-subtle bg-surface text-center peer-checked:border-primary peer-checked:bg-primary/5 transition-all">
+                                <span class="material-symbols-outlined text-3xl text-text-secondary peer-checked:text-primary mb-2">build</span>
+                                <div class="text-sm font-semibold text-primary">Facility Repair</div>
                             </div>
                         </label>
                     </div>
                     @error('type')
-                    <p class="text-error text-label-sm mt-2">{{ $message }}</p>
+                    <p class="text-red-500 text-xs mt-2">{{ $message }}</p>
                     @enderror
                 </div>
 
-                <div class="mb-6 pt-6 border-t border-outline-variant/20">
-                    <label for="notes" class="block font-label-lg text-label-lg text-primary mb-2">
-                        Catatan Tambahan
+                <div class="mb-6 pt-6 border-t border-border-subtle">
+                    <label for="notes" class="block text-sm font-semibold text-primary mb-2">
+                        Additional Notes
                     </label>
-                    <textarea name="notes" id="notes" rows="3" placeholder="Contoh: Tolong bersihkan jam 2 siang, atau lampu kamar mandi mati..."
-                        class="w-full text-body-md text-on-surface bg-surface-container-low border border-outline-variant rounded-xl p-4 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none resize-none transition-all">{{ old('notes') }}</textarea>
+                    <textarea name="notes" id="notes" rows="3" placeholder="e.g. Please clean at 2pm, or bathroom light is broken..."
+                        class="w-full text-sm text-primary bg-surface border border-border-subtle rounded-xl p-4 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none resize-none transition-all">{{ old('notes') }}</textarea>
                 </div>
 
-                <div class="mb-6 pt-6 border-t border-outline-variant/20">
-                    <label for="deadline_days" class="block font-label-lg text-label-lg text-primary mb-2">
-                        Tenggat Waktu Pengerjaan
+                <div class="mb-6 pt-6 border-t border-border-subtle">
+                    <label class="block text-sm font-semibold text-primary mb-2">
+                        Completion Deadline
                     </label>
-                    <p class="text-on-surface-variant text-label-sm mb-3">Kapan paling lambat kami harus menyelesaikannya?</p>
+                    <p class="text-text-secondary text-xs mb-3">When should we complete this by at the latest?</p>
                     <div class="grid grid-cols-3 gap-2">
-                        @php $daysOptions = [0 => 'Hari Ini', 1 => '1 Hari', 2 => '2 Hari', 3 => '3 Hari', 5 => '5 Hari', 7 => '7 Hari']; @endphp
+                        @php $daysOptions = [0 => 'Today', 1 => '1 Day', 2 => '2 Days', 3 => '3 Days', 5 => '5 Days', 7 => '7 Days']; @endphp
                         @foreach($daysOptions as $val => $label)
                         <label class="cursor-pointer">
                             <input type="radio" name="deadline_days" value="{{ $val }}" class="sr-only peer"
                                 {{ old('deadline_days', 1) == $val ? 'checked' : '' }}>
-                            <span class="block text-center py-3 rounded-xl border-2 border-outline-variant/30 bg-surface-container-low text-label-sm font-medium
-                                peer-checked:border-primary peer-checked:bg-primary-container/20 peer-checked:text-primary transition-all">
+                            <span class="block text-center py-3 rounded-xl border-2 border-border-subtle bg-surface text-xs font-medium
+                                peer-checked:border-primary peer-checked:bg-primary/5 peer-checked:text-primary transition-all">
                                 {{ $label }}
                             </span>
                         </label>
                         @endforeach
                     </div>
                     @error('deadline_days')
-                    <p class="text-error text-label-sm mt-2">{{ $message }}</p>
+                    <p class="text-red-500 text-xs mt-2">{{ $message }}</p>
                     @enderror
                 </div>
 
                 <button type="submit"
-                    class="w-full flex items-center justify-center gap-2 bg-primary text-on-primary font-label-lg text-label-lg py-4 rounded-xl hover:bg-primary-container transition-all active:scale-95 shadow-sm">
+                    class="w-full flex items-center justify-center gap-2 bg-primary text-white text-sm font-semibold py-4 rounded-xl hover:bg-black/80 transition-all active:scale-95">
                     <span class="material-symbols-outlined">send</span>
-                    Kirim Permintaan
+                    Send Request
                 </button>
             </form>
         </div>
 
         <div class="mt-6 text-center">
-            <a href="{{ route('booking.my-bookings') }}" class="inline-flex items-center gap-1 text-on-surface-variant hover:text-primary font-label-sm text-label-sm transition-colors">
+            <a href="{{ route('booking.my-bookings') }}" class="inline-flex items-center gap-1 text-text-secondary hover:text-primary text-xs transition-colors">
                 <span class="material-symbols-outlined text-sm">arrow_back</span>
-                Kembali ke My Bookings
+                Back to My Bookings
             </a>
         </div>
     </main>
 
-    <footer class="full-width bg-surface-container-highest border-t border-outline-variant/20 mt-section-gap-desktop">
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-section-gap-mobile md:gap-section-gap-desktop w-full px-container-padding py-16 max-w-7xl mx-auto">
-            <div class="md:col-span-1">
-                <span class="font-headline-md text-headline-md font-bold text-primary mb-4 block">Kos Arcadia</span>
-                <p class="font-body-md text-body-md text-on-surface-variant">
-                    Luxury managed boarding in the heart of Lombok. Experience the perfect blend of comfort and tranquility.
-                </p>
+    {{-- Footer — same as landing page --}}
+    <footer class="relative bg-[#0A0A0A] text-white overflow-hidden" x-data="footerTextEffect()">
+        <div class="absolute inset-0 z-0" style="background: radial-gradient(125% 125% at 50% 0%, #0F0F1166 50%, #3ca2fa22 100%);"></div>
+        <div class="relative z-10 max-w-7xl mx-auto px-6 md:px-12 pt-20 pb-10">
+            <div class="mb-16 -mt-4">
+                <svg x-ref="svg" width="100%" height="140" viewBox="0 0 900 140" xmlns="http://www.w3.org/2000/svg"
+                    class="select-none cursor-default"
+                    @mousemove="onMove($event)" @mouseenter="hovered = true" @mouseleave="hovered = false">
+                    <defs>
+                        <radialGradient id="frReveal" gradientUnits="userSpaceOnUse" :cx="maskCx" :cy="maskCy" r="18%">
+                            <stop offset="0%" stop-color="white" />
+                            <stop offset="100%" stop-color="black" />
+                        </radialGradient>
+                        <mask id="frMask">
+                            <rect x="0" y="0" width="900" height="140" fill="url(#frReveal)" />
+                        </mask>
+                    </defs>
+                    <text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle"
+                        stroke-width="1" fill="none" stroke="#ffffff"
+                        font-family="Inter, sans-serif" font-size="120" font-weight="700" letter-spacing="-2"
+                        :opacity="hovered ? 0.15 : 0">ARCADIA</text>
+                    <text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle"
+                        stroke-width="1" fill="none" stroke="#ffffff"
+                        font-family="Inter, sans-serif" font-size="120" font-weight="700" letter-spacing="-2"
+                        class="footer-stroke-draw">ARCADIA</text>
+                    <text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle"
+                        stroke="#ffffff" stroke-width="1" fill="none"
+                        mask="url(#frMask)"
+                        font-family="Inter, sans-serif" font-size="120" font-weight="700" letter-spacing="-2">ARCADIA</text>
+                </svg>
             </div>
-            <div>
-                <h4 class="font-label-lg text-label-lg font-bold text-primary mb-6">Discover</h4>
-                <ul class="space-y-3">
-                    <li><a class="font-label-sm text-label-sm text-on-surface-variant hover:underline decoration-secondary transition-all" href="{{ route('booking.page') }}">Rooms</a></li>
-                    <li><a class="font-label-sm text-label-sm text-on-surface-variant hover:underline decoration-secondary transition-all" href="{{ url('/') }}#facility">Amenities</a></li>
-                    <li><a class="font-label-sm text-label-sm text-on-surface-variant hover:underline decoration-secondary transition-all" href="{{ url('/') }}#location">Location</a></li>
-                </ul>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10 mb-16">
+                <div>
+                    <h4 class="text-sm font-semibold uppercase tracking-widest text-white/40 mb-5">Kos Arcadia</h4>
+                    <p class="text-white/60 text-sm leading-relaxed max-w-xs">
+                        Premium managed boarding in the heart of Mataram, Lombok. A sanctuary for students and professionals who value peace, cleanliness, and intentional living.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="text-sm font-semibold uppercase tracking-widest text-white/40 mb-5">Navigate</h4>
+                    <ul class="space-y-3 text-sm text-white/60">
+                        <li><a href="{{ url('/') }}#about" class="hover:text-white transition-colors">About</a></li>
+                        <li><a href="{{ url('/') }}#facility" class="hover:text-white transition-colors">Facilities</a></li>
+                        <li><a href="{{ url('/') }}#room" class="hover:text-white transition-colors">The Room</a></li>
+                        <li><a href="{{ url('/') }}#location" class="hover:text-white transition-colors">Location</a></li>
+                        <li><a href="{{ url('/book') }}" class="hover:text-white transition-colors">Book a Room</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-sm font-semibold uppercase tracking-widest text-white/40 mb-5">Contact</h4>
+                    <ul class="space-y-3 text-sm text-white/60">
+                        <li class="flex items-center gap-2">
+                            <span class="material-symbols-outlined text-sm text-white/30">location_on</span>
+                            Mataram, Lombok, NTB
+                        </li>
+                        <li>
+                            <a href="mailto:arcadiakost@gmail.com" class="flex items-center gap-2 hover:text-white transition-colors">
+                                <span class="material-symbols-outlined text-sm text-white/30">mail</span>
+                                arcadiakost@gmail.com
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://wa.me/6280000000" class="flex items-center gap-2 hover:text-white transition-colors">
+                                <span class="material-symbols-outlined text-sm text-white/30">call</span>
+                                WhatsApp
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </div>
-            <div>
-                <h4 class="font-label-lg text-label-lg font-bold text-primary mb-6">Company</h4>
-                <ul class="space-y-3">
-                    <li><a class="font-label-sm text-label-sm text-on-surface-variant hover:underline decoration-secondary transition-all" href="#">About Us</a></li>
-                    <li><a class="font-label-sm text-label-sm text-on-surface-variant hover:underline decoration-secondary transition-all" href="#">Contact</a></li>
-                    <li><a class="font-label-sm text-label-sm text-on-surface-variant hover:underline decoration-secondary transition-all" href="#">Privacy Policy</a></li>
-                </ul>
+            <div class="flex flex-col md:flex-row justify-between items-center border-t border-white/10 pt-8 text-xs text-white/30 uppercase tracking-widest gap-4">
+                <div>&copy; {{ date('Y') }} Kos Arcadia. All rights reserved.</div>
+                <div class="flex gap-6">
+                    <a href="#" class="hover:text-white/60 transition-colors">Instagram</a>
+                    <a href="#" class="hover:text-white/60 transition-colors">Terms</a>
+                    <a href="#" class="hover:text-white/60 transition-colors">Privacy</a>
+                </div>
             </div>
-            <div>
-                <h4 class="font-label-lg text-label-lg font-bold text-primary mb-6">Newsletter</h4>
-                <p class="font-label-sm text-label-sm text-on-surface-variant mb-4">Get the latest updates on new units and seasonal offers.</p>
-                <form action="{{ url('/newsletter') }}" method="POST" class="flex gap-2">
-                    @csrf
-                    <input name="email" class="bg-surface-container border border-outline-variant rounded-lg px-3 py-2 text-label-sm w-full outline-none focus:ring-1 focus:ring-primary" placeholder="Email" type="email" required>
-                    <button type="submit" class="bg-primary text-on-primary px-4 rounded-lg"><span class="material-symbols-outlined">arrow_forward</span></button>
-                </form>
-            </div>
-        </div>
-        <div class="max-w-7xl mx-auto px-container-padding pb-8">
-            <p class="font-label-sm text-label-sm text-on-surface-variant text-center opacity-60">
-                &copy; {{ date('Y') }} Kos Arcadia Lombok. Luxury Managed Boarding.
-            </p>
         </div>
     </footer>
+
+    <script>
+        function footerTextEffect() {
+            return {
+                hovered: false,
+                maskCx: '50%',
+                maskCy: '50%',
+                onMove(e) {
+                    const rect = this.$refs.svg.getBoundingClientRect();
+                    this.maskCx = ((e.clientX - rect.left) / rect.width * 100) + '%';
+                    this.maskCy = ((e.clientY - rect.top) / rect.height * 100) + '%';
+                },
+            };
+        }
+    </script>
 
 </body>
 </html>

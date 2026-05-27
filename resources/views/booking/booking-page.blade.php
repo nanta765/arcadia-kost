@@ -1,320 +1,256 @@
 <!DOCTYPE html>
-<html class="light" lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="utf-8">
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>{{ config('app.name', 'Kos Arcadia') }} - Booking</title>
-    
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Be+Vietnam+Pro:wght@400;500;600&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
-    
-    <style>
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-        }
-        .glass-effect {
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-        }
-        input:focus {
-            outline: none;
-            box-shadow: none;
-        }
-    </style>
-
-    <script id="tailwind-config">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arcadia Kost — Book a Room</title>
+    <link rel="icon" href="{{ asset('images/arcadia-logo.jpg') }}" type="image/jpeg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL,GRAD,opsz@300,0,0,24" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script>
         tailwind.config = {
-            darkMode: "class",
             theme: {
                 extend: {
-                    "colors": {
-                        "primary-fixed-dim": "#aacdd1",
-                        "surface-bright": "#fbf9f5",
-                        "on-error": "#ffffff",
-                        "surface-variant": "#e4e2de",
-                        "secondary": "#456554",
-                        "on-primary-container": "#84a6ab",
-                        "background": "#fbf9f5",
-                        "error": "#ba1a1a",
-                        "on-background": "#1b1c1a",
-                        "surface-container-low": "#f5f3ef",
-                        "primary": "#00262a",
-                        "surface-container-lowest": "#ffffff",
-                        "on-secondary-container": "#4b6b5a",
-                        "tertiary": "#2e1f07",
-                        "inverse-on-surface": "#f2f0ed",
-                        "on-secondary-fixed": "#012114",
-                        "secondary-fixed-dim": "#accfba",
-                        "surface-container": "#efeeea",
-                        "tertiary-fixed": "#fbdeb9",
-                        "tertiary-container": "#46341a",
-                        "surface-dim": "#dbdad6",
-                        "on-error-container": "#93000a",
-                        "surface-container-highest": "#e4e2de",
-                        "on-primary": "#ffffff",
-                        "on-secondary-fixed-variant": "#2e4d3e",
-                        "error-container": "#ffdad6",
-                        "surface-container-high": "#eae8e4",
-                        "on-surface-variant": "#414849",
-                        "on-secondary": "#ffffff",
-                        "on-tertiary-container": "#b69c7b",
-                        "outline": "#717879",
-                        "on-primary-fixed": "#001f23",
-                        "primary-container": "#1a3c40",
-                        "surface-tint": "#436468",
-                        "on-tertiary": "#ffffff",
-                        "on-surface": "#1b1c1a",
-                        "inverse-surface": "#30312e",
-                        "inverse-primary": "#aacdd1",
-                        "on-tertiary-fixed-variant": "#564428",
-                        "primary-fixed": "#c5e9ee",
-                        "outline-variant": "#c1c8c9",
-                        "tertiary-fixed-dim": "#dec29f",
-                        "secondary-container": "#c7ebd6",
-                        "surface": "#fbf9f5",
-                        "on-primary-fixed-variant": "#2b4c50",
-                        "secondary-fixed": "#c7ebd6",
-                        "on-tertiary-fixed": "#271903"
+                    colors: {
+                        primary: "#0A0A0A",
+                        canvas: "#FFFFFF",
+                        surface: "#F3F4F6",
+                        "border-subtle": "#E5E7EB",
+                        "text-secondary": "#4B5563"
                     },
-                    "borderRadius": {
-                        "DEFAULT": "0.25rem",
-                        "lg": "0.5rem",
-                        "xl": "0.75rem",
-                        "full": "9999px"
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
                     },
-                    "spacing": {
-                        "section-gap-mobile": "40px",
-                        "base": "8px",
-                        "gutter": "16px",
-                        "container-padding": "24px",
-                        "section-gap-desktop": "80px"
-                    },
-                    "fontFamily": {
-                        "headline-lg": ["Montserrat"],
-                        "display-lg": ["Montserrat"],
-                        "headline-lg-mobile": ["Montserrat"],
-                        "headline-md": ["Montserrat"],
-                        "body-lg": ["Be Vietnam Pro"],
-                        "body-md": ["Be Vietnam Pro"],
-                        "label-lg": ["Be Vietnam Pro"],
-                        "label-sm": ["Be Vietnam Pro"]
-                    },
-                    "fontSize": {
-                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
-                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
-                        "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
-                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
-                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
-                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
-                        "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600"}],
-                        "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}]
+                    spacing: {
+                        'section': '120px',
                     }
-                },
-            },
+                }
+            }
         }
     </script>
+    <style>
+        .footer-stroke-draw {
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation: drawIn 4s ease-in-out forwards;
+        }
+        @keyframes drawIn {
+            to { stroke-dashoffset: 0; }
+        }
+    </style>
 </head>
-<body class="bg-background text-on-background font-body-md">
+<body class="bg-canvas text-primary font-sans antialiased">
 
-    <header class="docked full-width top-0 sticky z-50 bg-surface/80 dark:bg-surface-dim/80 backdrop-blur-md shadow-sm shadow-primary/5 border-b border-outline-variant/30">
-        <nav class="flex justify-between items-center w-full px-container-padding py-4 max-w-7xl mx-auto">
-            <div class="flex items-center gap-8">
-                <a href="{{ url('/') }}" class="font-display-lg text-display-lg font-bold text-primary dark:text-primary-fixed-dim tracking-tight">Kos Arcadia</a>
-                <div class="hidden md:flex items-center gap-6">
-                    <a class="font-label-lg text-label-lg text-on-surface-variant dark:text-on-surface-variant hover:text-primary transition-colors" href="{{ url('/') }}">Home</a>
-                    <a class="font-label-lg text-label-lg text-primary dark:text-primary-fixed-dim border-b-2 border-primary pb-1 font-bold" href="{{ route('booking.page') }}">Rooms</a>
-                    <a class="font-label-lg text-label-lg text-on-surface-variant dark:text-on-surface-variant hover:text-primary transition-colors" href="{{ url('/') }}#facility">Amenities</a>
-                    <a class="font-label-lg text-label-lg text-on-surface-variant dark:text-on-surface-variant hover:text-primary transition-colors" href="{{ url('/') }}#location">Location</a>
-                </div>
+    {{-- Navbar — same as landing page --}}
+    <nav id="navbar" class="fixed top-0 w-full bg-white/40 backdrop-blur-xl border-b border-white/20 shadow-sm shadow-black/5 z-50 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-6 md:px-12 h-20 flex items-center justify-between">
+            <div class="flex items-center">
+                @if(file_exists(public_path('images/arcadia-logo-no-bg.png')))
+                <img src="{{ asset('images/arcadia-logo-no-bg.png') }}" alt="Arcadia" class="h-14 md:h-16 w-auto">
+                @else
+                <span class="font-sans font-semibold tracking-widest uppercase text-sm">Arca</span>
+                @endif
             </div>
-            <div class="flex items-center gap-4">
-                @auth
-                <a href="{{ route('booking.page') }}" class="hidden md:flex px-6 py-2 bg-primary text-on-primary font-label-lg text-label-lg rounded-full hover:bg-primary-container transition-all active:scale-95">Book Now</a>
-                <a href="{{ route('dashboard') }}" class="w-10 h-10 rounded-full bg-surface-container overflow-hidden border border-outline-variant/30 flex items-center justify-center">
-                    <span class="material-symbols-outlined text-primary">person</span>
+            <div class="hidden md:flex items-center gap-2 text-sm font-medium">
+                <a href="{{ route('dashboard') }}" class="px-4 py-2 rounded-full bg-white/30 backdrop-blur-sm border border-white/40 text-primary hover:bg-white/50 transition-all">Dashboard</a>
+                <a href="{{ url('/') }}" class="px-4 py-2 rounded-full bg-white/30 backdrop-blur-sm border border-white/40 text-primary hover:bg-white/50 transition-all">Home</a>
+                <a href="{{ route('booking.page') }}" class="px-4 py-2 rounded-full bg-white/30 backdrop-blur-sm border border-white/40 text-primary hover:bg-white/50 transition-all">Bookings</a>
+            </div>
+            <div class="flex items-center gap-3">
+                @if(auth()->user()->profile_photo)
+                <a href="{{ route('dashboard') }}" class="rounded-full overflow-hidden border-2 border-white/40 hover:border-white/80 transition-all" style="width: 38px; height: 38px;" title="Dashboard">
+                    <img src="{{ asset('storage/' . auth()->user()->profile_photo) }}" alt="Profile" class="w-full h-full object-cover">
                 </a>
                 @else
-                <a href="{{ route('login') }}" class="hidden md:flex px-6 py-2 bg-primary text-on-primary font-label-lg text-label-lg rounded-full hover:bg-primary-container transition-all active:scale-95">Login to Book</a>
-                @endauth
+                <a href="{{ route('dashboard') }}" class="flex items-center justify-center rounded-full bg-white/30 backdrop-blur-sm border-2 border-white/40 text-primary hover:border-white/80 transition-all" style="width: 38px; height: 38px;" title="Dashboard">
+                    <span class="material-symbols-outlined text-xl">person</span>
+                </a>
+                @endif
+                <form method="POST" action="{{ route('logout') }}" class="inline">
+                    @csrf
+                    <button type="submit" class="px-5 py-2 rounded-full border border-border-subtle text-sm font-medium text-text-secondary hover:bg-white/50 hover:text-primary transition-all">
+                        Logout
+                    </button>
+                </form>
             </div>
-        </nav>
-    </header>
+        </div>
+    </nav>
 
-    <main class="max-w-7xl mx-auto px-container-padding py-12 md:py-16">
-        <div class="mb-12">
-            <div class="flex items-center justify-between max-w-3xl mx-auto relative">
-                <div class="absolute top-1/2 left-0 w-full h-0.5 bg-surface-container-highest -translate-y-1/2 -z-10"></div>
+    {{-- Main Content --}}
+    <main class="max-w-7xl mx-auto px-6 md:px-12 pt-28 pb-16">
+        {{-- Stepper --}}
+        <div class="mb-14">
+            <div class="flex items-center justify-between max-w-xl mx-auto relative">
+                <div class="absolute top-1/2 left-0 w-full h-0.5 bg-surface -translate-y-1/2 -z-10"></div>
                 <div class="absolute top-1/2 left-0 w-1/3 h-0.5 bg-primary -translate-y-1/2 -z-10 transition-all duration-500"></div>
-                
+
                 <div class="flex flex-col items-center gap-2">
-                    <div class="w-10 h-10 rounded-full bg-primary text-on-primary flex items-center justify-center font-bold shadow-lg shadow-primary/20">1</div>
-                    <span class="font-label-lg text-label-lg text-primary">Select Room</span>
+                    <div class="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center text-sm font-bold">1</div>
+                    <span class="text-xs font-semibold text-primary">Select Room</span>
                 </div>
                 <div class="flex flex-col items-center gap-2">
-                    <div class="w-10 h-10 rounded-full bg-surface-container-highest text-on-surface-variant flex items-center justify-center font-bold">2</div>
-                    <span class="font-label-lg text-label-lg text-on-surface-variant">Details</span>
+                    <div class="w-10 h-10 rounded-full bg-surface text-text-secondary flex items-center justify-center text-sm font-bold">2</div>
+                    <span class="text-xs font-semibold text-text-secondary">Details</span>
                 </div>
                 <div class="flex flex-col items-center gap-2">
-                    <div class="w-10 h-10 rounded-full bg-surface-container-highest text-on-surface-variant flex items-center justify-center font-bold">3</div>
-                    <span class="font-label-lg text-label-lg text-on-surface-variant">Payment</span>
+                    <div class="w-10 h-10 rounded-full bg-surface text-text-secondary flex items-center justify-center text-sm font-bold">3</div>
+                    <span class="text-xs font-semibold text-text-secondary">Payment</span>
                 </div>
             </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+            {{-- Left: Room Grid --}}
             <div class="lg:col-span-8 space-y-10">
-                
-                <section class="bg-surface-container-low p-8 rounded-xl border border-outline-variant/20 shadow-sm shadow-primary/5">
-                    <div class="flex flex-col md:flex-row md:items-end gap-6">
+
+                {{-- Filters --}}
+                <div class="bg-surface/50 rounded-2xl border border-border-subtle p-6">
+                    <div class="flex flex-col md:flex-row md:items-end gap-4">
                         <div class="flex-1 space-y-2">
-                            <label class="font-label-lg text-label-lg text-on-surface-variant flex items-center gap-2">
-                                <span class="material-symbols-outlined text-[20px]">calendar_today</span>
+                            <label class="text-xs font-semibold text-text-secondary flex items-center gap-1.5">
+                                <span class="material-symbols-outlined text-base">calendar_today</span>
                                 Check-in Date
                             </label>
-                            <input class="w-full bg-surface p-3 border-b-2 border-outline-variant focus:border-primary transition-colors font-body-md text-on-surface" type="date" value="{{ date('Y-m-d') }}">
+                            <input class="w-full bg-white px-4 py-3 rounded-xl border border-border-subtle focus:ring-2 focus:ring-primary/10 focus:border-primary transition-all outline-none text-sm" type="date" value="{{ date('Y-m-d') }}">
                         </div>
                         <div class="flex-1 space-y-2">
-                            <label class="font-label-lg text-label-lg text-on-surface-variant flex items-center gap-2">
-                                <span class="material-symbols-outlined text-[20px]">event_busy</span>
+                            <label class="text-xs font-semibold text-text-secondary flex items-center gap-1.5">
+                                <span class="material-symbols-outlined text-base">event_busy</span>
                                 Duration
                             </label>
-                            <select class="w-full bg-surface p-3 border-b-2 border-outline-variant focus:border-primary transition-colors font-body-md text-on-surface">
+                            <select id="duration-select" onchange="updateDuration()" class="w-full bg-white px-4 py-3 rounded-xl border border-border-subtle focus:ring-2 focus:ring-primary/10 focus:border-primary transition-all outline-none text-sm">
                                 <option value="1">1 Month</option>
                                 <option value="3">3 Months</option>
                                 <option value="6">6 Months</option>
                                 <option value="12">1 Year</option>
                             </select>
                         </div>
-                        <button class="bg-primary-container text-on-primary-container px-8 py-3 rounded-lg font-label-lg text-label-lg hover:brightness-110 transition-all flex items-center justify-center gap-2">
-                            <span class="material-symbols-outlined">search</span>
+                        <button class="bg-primary text-white px-8 py-3 rounded-full text-xs font-semibold hover:bg-black/80 transition-all flex items-center justify-center gap-2">
+                            <span class="material-symbols-outlined text-base">search</span>
                             Update
                         </button>
                     </div>
-                </section>
+                </div>
 
+                {{-- Room Grid --}}
                 <section>
                     <div class="flex items-center justify-between mb-6">
-                        <h2 class="font-headline-lg text-headline-lg text-primary">Available Sanctuaries</h2>
-                        <div class="flex items-center gap-2 text-on-surface-variant">
-                            <span class="w-3 h-3 rounded-full bg-secondary"></span>
-                            <span class="font-label-sm text-label-sm">Available</span>
+                        <h2 class="text-xl font-bold text-primary">Available Rooms</h2>
+                        <div class="flex items-center gap-2 text-text-secondary text-xs">
+                            <span class="w-2.5 h-2.5 rounded-full bg-green-500"></span>
+                            Available
                         </div>
                     </div>
 
                     <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
                         @foreach($rooms as $room)
                             @if($room->status === 'available')
-                            <div class="room-card group cursor-pointer relative bg-white border border-outline-variant/30 rounded-xl p-6 transition-all duration-300 hover:shadow-xl hover:shadow-primary/5 hover:border-primary/50"
-                                 onclick="selectRoom(this, '{{ $room->id }}', '{{ $room->room_number }}', '{{ number_format($room->roomType->price) }}')">
+                            <div class="room-card group cursor-pointer relative bg-white border border-border-subtle rounded-2xl p-5 transition-all duration-300 hover:shadow-lg hover:shadow-black/5 hover:border-primary/30"
+                                 onclick="selectRoom(this, '{{ $room->id }}', '{{ $room->room_number }}', '{{ $room->roomType->price }}')">
                                 <div class="check-mark absolute top-3 right-3 transition-opacity" style="opacity: 0">
-                                    <span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 0;">check_circle</span>
+                                    <span class="material-symbols-outlined text-primary text-xl">check_circle</span>
                                 </div>
-                                <div class="flex flex-col items-center text-center gap-3">
-                                    <span class="font-label-sm text-label-sm text-on-surface-variant tracking-widest uppercase">{{ $room->roomType->name }}</span>
-                                    <span class="font-display-lg text-headline-lg text-primary">{{ $room->room_number }}</span>
-                                    <div class="w-full h-px bg-outline-variant/20 my-1"></div>
-                                    <span class="font-label-lg text-label-lg text-secondary">IDR {{ number_format($room->roomType->price / 1000, 1, ',', '.') }}M<span class="text-[10px] text-on-surface-variant">/mo</span></span>
+                                <div class="flex flex-col items-center text-center gap-2.5">
+                                    <span class="text-[10px] font-semibold text-text-secondary tracking-widest uppercase">{{ $room->roomType->name }}</span>
+                                    <span class="text-2xl font-bold text-primary">{{ $room->room_number }}</span>
+                                    <div class="w-full h-px bg-border-subtle/30 my-0.5"></div>
+                                    <span class="text-sm font-semibold text-primary">IDR {{ number_format($room->roomType->price / 1000, 1, ',', '.') }}M<span class="text-[10px] text-text-secondary font-normal">/mo</span></span>
                                 </div>
                             </div>
                             @else
-                            <div class="relative bg-surface-container-highest/50 border border-outline-variant/10 rounded-xl p-6 flex flex-col items-center text-center gap-3 opacity-60 cursor-not-allowed">
-                                <span class="font-label-sm text-label-sm text-on-surface-variant tracking-widest uppercase">{{ $room->roomType->name }}</span>
-                                <span class="font-display-lg text-headline-lg text-on-surface-variant">{{ $room->room_number }}</span>
-                                <div class="w-full h-px bg-outline-variant/20 my-1"></div>
-                                <span class="font-label-sm text-label-sm text-red-500">{{ ucfirst($room->status) }}</span>
+                            <div class="relative bg-surface/50 border border-border-subtle/30 rounded-2xl p-5 flex flex-col items-center text-center gap-2.5 opacity-50 cursor-not-allowed">
+                                <span class="text-[10px] font-semibold text-text-secondary tracking-widest uppercase">{{ $room->roomType->name }}</span>
+                                <span class="text-2xl font-bold text-text-secondary">{{ $room->room_number }}</span>
+                                <div class="w-full h-px bg-border-subtle/20 my-0.5"></div>
+                                <span class="text-xs font-medium text-red-400">{{ ucfirst($room->status) }}</span>
                             </div>
                             @endif
                         @endforeach
                     </div>
                 </section>
 
-                <section class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6">
-                    <div class="p-6 bg-surface-container-lowest border border-outline-variant/20 rounded-xl">
-                        <h3 class="font-label-lg text-label-lg text-primary mb-4 uppercase tracking-wider">Premium In-Room Amenities</h3>
-                        <div class="flex flex-wrap gap-3">
-                            <div class="flex items-center gap-2 px-3 py-1.5 bg-surface-container-high rounded-full">
-                                <span class="material-symbols-outlined text-[18px] text-secondary">ac_unit</span>
-                                <span class="font-label-sm text-label-sm">Climate Control</span>
+                {{-- Amenities --}}
+                <section class="grid grid-cols-1 md:grid-cols-2 gap-5 pt-4">
+                    <div class="p-6 bg-white border border-border-subtle rounded-2xl">
+                        <h3 class="text-sm font-semibold text-primary mb-4 uppercase tracking-wider">Room Amenities</h3>
+                        <div class="flex flex-wrap gap-2">
+                            <div class="flex items-center gap-2 px-3 py-1.5 bg-surface rounded-full text-xs font-medium">
+                                <span class="material-symbols-outlined text-base">ac_unit</span>
+                                Climate Control
                             </div>
-                            <div class="flex items-center gap-2 px-3 py-1.5 bg-surface-container-high rounded-full">
-                                <span class="material-symbols-outlined text-[18px] text-secondary">wifi</span>
-                                <span class="font-label-sm text-label-sm">High-Speed Fiber</span>
+                            <div class="flex items-center gap-2 px-3 py-1.5 bg-surface rounded-full text-xs font-medium">
+                                <span class="material-symbols-outlined text-base">wifi</span>
+                                High-Speed Fiber
                             </div>
-                            <div class="flex items-center gap-2 px-3 py-1.5 bg-surface-container-high rounded-full">
-                                <span class="material-symbols-outlined text-[18px] text-secondary">hot_tub</span>
-                                <span class="font-label-sm text-label-sm">Water Heater</span>
+                            <div class="flex items-center gap-2 px-3 py-1.5 bg-surface rounded-full text-xs font-medium">
+                                <span class="material-symbols-outlined text-base">hot_tub</span>
+                                Water Heater
                             </div>
                         </div>
                     </div>
-                    <div class="p-6 bg-surface-container-lowest border border-outline-variant/20 rounded-xl">
-                        <h3 class="font-label-lg text-label-lg text-primary mb-4 uppercase tracking-wider">Managed Excellence</h3>
-                        <div class="flex flex-wrap gap-3">
-                            <div class="flex items-center gap-2 px-3 py-1.5 bg-surface-container-high rounded-full">
-                                <span class="material-symbols-outlined text-[18px] text-secondary">security</span>
-                                <span class="font-label-sm text-label-sm">24/7 Security</span>
+                    <div class="p-6 bg-white border border-border-subtle rounded-2xl">
+                        <h3 class="text-sm font-semibold text-primary mb-4 uppercase tracking-wider">Managed Services</h3>
+                        <div class="flex flex-wrap gap-2">
+                            <div class="flex items-center gap-2 px-3 py-1.5 bg-surface rounded-full text-xs font-medium">
+                                <span class="material-symbols-outlined text-base">security</span>
+                                24/7 Security
                             </div>
-                            <div class="flex items-center gap-2 px-3 py-1.5 bg-surface-container-high rounded-full">
-                                <span class="material-symbols-outlined text-[18px] text-secondary">cleaning_services</span>
-                                <span class="font-label-sm text-label-sm">Weekly Cleaning</span>
+                            <div class="flex items-center gap-2 px-3 py-1.5 bg-surface rounded-full text-xs font-medium">
+                                <span class="material-symbols-outlined text-base">cleaning_services</span>
+                                Weekly Cleaning
                             </div>
                         </div>
                     </div>
                 </section>
             </div>
 
+            {{-- Right: Summary Sidebar --}}
             <aside class="lg:col-span-4">
-                <div class="sticky top-28 bg-white rounded-2xl border border-outline-variant/30 shadow-xl shadow-primary/5 overflow-hidden">
-                    <div class="h-48 relative">
-                        <img class="w-full h-full object-cover" alt="Minimalist bedroom" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAenxRA0jmgLmTPIuaLeAq_HHgAK6VLLq4t5B5bgC61LoH5Lm3GaruaB_5miK_usrZMwol3nZHLn-ChohRBmV5BDy1NVdc6xPe4M0gKBZGBKn25vMQiuD5Uk35H1IxeTf_fAJhg8VmwmYHoZQNZsitCY7HHnfmydN6y3pr0dj43nBt2h8A4W7ofWWlKQSdiNd0eyb7I_mke1x5zXmiRSMgF0zabccSK2EdjNsSsfk3ge1zla3Pg7sTJFyJ98U7C088GNJi92zcSjxs">
-                        <div class="absolute top-4 right-4 bg-primary text-on-primary px-3 py-1 rounded-lg font-label-lg text-label-lg">Premium Managed</div>
+                <div class="sticky top-28 bg-white rounded-2xl border border-border-subtle shadow-lg shadow-black/5 overflow-hidden">
+                    <div class="h-44 relative">
+                        <img class="w-full h-full object-cover" alt="Room preview" src="{{ asset('images/gallery/front-room.jpeg') }}">
+                        <div class="absolute top-4 right-4 bg-primary text-white px-3 py-1.5 rounded-full text-xs font-semibold">Premium Managed</div>
                     </div>
-                    <div class="p-8 space-y-6">
+                    <div class="p-7 space-y-5">
                         <div>
-                            <h3 class="font-headline-md text-headline-md text-primary mb-1">Reservation Summary</h3>
-                            <p class="font-body-md text-on-surface-variant">Lombok's Premier Living Experience</p>
+                            <h3 class="text-lg font-bold text-primary mb-1">Reservation Summary</h3>
+                            <p class="text-text-secondary text-xs">Mataram, Lombok Living Experience</p>
                         </div>
-                        <div class="space-y-4 py-6 border-y border-outline-variant/20">
+                        <div class="space-y-3 py-5 border-y border-border-subtle">
                             <div class="flex justify-between items-center">
-                                <span class="text-on-surface-variant font-label-lg text-label-lg">Selected Room</span>
-                                <span class="text-primary font-bold font-headline-md text-headline-md" id="summary-room-id">-</span>
+                                <span class="text-text-secondary text-xs font-medium">Selected Room</span>
+                                <span class="text-primary font-bold text-lg" id="summary-room-id">-</span>
                             </div>
                             <div class="flex justify-between items-center">
-                                <span class="text-on-surface-variant font-label-lg text-label-lg">Check-in</span>
-                                <span class="text-on-surface font-body-md" id="summary-date">{{ date('d M Y') }}</span>
+                                <span class="text-text-secondary text-xs font-medium">Check-in</span>
+                                <span class="text-primary text-sm font-medium" id="summary-date">{{ date('d M Y') }}</span>
                             </div>
                             <div class="flex justify-between items-center">
-                                <span class="text-on-surface-variant font-label-lg text-label-lg">Duration</span>
-                                <span class="text-on-surface font-body-md">1 Month</span>
+                                <span class="text-text-secondary text-xs font-medium">Duration</span>
+                                <span class="text-primary text-sm font-medium" id="summary-duration">1 Month</span>
                             </div>
                         </div>
                         <div class="space-y-2">
-                            <div class="flex justify-between items-center text-on-surface-variant">
-                                <span class="font-body-md">Monthly Rate</span>
-                                <span class="font-body-md" id="summary-price">-</span>
+                            <div class="flex justify-between items-center text-text-secondary text-xs">
+                                <span>Monthly Rate</span>
+                                <span id="summary-price">-</span>
                             </div>
-                            <div class="flex justify-between items-center text-on-surface-variant">
-                                <span class="font-body-md">Security Deposit</span>
-                                <span class="font-body-md">IDR 1.000.000</span>
-                            </div>
-                            <div class="flex justify-between items-center pt-4">
-                                <span class="font-headline-md text-headline-md text-primary">Total Payable</span>
-                                <span class="font-headline-md text-headline-md text-secondary" id="summary-total">-</span>
+                            <div class="flex justify-between items-center pt-3 mt-2 border-t border-border-subtle">
+                                <span class="text-sm font-bold text-primary">Total</span>
+                                <span class="text-sm font-bold text-primary" id="summary-total">-</span>
                             </div>
                         </div>
-                        <form id="booking-form" method="POST" action="" data-action="{{ url('/book') }}">
-                            @csrf
-                            <input type="hidden" name="room_id" id="form-room-id">
-                            <input type="hidden" name="start_date" id="form-start-date" value="{{ date('Y-m-d') }}">
-                            <button type="submit" id="btn-continue" disabled
-                                    class="w-full bg-on-surface-variant text-on-primary py-4 rounded-xl font-headline-md text-headline-md cursor-not-allowed transition-all shadow-lg">
-                                Select a Room to Continue
-                            </button>
-                        </form>
-                        <div class="flex items-center justify-center gap-2 text-on-surface-variant">
-                            <span class="material-symbols-outlined text-[16px]">lock</span>
-                            <span class="font-label-sm text-label-sm">Secure Booking Encryption</span>
+                        <a id="btn-continue"
+                            class="w-full bg-text-secondary text-white py-4 rounded-xl text-sm font-semibold cursor-not-allowed transition-all text-center block pointer-events-none">
+                            Select a Room to Continue
+                        </a>
+                        <div class="flex items-center justify-center gap-2 text-text-secondary/50 text-xs">
+                            <span class="material-symbols-outlined text-sm">lock</span>
+                            Secure Booking Encryption
                         </div>
                     </div>
                 </div>
@@ -322,41 +258,122 @@
         </div>
     </main>
 
-    <footer class="bg-surface-container-highest dark:bg-surface-container-low border-t border-outline-variant/20 mt-20">
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-section-gap-mobile md:gap-section-gap-desktop w-full px-container-padding py-16 max-w-7xl mx-auto">
-            <div class="md:col-span-1 flex flex-col gap-4">
-                <span class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed-dim">Kos Arcadia</span>
-                <p class="font-body-md text-body-md text-on-surface-variant">Elevating the boarding experience in Lombok with luxury management and serene environments.</p>
+    {{-- Footer — same as landing page --}}
+    <footer class="relative bg-[#0A0A0A] text-white overflow-hidden" x-data="footerTextEffect()">
+        <div class="absolute inset-0 z-0" style="background: radial-gradient(125% 125% at 50% 0%, #0F0F1166 50%, #3ca2fa22 100%);"></div>
+        <div class="relative z-10 max-w-7xl mx-auto px-6 md:px-12 pt-20 pb-10">
+            <div class="mb-16 -mt-4">
+                <svg x-ref="svg" width="100%" height="140" viewBox="0 0 900 140" xmlns="http://www.w3.org/2000/svg"
+                    class="select-none cursor-default"
+                    @mousemove="onMove($event)" @mouseenter="hovered = true" @mouseleave="hovered = false">
+                    <defs>
+                        <radialGradient id="frReveal" gradientUnits="userSpaceOnUse" :cx="maskCx" :cy="maskCy" r="18%">
+                            <stop offset="0%" stop-color="white" />
+                            <stop offset="100%" stop-color="black" />
+                        </radialGradient>
+                        <mask id="frMask">
+                            <rect x="0" y="0" width="900" height="140" fill="url(#frReveal)" />
+                        </mask>
+                    </defs>
+                    <text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle"
+                        stroke-width="1" fill="none" stroke="#ffffff"
+                        font-family="Inter, sans-serif" font-size="120" font-weight="700" letter-spacing="-2"
+                        :opacity="hovered ? 0.15 : 0">ARCADIA</text>
+                    <text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle"
+                        stroke-width="1" fill="none" stroke="#ffffff"
+                        font-family="Inter, sans-serif" font-size="120" font-weight="700" letter-spacing="-2"
+                        class="footer-stroke-draw">ARCADIA</text>
+                    <text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle"
+                        stroke="#ffffff" stroke-width="1" fill="none"
+                        mask="url(#frMask)"
+                        font-family="Inter, sans-serif" font-size="120" font-weight="700" letter-spacing="-2">ARCADIA</text>
+                </svg>
             </div>
-            <div class="flex flex-col gap-4">
-                <h4 class="font-label-lg text-label-lg text-primary font-bold">Explore</h4>
-                <a class="font-label-sm text-label-sm text-on-surface-variant hover:underline decoration-secondary transition-all" href="#">About Us</a>
-                <a class="font-label-sm text-label-sm text-on-surface-variant hover:underline decoration-secondary transition-all" href="#">Rooms</a>
-                <a class="font-label-sm text-label-sm text-on-surface-variant hover:underline decoration-secondary transition-all" href="#">Amenities</a>
-            </div>
-            <div class="flex flex-col gap-4">
-                <h4 class="font-label-lg text-label-lg text-primary font-bold">Support</h4>
-                <a class="font-label-sm text-label-sm text-on-surface-variant hover:underline decoration-secondary transition-all" href="#">Contact</a>
-                <a class="font-label-sm text-label-sm text-on-surface-variant hover:underline decoration-secondary transition-all" href="#">FAQ</a>
-                <a class="font-label-sm text-label-sm text-on-surface-variant hover:underline decoration-secondary transition-all" href="#">Privacy Policy</a>
-            </div>
-            <div class="flex flex-col gap-4">
-                <h4 class="font-label-lg text-label-lg text-primary font-bold">Connect</h4>
-                <div class="flex gap-4">
-                    <span class="material-symbols-outlined text-primary cursor-pointer hover:scale-110 transition-transform">share</span>
-                    <span class="material-symbols-outlined text-primary cursor-pointer hover:scale-110 transition-transform">mail</span>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10 mb-16">
+                <div>
+                    <h4 class="text-sm font-semibold uppercase tracking-widest text-white/40 mb-5">Kos Arcadia</h4>
+                    <p class="text-white/60 text-sm leading-relaxed max-w-xs">
+                        Premium managed boarding in the heart of Mataram, Lombok. A sanctuary for students and professionals who value peace, cleanliness, and intentional living.
+                    </p>
                 </div>
-                <p class="font-label-sm text-label-sm text-on-surface-variant mt-4">© {{ date('Y') }} Kos Arcadia Lombok. Luxury Managed Boarding.</p>
+                <div>
+                    <h4 class="text-sm font-semibold uppercase tracking-widest text-white/40 mb-5">Navigate</h4>
+                    <ul class="space-y-3 text-sm text-white/60">
+                        <li><a href="{{ url('/') }}#about" class="hover:text-white transition-colors">About</a></li>
+                        <li><a href="{{ url('/') }}#facility" class="hover:text-white transition-colors">Facilities</a></li>
+                        <li><a href="{{ url('/') }}#room" class="hover:text-white transition-colors">The Room</a></li>
+                        <li><a href="{{ url('/') }}#location" class="hover:text-white transition-colors">Location</a></li>
+                        <li><a href="{{ url('/book') }}" class="hover:text-white transition-colors">Book a Room</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-sm font-semibold uppercase tracking-widest text-white/40 mb-5">Contact</h4>
+                    <ul class="space-y-3 text-sm text-white/60">
+                        <li class="flex items-center gap-2">
+                            <span class="material-symbols-outlined text-sm text-white/30">location_on</span>
+                            Mataram, Lombok, NTB
+                        </li>
+                        <li>
+                            <a href="mailto:arcadiakost@gmail.com" class="flex items-center gap-2 hover:text-white transition-colors">
+                                <span class="material-symbols-outlined text-sm text-white/30">mail</span>
+                                arcadiakost@gmail.com
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://wa.me/6280000000" class="flex items-center gap-2 hover:text-white transition-colors">
+                                <span class="material-symbols-outlined text-sm text-white/30">call</span>
+                                WhatsApp
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="flex flex-col md:flex-row justify-between items-center border-t border-white/10 pt-8 text-xs text-white/30 uppercase tracking-widest gap-4">
+                <div>&copy; {{ date('Y') }} Kos Arcadia. All rights reserved.</div>
+                <div class="flex gap-6">
+                    <a href="#" class="hover:text-white/60 transition-colors">Instagram</a>
+                    <a href="#" class="hover:text-white/60 transition-colors">Terms</a>
+                    <a href="#" class="hover:text-white/60 transition-colors">Privacy</a>
+                </div>
             </div>
         </div>
     </footer>
 
     <script>
+        function footerTextEffect() {
+            return {
+                hovered: false,
+                maskCx: '50%',
+                maskCy: '50%',
+                onMove(e) {
+                    const rect = this.$refs.svg.getBoundingClientRect();
+                    this.maskCx = ((e.clientX - rect.left) / rect.width * 100) + '%';
+                    this.maskCy = ((e.clientY - rect.top) / rect.height * 100) + '%';
+                },
+            };
+        }
+    </script>
+
+    <script>
+        function updateDuration() {
+            var select = document.getElementById('duration-select');
+            var durationText = select.options[select.selectedIndex].text;
+            document.getElementById('summary-duration').innerText = durationText;
+
+            if (selectedRoomId && selectedPrice) {
+                var duration = parseInt(select.value);
+                var total = parseInt(selectedPrice) * duration;
+                document.getElementById('summary-total').innerText = 'IDR ' + total.toLocaleString('id-ID');
+            }
+        }
+
+        var selectedRoomId = null;
+        var selectedPrice = null;
+
         function selectRoom(el, roomId, roomNumber, price) {
-            // Deselect all cards
             document.querySelectorAll('.room-card').forEach(card => {
-                card.classList.remove('selected', 'border-2', 'border-primary', 'shadow-xl', 'shadow-primary/5');
-                card.classList.add('border', 'border-outline-variant/30');
+                card.classList.remove('border-2', 'border-primary', 'shadow-lg', 'shadow-black/5');
+                card.classList.add('border', 'border-border-subtle');
                 const mark = card.querySelector('.check-mark');
                 if (mark) {
                     mark.style.opacity = '0';
@@ -365,9 +382,8 @@
                 }
             });
 
-            // Select clicked card
-            el.classList.add('selected', 'border-2', 'border-primary', 'shadow-xl', 'shadow-primary/5');
-            el.classList.remove('border', 'border-outline-variant/30');
+            el.classList.add('border-2', 'border-primary', 'shadow-lg', 'shadow-black/5');
+            el.classList.remove('border', 'border-border-subtle');
 
             const mark = el.querySelector('.check-mark');
             if (mark) {
@@ -376,29 +392,26 @@
                 if (icon) icon.style.fontVariationSettings = "'FILL' 1";
             }
 
-            // Update Summary Sidebar
+            selectedRoomId = roomId;
+            selectedPrice = price;
+
+            var rawPrice = parseInt(price);
             document.getElementById('summary-room-id').innerText = roomNumber;
-            document.getElementById('summary-price').innerText = 'IDR ' + price;
-            document.getElementById('summary-total').innerText = 'IDR ' + (parseInt(price.replace(/\./g, '')) + 1000000).toLocaleString('id-ID');
+            document.getElementById('summary-price').innerText = 'IDR ' + rawPrice.toLocaleString('id-ID');
 
-            // Update hidden form fields
-            document.getElementById('form-room-id').value = roomId;
-            document.getElementById('form-start-date').value = document.querySelector('input[type="date"]').value;
+            var duration = parseInt(document.getElementById('duration-select').value);
+            var total = rawPrice * duration;
+            document.getElementById('summary-total').innerText = 'IDR ' + total.toLocaleString('id-ID');
 
-            // Update form action URL
-            var baseUrl = document.getElementById('booking-form').getAttribute('data-action');
-            document.getElementById('booking-form').action = baseUrl + '/' + roomId;
-
-            // Enable continue button
             var btn = document.getElementById('btn-continue');
-            btn.disabled = false;
-            btn.className = 'w-full bg-primary text-on-primary py-4 rounded-xl font-headline-md text-headline-md hover:brightness-110 active:scale-95 transition-all shadow-lg shadow-primary/20';
+            btn.href = '/book/' + roomId + '/details';
+            btn.className = 'w-full bg-primary text-white py-4 rounded-xl text-sm font-semibold hover:bg-black/80 active:scale-[0.98] transition-all text-center block pointer-events-auto';
             btn.innerText = 'Continue to Details';
 
-            // Interaction Feedback
             el.classList.add('scale-95');
             setTimeout(function() { el.classList.remove('scale-95'); }, 150);
         }
     </script>
+
 </body>
 </html>

@@ -6,13 +6,8 @@
 <div id="chat-widget-container">
     {{-- Floating Bubble Button --}}
     <button id="chat-toggle-btn" onclick="toggleChat()" aria-label="Chat Support">
-        <svg id="chat-icon-open" xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="white" viewBox="0 0 24 24">
-            <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H5.17L4 17.17V4h16v12z"/>
-            <path d="M7 9h10v2H7zm0-3h10v2H7zm0 6h7v2H7z"/>
-        </svg>
-        <svg id="chat-icon-close" xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="white" viewBox="0 0 24 24" style="display:none;">
-            <path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
-        </svg>
+        <span class="material-symbols-outlined" id="chat-icon-open" style="font-size:26px;">chat_bubble</span>
+        <span class="material-symbols-outlined" id="chat-icon-close" style="font-size:22px;display:none;">close</span>
         <span id="chat-unread-badge" style="display:none;"></span>
     </button>
 
@@ -22,35 +17,35 @@
         <div id="chat-header">
             <div style="display:flex;align-items:center;gap:10px;">
                 <div id="chat-avatar">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="white" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
+                    <span class="material-symbols-outlined" style="font-size:20px;">person</span>
                 </div>
                 <div>
                     <div id="chat-header-title">Staff Arcadia</div>
-                    <div id="chat-header-subtitle">Biasanya membalas dalam beberapa menit</div>
+                    <div id="chat-header-subtitle">Typically replies within a few minutes</div>
                 </div>
             </div>
             <button onclick="toggleChat()" style="background:none;border:none;cursor:pointer;padding:4px;">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="rgba(255,255,255,0.7)" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+                <span class="material-symbols-outlined" style="font-size:18px;color:rgba(255,255,255,0.6);">close</span>
             </button>
         </div>
 
         {{-- Messages Area --}}
         <div id="chat-messages">
             <div id="chat-welcome-msg">
-                <div style="width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#A65437,#C9A252);display:flex;align-items:center;justify-content:center;margin:0 auto 10px;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="white" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+                <div style="width:42px;height:42px;border-radius:50%;background:#0A0A0A;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;">
+                    <span class="material-symbols-outlined" style="font-size:22px;color:#fff;">chat_bubble</span>
                 </div>
-                <div style="font-weight:600;color:#1E3528;margin-bottom:4px;font-size:0.92rem;">Selamat datang! 👋</div>
-                <div style="font-size:0.78rem;color:#8A7F72;line-height:1.5;">Kirim pesan untuk menghubungi staff Arcadia Kost. Kami siap membantu Anda.</div>
+                <div style="font-weight:600;color:#0A0A0A;margin-bottom:4px;font-size:0.92rem;">Welcome!</div>
+                <div style="font-size:0.78rem;color:#4B5563;line-height:1.5;">Send a message to reach Arcadia Kost staff. We're here to help.</div>
             </div>
         </div>
 
         {{-- Input Area --}}
         <div id="chat-input-area">
             <form id="chat-form" onsubmit="sendChatMessage(event)">
-                <input type="text" id="chat-input" placeholder="Ketik pesan..." autocomplete="off" maxlength="1000">
-                <button type="submit" id="chat-send-btn" aria-label="Kirim">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="white" viewBox="0 0 24 24"><path d="M2.01 21 23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+                <input type="text" id="chat-input" placeholder="Type a message..." autocomplete="off" maxlength="1000">
+                <button type="submit" id="chat-send-btn" aria-label="Send">
+                    <span class="material-symbols-outlined" style="font-size:20px;">send</span>
                 </button>
             </form>
         </div>
@@ -64,7 +59,7 @@
         bottom: 24px;
         right: 24px;
         z-index: 9999;
-        font-family: 'Outfit', 'Inter', sans-serif;
+        font-family: 'Inter', sans-serif;
     }
 
     /* Floating toggle button */
@@ -72,19 +67,20 @@
         width: 58px;
         height: 58px;
         border-radius: 50%;
-        background: linear-gradient(135deg, #A65437, #1E3528);
+        background: #0A0A0A;
         border: none;
         cursor: pointer;
         display: flex;
         align-items: center;
         justify-content: center;
-        box-shadow: 0 6px 28px rgba(166,84,55,0.45);
+        box-shadow: 0 6px 28px rgba(0,0,0,0.25);
         transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
         position: relative;
+        color: #fff;
     }
     #chat-toggle-btn:hover {
         transform: scale(1.08);
-        box-shadow: 0 8px 36px rgba(166,84,55,0.55);
+        box-shadow: 0 8px 36px rgba(0,0,0,0.35);
     }
 
     /* Unread badge */
@@ -118,8 +114,8 @@
         width: 370px;
         max-height: 520px;
         background: #fff;
-        border-radius: 18px;
-        box-shadow: 0 12px 48px rgba(0,0,0,0.18), 0 0 0 1px rgba(0,0,0,0.04);
+        border-radius: 16px;
+        box-shadow: 0 12px 48px rgba(0,0,0,0.15), 0 0 0 1px rgba(0,0,0,0.04);
         display: flex;
         flex-direction: column;
         overflow: hidden;
@@ -132,7 +128,7 @@
 
     /* Header */
     #chat-header {
-        background: linear-gradient(135deg, #1E3528, #A65437);
+        background: #0A0A0A;
         padding: 16px 18px;
         display: flex;
         align-items: center;
@@ -143,10 +139,11 @@
         width: 36px;
         height: 36px;
         border-radius: 50%;
-        background: rgba(255,255,255,0.18);
+        background: rgba(255,255,255,0.12);
         display: flex;
         align-items: center;
         justify-content: center;
+        color: #fff;
     }
     #chat-header-title {
         color: #fff;
@@ -154,7 +151,7 @@
         font-size: 0.9rem;
     }
     #chat-header-subtitle {
-        color: rgba(255,255,255,0.55);
+        color: rgba(255,255,255,0.45);
         font-size: 0.7rem;
         margin-top: 1px;
     }
@@ -164,7 +161,7 @@
         flex: 1;
         overflow-y: auto;
         padding: 18px 16px;
-        background: #f8f6f3;
+        background: #F3F4F6;
         min-height: 280px;
         max-height: 340px;
         display: flex;
@@ -173,7 +170,7 @@
     }
     #chat-messages::-webkit-scrollbar { width: 5px; }
     #chat-messages::-webkit-scrollbar-track { background: transparent; }
-    #chat-messages::-webkit-scrollbar-thumb { background: #d1ccc4; border-radius: 10px; }
+    #chat-messages::-webkit-scrollbar-thumb { background: #D1D5DB; border-radius: 10px; }
 
     /* Welcome message */
     #chat-welcome-msg {
@@ -181,7 +178,7 @@
         padding: 18px 14px;
         background: #fff;
         border-radius: 14px;
-        border: 1px solid #e8e4dd;
+        border: 1px solid #E5E7EB;
     }
 
     /* Message bubbles */
@@ -201,7 +198,7 @@
     }
     .chat-bubble.own {
         align-self: flex-end;
-        background: linear-gradient(135deg, #A65437, #c4703f);
+        background: #0A0A0A;
         color: #fff;
         border-bottom-right-radius: 4px;
     }
@@ -209,7 +206,7 @@
         align-self: flex-start;
         background: #fff;
         color: #333;
-        border: 1px solid #e8e4dd;
+        border: 1px solid #E5E7EB;
         border-bottom-left-radius: 4px;
     }
     .chat-bubble .bubble-meta {
@@ -230,7 +227,7 @@
     #chat-input-area {
         padding: 12px 14px;
         background: #fff;
-        border-top: 1px solid #eee;
+        border-top: 1px solid #E5E7EB;
         flex-shrink: 0;
     }
     #chat-form {
@@ -241,23 +238,27 @@
     #chat-input {
         flex: 1;
         padding: 10px 14px;
-        border: 1.5px solid #e2ddd5;
+        border: 1.5px solid #E5E7EB;
         border-radius: 100px;
         font-size: 0.84rem;
         font-family: inherit;
         outline: none;
-        background: #faf9f7;
+        background: #F3F4F6;
         transition: border-color 0.2s;
+        color: #0A0A0A;
     }
     #chat-input:focus {
-        border-color: #A65437;
+        border-color: #0A0A0A;
         background: #fff;
+    }
+    #chat-input::placeholder {
+        color: #9CA3AF;
     }
     #chat-send-btn {
         width: 40px;
         height: 40px;
         border-radius: 50%;
-        background: linear-gradient(135deg, #A65437, #1E3528);
+        background: #0A0A0A;
         border: none;
         cursor: pointer;
         display: flex;
@@ -265,6 +266,7 @@
         justify-content: center;
         flex-shrink: 0;
         transition: all 0.2s;
+        color: #fff;
     }
     #chat-send-btn:hover {
         transform: scale(1.08);

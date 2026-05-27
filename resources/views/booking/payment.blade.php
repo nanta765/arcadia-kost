@@ -1,157 +1,129 @@
 <!DOCTYPE html>
-<html class="light" lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="utf-8">
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>{{ config('app.name', 'Kos Arcadia') }} - Secure Payment</title>
-    
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Be+Vietnam+Pro:wght@400;500;600&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
-    
-    <script id="tailwind-config">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arcadia Kost — Secure Payment</title>
+    <link rel="icon" href="{{ asset('images/arcadia-logo.jpg') }}" type="image/jpeg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL,GRAD,opsz@300,0,0,24" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script>
         tailwind.config = {
-            darkMode: "class",
             theme: {
                 extend: {
-                    "colors": {
-                        "primary-fixed-dim": "#aacdd1",
-                        "surface-bright": "#fbf9f5",
-                        "on-error": "#ffffff",
-                        "surface-variant": "#e4e2de",
-                        "secondary": "#456554",
-                        "on-primary-container": "#84a6ab",
-                        "background": "#fbf9f5",
-                        "error": "#ba1a1a",
-                        "on-background": "#1b1c1a",
-                        "surface-container-low": "#f5f3ef",
-                        "primary": "#00262a",
-                        "surface-container-lowest": "#ffffff",
-                        "on-secondary-container": "#4b6b5a",
-                        "tertiary": "#2e1f07",
-                        "inverse-on-surface": "#f2f0ed",
-                        "on-secondary-fixed": "#012114",
-                        "secondary-fixed-dim": "#accfba",
-                        "surface-container": "#efeeea",
-                        "tertiary-fixed": "#fbdeb9",
-                        "tertiary-container": "#46341a",
-                        "surface-dim": "#dbdad6",
-                        "on-error-container": "#93000a",
-                        "surface-container-highest": "#e4e2de",
-                        "on-primary": "#ffffff",
-                        "on-secondary-fixed-variant": "#2e4d3e",
-                        "error-container": "#ffdad6",
-                        "surface-container-high": "#eae8e4",
-                        "on-surface-variant": "#414849",
-                        "on-secondary": "#ffffff",
-                        "on-tertiary-container": "#b69c7b",
-                        "outline": "#717879",
-                        "on-primary-fixed": "#001f23",
-                        "primary-container": "#1a3c40",
-                        "surface-tint": "#436468",
-                        "on-tertiary": "#ffffff",
-                        "on-surface": "#1b1c1a",
-                        "inverse-surface": "#30312e",
-                        "inverse-primary": "#aacdd1",
-                        "on-tertiary-fixed-variant": "#564428",
-                        "primary-fixed": "#c5e9ee",
-                        "outline-variant": "#c1c8c9",
-                        "tertiary-fixed-dim": "#dec29f",
-                        "secondary-container": "#c7ebd6",
-                        "surface": "#fbf9f5",
-                        "on-primary-fixed-variant": "#2b4c50",
-                        "secondary-fixed": "#c7ebd6",
-                        "on-tertiary-fixed": "#271903"
+                    colors: {
+                        primary: "#0A0A0A",
+                        canvas: "#FFFFFF",
+                        surface: "#F3F4F6",
+                        "border-subtle": "#E5E7EB",
+                        "text-secondary": "#4B5563"
                     },
-                    "borderRadius": {
-                        "DEFAULT": "0.25rem",
-                        "lg": "0.5rem",
-                        "xl": "0.75rem",
-                        "full": "9999px"
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
                     },
-                    "spacing": {
-                        "section-gap-mobile": "40px",
-                        "base": "8px",
-                        "gutter": "16px",
-                        "container-padding": "24px",
-                        "section-gap-desktop": "80px"
-                    },
-                    "fontFamily": {
-                        "headline-lg": ["Montserrat"],
-                        "display-lg": ["Montserrat"],
-                        "headline-lg-mobile": ["Montserrat"],
-                        "headline-md": ["Montserrat"],
-                        "body-lg": ["Be Vietnam Pro"],
-                        "body-md": ["Be Vietnam Pro"],
-                        "label-lg": ["Be Vietnam Pro"],
-                        "label-sm": ["Be Vietnam Pro"]
-                    },
-                    "fontSize": {
-                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
-                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
-                        "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
-                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
-                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
-                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
-                        "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600"}],
-                        "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}]
+                    spacing: {
+                        'section': '120px',
                     }
                 }
             }
         }
     </script>
     <style>
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        .footer-stroke-draw {
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation: drawIn 4s ease-in-out forwards;
         }
-        .backdrop-blur-custom {
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-        }
-        .custom-shadow {
-            box-shadow: 0 10px 40px -10px rgba(26, 60, 64, 0.08);
+        @keyframes drawIn {
+            to { stroke-dashoffset: 0; }
         }
     </style>
 </head>
-<body class="bg-surface font-body-md text-on-surface">
-    <header class="docked full-width top-0 sticky z-50 bg-surface/80 backdrop-blur-md border-b border-outline-variant/30 shadow-sm shadow-primary/5">
-        <div class="flex justify-between items-center w-full px-container-padding py-4 max-w-7xl mx-auto">
-            <div class="flex items-center gap-2">
-                <a href="{{ url('/') }}" class="font-display-lg text-display-lg font-bold text-primary tracking-tight">Kos Arcadia</a>
+<body class="bg-canvas text-primary font-sans antialiased">
+
+    {{-- Navbar — same as landing page --}}
+    <nav id="navbar" class="fixed top-0 w-full bg-white/40 backdrop-blur-xl border-b border-white/20 shadow-sm shadow-black/5 z-50 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-6 md:px-12 h-20 flex items-center justify-between">
+            <div class="flex items-center">
+                @if(file_exists(public_path('images/arcadia-logo-no-bg.png')))
+                <img src="{{ asset('images/arcadia-logo-no-bg.png') }}" alt="Arcadia" class="h-14 md:h-16 w-auto">
+                @else
+                <span class="font-sans font-semibold tracking-widest uppercase text-sm">Arca</span>
+                @endif
             </div>
-            <nav class="hidden md:flex items-center gap-8">
-                <a class="font-label-lg text-label-lg text-on-surface-variant hover:text-primary transition-colors" href="{{ url('/') }}">Home</a>
-                <a class="font-label-lg text-label-lg text-on-surface-variant hover:text-primary transition-colors" href="{{ url('/rooms') }}">Rooms</a>
-                <a class="font-label-lg text-label-lg text-on-surface-variant hover:text-primary transition-colors" href="{{ url('/amenities') }}">Amenities</a>
-                <a class="font-label-lg text-label-lg text-on-surface-variant hover:text-primary transition-colors" href="{{ url('/location') }}">Location</a>
-            </nav>
-            <div class="flex items-center gap-4">
-                <button onclick="window.location.href='{{ url('/booking') }}'" class="bg-primary text-on-primary px-6 py-3 rounded-xl font-label-lg text-label-lg font-bold hover:bg-primary-container transition-all active:scale-95 duration-150">
-                    Book Now
-                </button>
+            <div class="hidden md:flex items-center gap-2 text-sm font-medium">
+                <a href="{{ route('dashboard') }}" class="px-4 py-2 rounded-full bg-white/30 backdrop-blur-sm border border-white/40 text-primary hover:bg-white/50 transition-all">Dashboard</a>
+                <a href="{{ url('/') }}" class="px-4 py-2 rounded-full bg-white/30 backdrop-blur-sm border border-white/40 text-primary hover:bg-white/50 transition-all">Home</a>
+                <a href="{{ route('booking.page') }}" class="px-4 py-2 rounded-full bg-white/30 backdrop-blur-sm border border-white/40 text-primary hover:bg-white/50 transition-all">Bookings</a>
+            </div>
+            <div class="flex items-center gap-3">
+                @if(auth()->user()->profile_photo)
+                <a href="{{ route('dashboard') }}" class="rounded-full overflow-hidden border-2 border-white/40 hover:border-white/80 transition-all" style="width: 38px; height: 38px;" title="Dashboard">
+                    <img src="{{ asset('storage/' . auth()->user()->profile_photo) }}" alt="Profile" class="w-full h-full object-cover">
+                </a>
+                @else
+                <a href="{{ route('dashboard') }}" class="flex items-center justify-center rounded-full bg-white/30 backdrop-blur-sm border-2 border-white/40 text-primary hover:border-white/80 transition-all" style="width: 38px; height: 38px;" title="Dashboard">
+                    <span class="material-symbols-outlined text-xl">person</span>
+                </a>
+                @endif
+                <form method="POST" action="{{ route('logout') }}" class="inline">
+                    @csrf
+                    <button type="submit" class="px-5 py-2 rounded-full border border-border-subtle text-sm font-medium text-text-secondary hover:bg-white/50 hover:text-primary transition-all">
+                        Logout
+                    </button>
+                </form>
             </div>
         </div>
-    </header>
+    </nav>
 
-    <main class="max-w-7xl mx-auto px-container-padding py-section-gap-mobile md:py-section-gap-desktop">
+    {{-- Stepper --}}
+    <div class="pt-28 mb-8">
+        <div class="flex items-center justify-between max-w-xl mx-auto relative">
+            <div class="absolute top-1/2 left-0 w-full h-0.5 bg-primary -translate-y-1/2 -z-10"></div>
+
+            <a href="{{ route('booking.page') }}" class="flex flex-col items-center gap-2 group">
+                <div class="w-10 h-10 rounded-full bg-primary/20 text-primary/50 flex items-center justify-center text-sm font-bold">
+                    <span class="material-symbols-outlined text-base" style="font-variation-settings: 'FILL' 1;">check</span>
+                </div>
+                <span class="text-xs font-semibold text-primary/50">Select Room</span>
+            </a>
+            <a href="{{ route('booking.details', $booking->room_id) }}" class="flex flex-col items-center gap-2 group">
+                <div class="w-10 h-10 rounded-full bg-primary/20 text-primary/50 flex items-center justify-center text-sm font-bold">
+                    <span class="material-symbols-outlined text-base" style="font-variation-settings: 'FILL' 1;">check</span>
+                </div>
+                <span class="text-xs font-semibold text-primary/50">Details</span>
+            </a>
+            <div class="flex flex-col items-center gap-2">
+                <div class="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center text-sm font-bold">3</div>
+                <span class="text-xs font-semibold text-primary">Payment</span>
+            </div>
+        </div>
+    </div>
+
+    {{-- Main Content --}}
+    <main class="max-w-7xl mx-auto px-6 md:px-12 pb-16">
         <form action="{{ route('booking.checkout', $booking) }}" method="POST" enctype="multipart/form-data" id="checkout-form">
             @csrf
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-                
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+
+                {{-- Left: Payment Form --}}
                 <div class="lg:col-span-7 space-y-8">
                     <div>
-                        <h1 class="font-headline-lg text-headline-lg text-primary mb-2">Secure Checkout</h1>
-                        <p class="text-on-surface-variant">Complete your reservation for a tropical luxury experience.</p>
+                        <h1 class="text-2xl font-bold text-primary mb-2">Secure Checkout</h1>
+                        <p class="text-text-secondary text-sm">Complete your reservation for a premium living experience.</p>
                     </div>
 
-                    <section class="bg-surface-container-lowest rounded-xl p-6 custom-shadow border border-outline-variant/10">
-                        <h2 class="font-headline-md text-headline-md text-primary mb-6">Payment Method</h2>
-                        
-                        {{-- Show Validation Errors if any exist --}}
+                    {{-- Payment Method --}}
+                    <section class="bg-white rounded-2xl p-6 border border-border-subtle shadow-sm">
+                        <h2 class="text-lg font-bold text-primary mb-6">Payment Method</h2>
+
                         @if ($errors->any())
-                            <div class="mb-4 p-4 bg-error-container text-on-error-container rounded-lg font-label-sm">
-                                <ul>
+                            <div class="mb-4 p-4 bg-red-50 text-red-600 rounded-xl text-xs">
+                                <ul class="list-disc list-inside">
                                     @foreach ($errors->all() as $error)
                                         <li>{{ $error }}</li>
                                     @endforeach
@@ -159,167 +131,224 @@
                             </div>
                         @endif
 
-                        <div class="space-y-4">
-                            <label class="relative flex items-center p-4 border border-outline-variant rounded-xl cursor-pointer hover:bg-primary/5 transition-all group has-[:checked]:border-primary has-[:checked]:bg-primary/5">
+                        <div class="space-y-3">
+                            <label class="relative flex items-center p-4 border border-border-subtle rounded-xl cursor-pointer hover:bg-surface transition-all has-[:checked]:border-primary has-[:checked]:bg-surface/50">
                                 <input checked class="hidden peer" name="payment_method" value="qr" type="radio">
-                                <span class="material-symbols-outlined text-primary mr-4" data-icon="qr_code">qr_code</span>
+                                <span class="material-symbols-outlined text-primary mr-4">qr_code</span>
                                 <div class="flex-grow">
-                                    <span class="font-label-lg text-label-lg text-on-surface block">QR Payment</span>
-                                    <span class="text-label-sm text-on-surface-variant">Scan QR code to pay instantly</span>
+                                    <span class="text-sm font-semibold text-primary block">QR Payment</span>
+                                    <span class="text-xs text-text-secondary">Scan QR code to pay instantly</span>
                                 </div>
-                                <div class="w-5 h-5 border-2 border-outline rounded-full flex items-center justify-center peer-checked:border-primary peer-checked:bg-primary">
+                                <div class="w-5 h-5 border-2 border-border-subtle rounded-full flex items-center justify-center peer-checked:border-primary peer-checked:bg-primary">
                                     <div class="w-2 h-2 bg-white rounded-full"></div>
                                 </div>
                             </label>
 
-                            <label class="relative flex items-center p-4 border border-outline-variant rounded-xl cursor-pointer hover:bg-primary/5 transition-all group has-[:checked]:border-primary has-[:checked]:bg-primary/5">
+                            <label class="relative flex items-center p-4 border border-border-subtle rounded-xl cursor-pointer hover:bg-surface transition-all has-[:checked]:border-primary has-[:checked]:bg-surface/50">
                                 <input class="hidden peer" name="payment_method" value="bank_transfer" type="radio">
-                                <span class="material-symbols-outlined text-primary mr-4" data-icon="account_balance">account_balance</span>
+                                <span class="material-symbols-outlined text-primary mr-4">account_balance</span>
                                 <div class="flex-grow">
-                                    <span class="font-label-lg text-label-lg text-on-surface block">Bank Transfer</span>
-                                    <span class="text-label-sm text-on-surface-variant">BCA, Mandiri, BNI (Manual Verification)</span>
+                                    <span class="text-sm font-semibold text-primary block">Bank Transfer</span>
+                                    <span class="text-xs text-text-secondary">BCA, Mandiri, BNI (Manual Verification)</span>
                                 </div>
-                                <div class="w-5 h-5 border-2 border-outline rounded-full flex items-center justify-center peer-checked:border-primary peer-checked:bg-primary">
+                                <div class="w-5 h-5 border-2 border-border-subtle rounded-full flex items-center justify-center peer-checked:border-primary peer-checked:bg-primary">
                                     <div class="w-2 h-2 bg-white rounded-full"></div>
                                 </div>
                             </label>
                         </div>
 
-                        <div class="mt-8 flex flex-col items-center justify-center p-6 bg-surface-container-low rounded-xl border border-outline-variant/30" id="qr-details">
-                            <p class="font-label-lg text-label-lg text-primary mb-4">Scan QR Code to Pay</p>
-                            <div class="bg-white rounded-xl p-4 shadow-sm border border-outline-variant/20">
+                        <div class="mt-6 flex flex-col items-center justify-center p-6 bg-surface rounded-xl border border-border-subtle" id="qr-details">
+                            <p class="text-sm font-semibold text-primary mb-4">Scan QR Code to Pay</p>
+                            <div class="bg-white rounded-xl p-4 shadow-sm border border-border-subtle">
                                 {!! $qrCode !!}
                             </div>
                             <div class="mt-4 space-y-2 text-center">
-                                <p class="font-label-sm text-label-sm text-on-surface-variant">Bank <span class="font-bold text-primary">{{ $bankName }}</span></p>
-                                <p class="font-label-sm text-label-sm text-on-surface-variant">No. Rekening <span class="font-bold text-primary">{{ $bankAccount }}</span></p>
-                                <p class="font-label-sm text-label-sm text-on-surface-variant">A.N <span class="font-bold text-primary">{{ $bankHolder }}</span></p>
-                                <p class="font-headline-md text-headline-md text-primary mt-3">Rp {{ number_format($totalAmount, 0, ',', '.') }}</p>
+                                <p class="text-xs text-text-secondary">Bank <span class="font-bold text-primary">{{ $bankName }}</span></p>
+                                <p class="text-xs text-text-secondary">No. Rekening <span class="font-bold text-primary">{{ $bankAccount }}</span></p>
+                                <p class="text-xs text-text-secondary">A.N <span class="font-bold text-primary">{{ $bankHolder }}</span></p>
+                                <p class="text-lg font-bold text-primary mt-3">Rp {{ number_format($totalAmount, 0, ',', '.') }}</p>
                             </div>
-                            <p class="text-label-sm text-on-surface-variant mt-4 text-center">Setelah transfer, unggah bukti pembayaran di bawah.</p>
+                            <p class="text-xs text-text-secondary mt-4 text-center">After transferring, upload your proof of payment below.</p>
                         </div>
                     </section>
 
-                    <section id="proof-upload" class="flex bg-surface-container-lowest rounded-xl p-6 border-2 border-dashed border-outline-variant/50 flex-col items-center justify-center text-center">
-                        <span class="material-symbols-outlined text-primary text-4xl mb-2" data-icon="cloud_upload">cloud_upload</span>
-                        <p class="font-label-lg text-label-lg text-on-surface">Upload Proof of Payment</p>
-                        <p class="text-label-sm text-on-surface-variant mt-1">Upload your payment receipt here (PNG, JPG, PDF)</p>
-                        <input type="file" name="payment_receipt" id="payment_receipt" class="hidden" accept=".png, .jpg, .jpeg, .pdf">
-                        <label for="payment_receipt" class="mt-4 text-primary font-bold hover:underline cursor-pointer">Choose File</label>
-                        <span id="file-name-display" class="block mt-2 text-label-sm text-secondary"></span>
+                    {{-- Upload Proof --}}
+                    <section id="proof-upload" class="bg-white rounded-2xl p-6 border-2 border-dashed border-border-subtle">
+                        <div id="upload-prompt" class="flex flex-col items-center justify-center text-center">
+                            <span class="material-symbols-outlined text-primary text-4xl mb-2">cloud_upload</span>
+                            <p class="text-sm font-semibold text-primary">Upload Proof of Payment</p>
+                            <p class="text-xs text-text-secondary mt-1">Upload your payment receipt here (PNG, JPG, PDF)</p>
+                            <input type="file" name="payment_receipt" id="payment_receipt" class="hidden" accept=".png, .jpg, .jpeg, .pdf">
+                            <label for="payment_receipt" class="mt-4 text-sm text-primary font-semibold hover:underline cursor-pointer">Choose File</label>
+                        </div>
+                        <div id="upload-preview" class="hidden flex flex-col items-center text-center">
+                            <img id="preview-image" class="w-full max-h-64 object-contain rounded-xl mb-3" src="" alt="Payment preview">
+                            <span id="file-name-display" class="text-xs text-text-secondary mb-1"></span>
+                            <label for="payment_receipt" class="text-xs text-primary font-semibold hover:underline cursor-pointer">Change File</label>
+                        </div>
                     </section>
                 </div>
 
+                {{-- Right: Summary Sidebar --}}
                 <aside class="lg:col-span-5 space-y-6">
-                    <div class="bg-primary-container text-on-primary-fixed-dim rounded-2xl overflow-hidden custom-shadow">
+                    <div class="bg-[#0A0A0A] text-white rounded-2xl overflow-hidden shadow-lg">
                         <div class="relative h-48">
-                            <img class="w-full h-full object-cover" data-alt="A luxurious minimalist bedroom in a tropical villa in Lombok." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCYSdAP2lpPqXLqHSKui0wJV-SY-gJwfhvowlb6X1x1kkdwsKZGijzQbfe9o1XfjApgkO3auPaZqZZi_eRHWR1488OfOrPgPUxUbYhgffIhtLrTgjBf_ghEMDP1w4TuWa9kujOGsCOHcCx3B9uAKNQGIQXg0xle4VriOsX3tae2uNN6cInCjdP3KSyHySZJaYzp0NzoHPCWk7SoGwfBEh383ydOJdtcLIkWAdEAdB9vQ1tfSOUi2xnVcm35o5EhWa51uhJvuRAdO7U">
+                            <img class="w-full h-full object-cover" alt="Room preview" src="{{ asset('images/gallery/front-room.jpeg') }}">
                             <div class="absolute inset-0 bg-gradient-to-t from-primary/80 to-transparent"></div>
                             <div class="absolute bottom-4 left-6">
-                                <span class="bg-secondary text-on-secondary text-label-sm px-3 py-1 rounded-full uppercase tracking-wider">{{ $booking->room->roomType->name }}</span>
-                                <h3 class="font-headline-md text-headline-md text-white mt-1">{{ $roomName ?? 'The Azure Loft' }}</h3>
+                                <span class="bg-white/20 text-white text-[10px] px-3 py-1 rounded-full uppercase tracking-wider">{{ $booking->room->roomType->name }}</span>
+                                <h3 class="text-lg font-bold text-white mt-1">{{ $roomName ?? 'The Azure Loft' }}</h3>
                             </div>
                         </div>
                         <div class="p-6 space-y-4">
-                            <div class="flex justify-between items-center text-surface-bright/80 border-b border-white/10 pb-4">
+                            <div class="flex justify-between items-center text-white/80 border-b border-white/10 pb-4">
                                 <div class="flex items-center gap-2">
-                                    <span class="material-symbols-outlined text-sm" data-icon="calendar_today">calendar_today</span>
-                                    <span class="font-label-lg">Duration</span>
+                                    <span class="material-symbols-outlined text-sm">calendar_today</span>
+                                    <span class="text-sm font-medium">Duration</span>
                                 </div>
                                 <span class="font-bold text-white">{{ $duration ?? '6 Months' }}</span>
                             </div>
                             <div class="space-y-3 pt-2">
-                                <div class="flex justify-between items-center text-surface-bright/70">
+                                <div class="flex justify-between items-center text-white/60 text-xs">
                                     <span>Monthly Rent</span>
                                     <span>Rp {{ number_format($monthlyRent ?? 8500000, 0, ',', '.') }}</span>
                                 </div>
-                                <div class="flex justify-between items-center text-surface-bright/70">
-                                    <span>Security Deposit</span>
-                                    <span>Rp {{ number_format($deposit ?? 2000000, 0, ',', '.') }}</span>
-                                </div>
-                                <div class="flex justify-between items-center text-surface-bright/70">
-                                    <span>Service Fee</span>
-                                    <span>Rp {{ number_format($serviceFee ?? 150000, 0, ',', '.') }}</span>
-                                </div>
                                 <div class="pt-4 border-t border-white/20 flex justify-between items-end">
                                     <div>
-                                        <p class="text-label-sm text-surface-bright/60 uppercase">Total Amount</p>
-                                        <p class="font-headline-lg text-headline-lg text-white">Rp {{ number_format($totalAmount ?? 53150000, 0, ',', '.') }}</p>
+                                        <p class="text-[10px] text-white/40 uppercase">Total Amount</p>
+                                        <p class="text-xl font-bold text-white">Rp {{ number_format($totalAmount ?? 53150000, 0, ',', '.') }}</p>
                                     </div>
-                                    <span class="text-label-sm text-primary-fixed-dim">Inc. Taxes</span>
+                                    <span class="text-[10px] text-white/40">Inc. Taxes</span>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="bg-surface-container-high rounded-xl p-6 space-y-4">
+                    {{-- Security Info --}}
+                    <div class="bg-white rounded-2xl border border-border-subtle p-6 space-y-4">
                         <div class="flex items-start gap-3">
-                            <span class="material-symbols-outlined text-secondary" data-icon="verified_user" data-weight="fill">verified_user</span>
+                            <span class="material-symbols-outlined text-primary text-xl">verified_user</span>
                             <div>
-                                <p class="font-label-lg text-on-surface">Secure SSL Encryption</p>
-                                <p class="text-label-sm text-on-surface-variant">Your transaction is protected by industry-leading 256-bit encryption.</p>
+                                <p class="text-sm font-semibold text-primary">Secure SSL Encryption</p>
+                                <p class="text-xs text-text-secondary">Your transaction is protected by industry-leading 256-bit encryption.</p>
                             </div>
                         </div>
                         <div class="flex items-start gap-3">
-                            <span class="material-symbols-outlined text-secondary" data-icon="shield_checkered" data-weight="fill">shield</span>
+                            <span class="material-symbols-outlined text-primary text-xl">shield</span>
                             <div>
-                                <p class="font-label-lg text-on-surface">Managed Protection</p>
-                                <p class="text-label-sm text-on-surface-variant">Payments are escrowed until move-in for your peace of mind.</p>
+                                <p class="text-sm font-semibold text-primary">Managed Protection</p>
+                                <p class="text-xs text-text-secondary">Payments are escrowed until move-in for your peace of mind.</p>
                             </div>
                         </div>
                     </div>
 
-                    <button type="submit" class="w-full bg-primary text-on-primary py-4 rounded-xl font-headline-md text-headline-md hover:shadow-lg hover:shadow-primary/20 transition-all active:scale-[0.98]">
+                    <button type="submit" class="w-full bg-primary text-white py-4 rounded-xl text-sm font-semibold hover:bg-black/80 transition-all active:scale-[0.98]">
                         Complete Payment
                     </button>
-                    <p class="text-center text-label-sm text-on-surface-variant">
-                        By clicking "Complete Payment", you agree to Kos Arcadia's 
-                        <a class="underline" href="{{ url('/terms') }}">Rental Terms</a> and <a class="underline" href="{{ url('/privacy') }}">Privacy Policy</a>.
+                    <p class="text-center text-xs text-text-secondary">
+                        By clicking "Complete Payment", you agree to Kos Arcadia's
+                        <a class="underline font-medium text-primary" href="{{ url('/terms') }}">Rental Terms</a> and <a class="underline font-medium text-primary" href="{{ url('/privacy') }}">Privacy Policy</a>.
                     </p>
                 </aside>
             </div>
         </form>
     </main>
 
-    <footer class="full-width bg-surface-container-highest border-t border-outline-variant/20 mt-section-gap-desktop">
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-section-gap-mobile md:gap-section-gap-desktop w-full px-container-padding py-16 max-w-7xl mx-auto">
-            <div class="md:col-span-1">
-                <span class="font-headline-md text-headline-md font-bold text-primary mb-4 block">Kos Arcadia</span>
-                <p class="font-body-md text-body-md text-on-surface-variant">
-                    Luxury managed boarding in the heart of Lombok. Experience the perfect blend of comfort and tranquility.
-                </p>
+    {{-- Footer — same as landing page --}}
+    <footer class="relative bg-[#0A0A0A] text-white overflow-hidden" x-data="footerTextEffect()">
+        <div class="absolute inset-0 z-0" style="background: radial-gradient(125% 125% at 50% 0%, #0F0F1166 50%, #3ca2fa22 100%);"></div>
+        <div class="relative z-10 max-w-7xl mx-auto px-6 md:px-12 pt-20 pb-10">
+            <div class="mb-16 -mt-4">
+                <svg x-ref="svg" width="100%" height="140" viewBox="0 0 900 140" xmlns="http://www.w3.org/2000/svg"
+                    class="select-none cursor-default"
+                    @mousemove="onMove($event)" @mouseenter="hovered = true" @mouseleave="hovered = false">
+                    <defs>
+                        <radialGradient id="frReveal" gradientUnits="userSpaceOnUse" :cx="maskCx" :cy="maskCy" r="18%">
+                            <stop offset="0%" stop-color="white" />
+                            <stop offset="100%" stop-color="black" />
+                        </radialGradient>
+                        <mask id="frMask">
+                            <rect x="0" y="0" width="900" height="140" fill="url(#frReveal)" />
+                        </mask>
+                    </defs>
+                    <text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle"
+                        stroke-width="1" fill="none" stroke="#ffffff"
+                        font-family="Inter, sans-serif" font-size="120" font-weight="700" letter-spacing="-2"
+                        :opacity="hovered ? 0.15 : 0">ARCADIA</text>
+                    <text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle"
+                        stroke-width="1" fill="none" stroke="#ffffff"
+                        font-family="Inter, sans-serif" font-size="120" font-weight="700" letter-spacing="-2"
+                        class="footer-stroke-draw">ARCADIA</text>
+                    <text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle"
+                        stroke="#ffffff" stroke-width="1" fill="none"
+                        mask="url(#frMask)"
+                        font-family="Inter, sans-serif" font-size="120" font-weight="700" letter-spacing="-2">ARCADIA</text>
+                </svg>
             </div>
-            <div>
-                <h4 class="font-label-lg text-label-lg font-bold text-primary mb-4">Quick Links</h4>
-                <ul class="space-y-3">
-                    <li><a class="font-label-sm text-label-sm text-on-surface-variant hover:underline decoration-secondary transition-all" href="{{ url('/about') }}">About Us</a></li>
-                    <li><a class="font-label-sm text-label-sm text-on-surface-variant hover:underline decoration-secondary transition-all" href="{{ url('/contact') }}">Contact</a></li>
-                    <li><a class="font-label-sm text-label-sm text-on-surface-variant hover:underline decoration-secondary transition-all" href="{{ url('/privacy') }}">Privacy Policy</a></li>
-                </ul>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10 mb-16">
+                <div>
+                    <h4 class="text-sm font-semibold uppercase tracking-widest text-white/40 mb-5">Kos Arcadia</h4>
+                    <p class="text-white/60 text-sm leading-relaxed max-w-xs">
+                        Premium managed boarding in the heart of Mataram, Lombok. A sanctuary for students and professionals who value peace, cleanliness, and intentional living.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="text-sm font-semibold uppercase tracking-widest text-white/40 mb-5">Navigate</h4>
+                    <ul class="space-y-3 text-sm text-white/60">
+                        <li><a href="{{ url('/') }}#about" class="hover:text-white transition-colors">About</a></li>
+                        <li><a href="{{ url('/') }}#facility" class="hover:text-white transition-colors">Facilities</a></li>
+                        <li><a href="{{ url('/') }}#room" class="hover:text-white transition-colors">The Room</a></li>
+                        <li><a href="{{ url('/') }}#location" class="hover:text-white transition-colors">Location</a></li>
+                        <li><a href="{{ url('/book') }}" class="hover:text-white transition-colors">Book a Room</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-sm font-semibold uppercase tracking-widest text-white/40 mb-5">Contact</h4>
+                    <ul class="space-y-3 text-sm text-white/60">
+                        <li class="flex items-center gap-2">
+                            <span class="material-symbols-outlined text-sm text-white/30">location_on</span>
+                            Mataram, Lombok, NTB
+                        </li>
+                        <li>
+                            <a href="mailto:arcadiakost@gmail.com" class="flex items-center gap-2 hover:text-white transition-colors">
+                                <span class="material-symbols-outlined text-sm text-white/30">mail</span>
+                                arcadiakost@gmail.com
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://wa.me/6280000000" class="flex items-center gap-2 hover:text-white transition-colors">
+                                <span class="material-symbols-outlined text-sm text-white/30">call</span>
+                                WhatsApp
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </div>
-            <div>
-                <h4 class="font-label-lg text-label-lg font-bold text-primary mb-4">Support</h4>
-                <ul class="space-y-3">
-                    <li><a class="font-label-sm text-label-sm text-on-surface-variant hover:underline decoration-secondary transition-all" href="{{ url('/faq') }}">FAQ</a></li>
-                    <li><a class="font-label-sm text-label-sm text-on-surface-variant hover:underline decoration-secondary transition-all" href="{{ url('/terms') }}">Terms of Service</a></li>
-                </ul>
+            <div class="flex flex-col md:flex-row justify-between items-center border-t border-white/10 pt-8 text-xs text-white/30 uppercase tracking-widest gap-4">
+                <div>&copy; {{ date('Y') }} Kos Arcadia. All rights reserved.</div>
+                <div class="flex gap-6">
+                    <a href="#" class="hover:text-white/60 transition-colors">Instagram</a>
+                    <a href="#" class="hover:text-white/60 transition-colors">Terms</a>
+                    <a href="#" class="hover:text-white/60 transition-colors">Privacy</a>
+                </div>
             </div>
-            <div>
-                <h4 class="font-label-lg text-label-lg font-bold text-primary mb-4">Newsletter</h4>
-                <p class="font-label-sm text-label-sm text-on-surface-variant mb-4">Get the latest updates on new units and seasonal offers.</p>
-                <form action="{{ url('/newsletter') }}" method="POST" class="flex gap-2">
-                    @csrf
-                    <input name="email" class="bg-surface-container border border-outline-variant rounded-lg px-3 py-2 text-label-sm w-full outline-none focus:ring-1 focus:ring-primary" placeholder="Email" type="email" required>
-                    <button type="submit" class="bg-primary text-on-primary px-4 rounded-lg"><span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span></button>
-                </form>
-            </div>
-        </div>
-        <div class="max-w-7xl mx-auto px-container-padding pb-8">
-            <p class="font-label-sm text-label-sm text-on-surface-variant text-center opacity-60">
-                © {{ date('Y') }} Kos Arcadia Lombok. Luxury Managed Boarding.
-            </p>
         </div>
     </footer>
+
+    <script>
+        function footerTextEffect() {
+            return {
+                hovered: false,
+                maskCx: '50%',
+                maskCy: '50%',
+                onMove(e) {
+                    const rect = this.$refs.svg.getBoundingClientRect();
+                    this.maskCx = ((e.clientX - rect.left) / rect.width * 100) + '%';
+                    this.maskCy = ((e.clientY - rect.top) / rect.height * 100) + '%';
+                },
+            };
+        }
+    </script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -331,7 +360,6 @@
             document.querySelectorAll('input[name="payment_method"]').forEach(input => {
                 input.addEventListener('change', (e) => {
                     const selectedMethod = e.target.value;
-
                     if (selectedMethod === 'qr') {
                         qrDetails.style.display = 'flex';
                         proofUpload.style.display = 'flex';
@@ -342,15 +370,38 @@
                 });
             });
 
-            // Show selected filename
             fileInput.addEventListener('change', function(e) {
+                const uploadPrompt = document.getElementById('upload-prompt');
+                const uploadPreview = document.getElementById('upload-preview');
+                const previewImage = document.getElementById('preview-image');
+
                 if (e.target.files.length > 0) {
-                    fileNameDisplay.textContent = 'Selected: ' + e.target.files[0].name;
+                    const file = e.target.files[0];
+                    fileNameDisplay.textContent = file.name;
+
+                    if (file.type.startsWith('image/')) {
+                        const reader = new FileReader();
+                        reader.onload = function(ev) {
+                            previewImage.src = ev.target.result;
+                            uploadPrompt.classList.add('hidden');
+                            uploadPreview.classList.remove('hidden');
+                        };
+                        reader.readAsDataURL(file);
+                    } else {
+                        uploadPrompt.classList.add('hidden');
+                        uploadPreview.classList.remove('hidden');
+                        previewImage.src = '';
+                        previewImage.classList.add('hidden');
+                    }
                 } else {
                     fileNameDisplay.textContent = '';
+                    uploadPrompt.classList.remove('hidden');
+                    uploadPreview.classList.add('hidden');
+                    previewImage.classList.remove('hidden');
                 }
             });
         });
     </script>
+
 </body>
 </html>

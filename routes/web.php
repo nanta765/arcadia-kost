@@ -20,6 +20,7 @@ require __DIR__ . '/auth.php';
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::post('/profile/photo', [ProfileController::class, 'updatePhoto'])->name('profile.photo');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
@@ -31,6 +32,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Booking — room catalog
     Route::controller(BookingPageController::class)->group(function () {
         Route::get('/book', 'show')->name('booking.page');
+        Route::get('/book/{room}/details', 'details')->name('booking.details')->whereNumber('room');
         Route::post('/book/{room}', 'store')->name('booking.store-room')->whereNumber('room');
     });
 

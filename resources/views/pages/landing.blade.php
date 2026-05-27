@@ -99,6 +99,13 @@
             </div>
             <div class="flex items-center gap-4">
                 @auth
+                <a href="{{ route('dashboard') }}" class="nav-link flex items-center gap-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-white hover:bg-white/30 transition-all overflow-hidden" title="Dashboard" style="width: 38px; height: 38px; padding: 0;">
+                    @if(auth()->user()->profile_photo)
+                    <img src="{{ asset('storage/' . auth()->user()->profile_photo) }}" alt="Profile" class="w-full h-full object-cover">
+                    @else
+                    <span class="material-symbols-outlined text-xl w-full h-full flex items-center justify-center">account_circle</span>
+                    @endif
+                </a>
                 <a href="{{ route('booking.page') }}" class="bg-white text-primary px-6 py-3 rounded-full text-xs font-semibold tracking-widest uppercase hover:bg-white/80 transition-all">
                     Book Now
                 </a>
