@@ -194,6 +194,29 @@
                         class="w-full text-body-md text-on-surface bg-surface-container-low border border-outline-variant rounded-xl p-4 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none resize-none transition-all">{{ old('notes') }}</textarea>
                 </div>
 
+                <div class="mb-6 pt-6 border-t border-outline-variant/20">
+                    <label for="deadline_days" class="block font-label-lg text-label-lg text-primary mb-2">
+                        Tenggat Waktu Pengerjaan
+                    </label>
+                    <p class="text-on-surface-variant text-label-sm mb-3">Kapan paling lambat kami harus menyelesaikannya?</p>
+                    <div class="grid grid-cols-3 gap-2">
+                        @php $daysOptions = [0 => 'Hari Ini', 1 => '1 Hari', 2 => '2 Hari', 3 => '3 Hari', 5 => '5 Hari', 7 => '7 Hari']; @endphp
+                        @foreach($daysOptions as $val => $label)
+                        <label class="cursor-pointer">
+                            <input type="radio" name="deadline_days" value="{{ $val }}" class="sr-only peer"
+                                {{ old('deadline_days', 1) == $val ? 'checked' : '' }}>
+                            <span class="block text-center py-3 rounded-xl border-2 border-outline-variant/30 bg-surface-container-low text-label-sm font-medium
+                                peer-checked:border-primary peer-checked:bg-primary-container/20 peer-checked:text-primary transition-all">
+                                {{ $label }}
+                            </span>
+                        </label>
+                        @endforeach
+                    </div>
+                    @error('deadline_days')
+                    <p class="text-error text-label-sm mt-2">{{ $message }}</p>
+                    @enderror
+                </div>
+
                 <button type="submit"
                     class="w-full flex items-center justify-center gap-2 bg-primary text-on-primary font-label-lg text-label-lg py-4 rounded-xl hover:bg-primary-container transition-all active:scale-95 shadow-sm">
                     <span class="material-symbols-outlined">send</span>

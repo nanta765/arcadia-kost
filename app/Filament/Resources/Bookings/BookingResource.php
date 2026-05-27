@@ -38,8 +38,8 @@ class BookingResource extends Resource
     // Menggunakan Heroicon bawaan
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
-    protected static ?string $navigationLabel = 'Manajemen Pesanan';
-    protected static ?string $pluralLabel = 'Pesanan';
+    protected static ?string $navigationLabel = 'Bookings';
+    protected static ?string $pluralLabel = 'Bookings';
 
     // Menggunakan id sebagai title attribute untuk pencarian
     protected static ?string $recordTitleAttribute = 'id';

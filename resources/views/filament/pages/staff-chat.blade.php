@@ -5,10 +5,10 @@
     <div class="arca-chat-wrapper">
         <div class="chat-sidebar">
             <div class="sidebar-header">
-                <h2>Pesan Masuk</h2>
+                <h2>Messages</h2>
             </div>
             <div class="sidebar-list" id="chat-list">
-                <div class="empty-text">Memuat daftar obrolan...</div>
+                <div class="empty-text">Loading conversations...</div>
             </div>
         </div>
 
@@ -17,11 +17,11 @@
                 <div class="header-profile">
                     <div class="tenant-avatar active-avatar" id="active-avatar-text">U</div>
                     <div>
-                        <h3 id="chat-partner-name">Nama Tenant</h3>
+                        <h3 id="chat-partner-name">Tenant Name</h3>
                         <p class="status-online"><span class="dot"></span> Online</p>
                     </div>
                 </div>
-                <button id="clear-chat-btn" class="btn-delete-chat" title="Bersihkan Chat">
+                <button id="clear-chat-btn" class="btn-delete-chat" title="Clear Chat">
                     <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                     </svg>
@@ -33,16 +33,16 @@
                     <svg width="64" height="64" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
                     </svg>
-                    <p class="title">Buka Obrolan Tenant</p>
-                    <p class="subtitle">Pilih salah satu nama di sebelah kiri untuk merespons pesan anak kost.</p>
+                    <p class="title">Open a Conversation</p>
+                    <p class="subtitle">Select a name on the left to respond to tenant messages.</p>
                 </div>
             </div>
 
             <div class="chat-footer" id="chat-footer" style="visibility: hidden;">
                 <form id="chat-form" class="form-send" onsubmit="sendStaffMessage(event)">
-                    <input type="text" id="chat-input" placeholder="Ketik pesan di sini..." autocomplete="off">
+                    <input type="text" id="chat-input" placeholder="Type a message..." autocomplete="off">
                     <button type="submit" id="chat-send-btn">
-                        <span>Kirim</span>
+                        <span>Send</span>
                     </button>
                 </form>
             </div>
@@ -63,10 +63,10 @@
         .dark .tenant-item { border-color: #1f2937; }
         .tenant-item:hover { background: #f3f4f6; }
         .dark .tenant-item:hover { background: #374151; }
-        .active-tenant { background: #eef2ff !important; border-left: 4px solid #4f46e5; }
-        .dark .active-tenant { background: rgba(79, 70, 229, 0.15) !important; border-left-color: #6366f1; }
-        .tenant-avatar { width: 36px; height: 36px; border-radius: 50%; background: #e0e7ff; color: #4338ca; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; flex-shrink: 0; }
-        .dark .tenant-avatar { background: #312e81; color: #c7d2fe; }
+        .active-tenant { background: #fffbeb !important; border-left: 4px solid #d97706; }
+        .dark .active-tenant { background: rgba(217, 119, 6, 0.12) !important; border-left-color: #f59e0b; }
+        .tenant-avatar { width: 36px; height: 36px; border-radius: 50%; background: #fef3c7; color: #92400e; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; flex-shrink: 0; }
+        .dark .tenant-avatar { background: #78350f; color: #fde68a; }
         .tenant-info { flex: 1; min-width: 0; }
         .tenant-row { display: flex; justify-content: space-between; align-items: center; }
         .tenant-name { font-size: 14px; font-weight: 600; color: #111827; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -91,21 +91,21 @@
         .row-own { justify-content: flex-end; }
         .row-other { justify-content: flex-start; }
         .bubble { max-width: 65%; padding: 10px 14px; border-radius: 14px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); position: relative; }
-        .bubble-own { background: #4f46e5; color: #ffffff; border-top-right-radius: 2px; }
+        .bubble-own { background: #d97706; color: #ffffff; border-top-right-radius: 2px; }
         .bubble-other { background: #ffffff; color: #1f2937; border-top-left-radius: 2px; border: 1px solid #e5e7eb; }
         .dark .bubble-other { background: #1f2937; color: #f9fafb; border-color: #374151; }
         .bubble-text { font-size: 13.5px; line-height: 1.5; margin: 0; word-break: break-word; }
-        .bubble-name { font-size: 11px; font-weight: bold; margin-bottom: 4px; color: #4f46e5; }
-        .dark .bubble-name { color: #818cf8; }
+        .bubble-name { font-size: 11px; font-weight: bold; margin-bottom: 4px; color: #d97706; }
+        .dark .bubble-name { color: #f59e0b; }
         .bubble-time { display: block; text-align: right; font-size: 10px; margin-top: 4px; opacity: 0.7; }
         .chat-footer { padding: 16px; background: #ffffff; border-top: 1px solid #e5e7eb; }
         .dark .chat-footer { background: #111827; border-color: #1f2937; }
         .form-send { display: flex; gap: 12px; }
         .form-send input { flex: 1; padding: 10px 16px; border: 1px solid #d1d5db; border-radius: 10px; font-size: 14px; outline: none; background: #f9fafb; }
         .dark .form-send input { background: #1f2937; border-color: #374151; color: #ffffff; }
-        .form-send input:focus { border-color: #4f46e5; box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.1); }
-        .form-send button { background: #4f46e5; border: none; color: #ffffff; padding: 0 20px; border-radius: 10px; font-weight: 600; font-size: 14px; cursor: pointer; transition: background 0.2s; }
-        .form-send button:hover { background: #4338ca; }
+        .form-send input:focus { border-color: #d97706; box-shadow: 0 0 0 2px rgba(217, 119, 6, 0.1); }
+        .form-send button { background: #d97706; border: none; color: #ffffff; padding: 0 20px; border-radius: 10px; font-weight: 600; font-size: 14px; cursor: pointer; transition: background 0.2s; }
+        .form-send button:hover { background: #b45309; }
         .form-send button:disabled { background: #9ca3af; cursor: not-allowed; }
         .chat-empty-board { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #9ca3af; text-align: center; height: 100%; }
         .chat-empty-board svg { margin-bottom: 16px; opacity: 0.4; }
@@ -149,14 +149,14 @@
                 chatsData = data.chats || [];
                 renderChatList();
             } catch (error) {
-                console.error("Gagal memuat list chat:", error);
+                console.error("Failed to load chat list:", error);
             }
         }
 
         // 2. Merender HTML Daftar Chat Kiri
         function renderChatList() {
             if (chatsData.length === 0) {
-                chatListEl.innerHTML = '<div class="empty-text">Belum ada obrolan anak kost.</div>';
+                chatListEl.innerHTML = '<div class="empty-text">No conversations yet.</div>';
                 return;
             }
 
@@ -169,7 +169,7 @@
                             <span class="tenant-time">${escapeHtml(chat.last_message_time)}</span>
                         </div>
                         <div class="tenant-row" style="margin-top: 4px;">
-                            <span class="tenant-preview">${escapeHtml(chat.last_message_preview) || 'Belum ada pesan...'}</span>
+                            <span class="tenant-preview">${escapeHtml(chat.last_message_preview) || 'No messages yet...'}</span>
                             ${chat.unread_count > 0 ? `<span class="chat-badge">${chat.unread_count}</span>` : ''}
                         </div>
                     </div>
@@ -204,14 +204,14 @@
                 const data = await response.json();
                 renderMessages(data.messages || []);
             } catch (error) {
-                console.error("Gagal memuat history:", error);
+                console.error("Failed to load message history:", error);
             }
         }
 
         // 5. Render Gelembung Chat
         function renderMessages(messages) {
             if (messages.length === 0) {
-                messagesEl.innerHTML = `<div class="empty-text" style="margin: auto;">Belum ada pesan sejarah. Kirim pesan pertama!</div>`;
+                messagesEl.innerHTML = `<div class="empty-text" style="margin: auto;">No messages yet. Send the first one!</div>`;
                 return;
             }
 
@@ -254,7 +254,7 @@
                     await fetchChatList(); // Update last message di panel kiri
                 }
             } catch (error) {
-                alert('Gagal mengirim pesan. Cek koneksi.');
+                alert('Failed to send message. Check your connection.');
             } finally {
                 inputEl.disabled = false;
                 sendBtnEl.disabled = false;
@@ -264,7 +264,7 @@
 
         // 7. Hapus Obrolan
         document.getElementById('clear-chat-btn').addEventListener('click', async () => {
-            if(!currentChatId || !confirm('Yakin ingin menghapus seluruh history obrolan ini?')) return;
+            if(!currentChatId || !confirm('Delete this entire chat history?')) return;
             
             try {
                 const response = await fetch(`/chat/${currentChatId}`, {
@@ -280,7 +280,7 @@
                     fetchChatList();
                 }
             } catch (error) {
-                alert('Gagal menghapus obrolan.');
+                alert('Failed to delete conversation.');
             }
         });
 

@@ -35,6 +35,7 @@ class ServiceRequestController extends Controller
         $request->validate([
             'type' => 'required|in:cleaning,repair',
             'notes' => 'nullable|string|max:500',
+            'deadline_days' => 'required|integer|min:0|max:30',
         ]);
 
         ServiceRequest::create([
@@ -43,7 +44,8 @@ class ServiceRequestController extends Controller
             'room_id' => $booking->room_id,
             'type' => $request->type,
             'notes' => $request->notes,
-            'status' => 'pending', // Otomatis masuk antrean
+            'deadline' => now()->addDays((int) $request->deadline_days),
+            'status' => 'pending',
         ]);
 
         return redirect()->route('booking.my-bookings')->with('success', 'Permintaan layanan berhasil dikirim! Staf kami akan segera datang.');

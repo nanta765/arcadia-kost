@@ -9,6 +9,7 @@ use Filament\Tables\Columns\TextColumn;
 
 class RecentBookings extends TableWidget
 {
+    protected int|string|array $columnSpan = 'full';
     protected static ?string $heading = 'Recent Bookings';
 
     public function table(Table $table): Table

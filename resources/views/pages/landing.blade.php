@@ -3,7 +3,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Urban Stay | Premium Boarding</title>
+    <title>Arcadia Kost</title>
+    <link rel="icon" href="{{ asset('images/arcadia-logo.jpg') }}" type="image/jpeg">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -66,11 +67,20 @@
         .delay-300 { transition-delay: 300ms; }
         .delay-400 { transition-delay: 400ms; }
         .delay-500 { transition-delay: 500ms; }
+
+        .footer-stroke-draw {
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation: drawIn 4s ease-in-out forwards;
+        }
+        @keyframes drawIn {
+            to { stroke-dashoffset: 0; }
+        }
     </style>
 </head>
 <body class="bg-canvas text-primary font-sans antialiased selection:bg-primary selection:text-white">
 
-    <nav class="fixed top-0 w-full bg-white/40 backdrop-blur-xl border-b border-white/20 shadow-sm shadow-black/5 z-50 transition-all duration-300">
+    <nav id="navbar" class="fixed top-0 w-full bg-transparent border-b border-transparent z-50 transition-all duration-500">
         <div class="max-w-7xl mx-auto px-6 md:px-12 h-20 flex items-center justify-between">
             <div class="flex items-center">
                 @if(file_exists(public_path('images/arcadia-logo-no-bg.png')))
@@ -80,22 +90,23 @@
                 @endif
             </div>
             <div class="hidden md:flex items-center gap-2 text-sm font-medium">
-                <a href="#about" class="px-4 py-2 rounded-full bg-white/30 backdrop-blur-sm border border-white/40 text-primary hover:bg-white/50 transition-all">About</a>
-                <a href="#facility" class="px-4 py-2 rounded-full bg-white/30 backdrop-blur-sm border border-white/40 text-primary hover:bg-white/50 transition-all">Facilities</a>
-                <a href="#room" class="px-4 py-2 rounded-full bg-white/30 backdrop-blur-sm border border-white/40 text-primary hover:bg-white/50 transition-all">The Room</a>
-                <a href="#location" class="px-4 py-2 rounded-full bg-white/30 backdrop-blur-sm border border-white/40 text-primary hover:bg-white/50 transition-all">Location</a>
-                <a href="{{ url('/book') }}" class="px-4 py-2 rounded-full bg-white/50 backdrop-blur-sm border border-white/60 text-primary hover:bg-white/70 transition-all">Book</a>
+                <a href="#about" class="nav-link px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-white hover:bg-white/30 transition-all">About</a>
+                <a href="#facility" class="nav-link px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-white hover:bg-white/30 transition-all">Facilities</a>
+                <a href="#gallery" class="nav-link px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-white hover:bg-white/30 transition-all">Gallery</a>
+                <a href="#room" class="nav-link px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-white hover:bg-white/30 transition-all">The Room</a>
+                <a href="#location" class="nav-link px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-white hover:bg-white/30 transition-all">Location</a>
+                <a href="#reviews" class="nav-link px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-white hover:bg-white/30 transition-all">Reviews</a>
             </div>
             <div class="flex items-center gap-4">
                 @auth
-                <a href="{{ route('booking.page') }}" class="bg-primary text-white px-6 py-3 rounded-full text-xs font-semibold tracking-widest uppercase hover:bg-black/80 transition-all">
+                <a href="{{ route('booking.page') }}" class="bg-white text-primary px-6 py-3 rounded-full text-xs font-semibold tracking-widest uppercase hover:bg-white/80 transition-all">
                     Book Now
                 </a>
                 @else
-                <a href="{{ route('login') }}" class="px-5 py-2 rounded-full bg-white/30 backdrop-blur-sm border border-white/40 text-sm font-medium text-primary hover:bg-white/50 transition-all">
+                <a href="{{ route('login') }}" class="nav-link px-5 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-sm font-medium text-white hover:bg-white/30 transition-all">
                     Login
                 </a>
-                <a href="{{ route('booking.page') }}" class="bg-primary text-white px-6 py-3 rounded-full text-xs font-semibold tracking-widest uppercase hover:bg-black/80 transition-all">
+                <a href="{{ route('booking.page') }}" class="bg-white text-primary px-6 py-3 rounded-full text-xs font-semibold tracking-widest uppercase hover:bg-white/80 transition-all">
                     Reserve Now
                 </a>
                 @endauth
@@ -150,7 +161,7 @@
                 </div>
                 <div>
                     <p class="text-[#4B5563] text-base md:text-lg leading-relaxed mb-8">
-                        We disrupt the traditional chaotic boarding house model. Urban Stay is built on the principles of spatial harmony, eliminating clutter, and providing a seamless living experience in Malang.
+                        We reimagine the boarding house experience in Mataram. Kost Arcadia is built on the principles of spatial harmony and eliminating clutter, embracing natural light, and delivering a seamless living experience in the heart of Lombok.
                     </p>
                     <a href="#facility" class="inline-flex items-center text-sm font-semibold uppercase tracking-widest border-b-2 border-[#0A0A0A] pb-1 hover:opacity-70 transition-opacity">
                         Discover Features
@@ -171,33 +182,33 @@
 
             <div class="md:col-span-3 bg-[#F3F4F6] rounded-[2rem] p-8 flex flex-col justify-center reveal delay-200">
                 <div class="w-12 h-12 rounded-full bg-white flex items-center justify-center mb-6">
-                    <span class="material-symbols-outlined text-[#0A0A0A]">cleaning_services</span>
+                    <span class="material-symbols-outlined text-[#0A0A0A]">build</span>
                 </div>
-                <h3 class="text-lg font-semibold mb-2">Weekly Cleaning</h3>
+                <h3 class="text-lg font-semibold mb-2">Service Request</h3>
                 <p class="text-sm text-[#4B5563] leading-relaxed">
-                    Complimentary deep cleaning of your room and bathroom every week.
+                    Request cleaning or repair services anytime. Track progress and deadlines from your dashboard.
                 </p>
             </div>
 
             <div class="md:col-span-4 relative rounded-[2rem] overflow-hidden min-h-[260px] group reveal delay-300">
-                <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1000&auto=format&fit=crop" 
-                     alt="Minimalist interior" 
+                <img src="{{ asset('images/gallery/front-room.jpeg') }}"
+                     alt="Modern Room Interior"
                      class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out">
                 <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
                 <div class="absolute bottom-0 left-0 p-8 w-full z-10">
-                    <div class="text-white text-lg font-medium mb-1">Spatial Harmony</div>
-                    <div class="text-white/70 text-sm">Clean lines and authentic materials.</div>
+                    <div class="text-white text-lg font-medium mb-1">Thoughtfully Designed</div>
+                    <div class="text-white/70 text-sm">Clean lines, premium materials, and natural light.</div>
                 </div>
             </div>
 
             <div class="md:col-span-2 relative rounded-[2rem] overflow-hidden min-h-[260px] group reveal delay-400">
-                <img src="https://images.unsplash.com/photo-1554995207-c18c203602cb?q=80&w=600&auto=format&fit=crop" 
-                     alt="Smart Access" 
+                <img src="{{ asset('images/gallery/facility.jpeg') }}"
+                     alt="Private Facilities"
                      class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out">
                 <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
                 <div class="absolute bottom-0 left-0 p-6 w-full z-10">
-                    <div class="text-white text-base font-medium mb-1">Smart Access</div>
-                    <div class="text-white/70 text-xs">RFID Keyless entry.</div>
+                    <div class="text-white text-base font-medium mb-1">Private Facilities</div>
+                    <div class="text-white/70 text-xs">Ensuite bathroom & premium fittings.</div>
                 </div>
             </div>
 
@@ -219,9 +230,9 @@
                     <p class="text-text-secondary">Enterprise-grade 100 Mbps connection with individual access points per room to ensure zero latency for your online exams or remote work.</p>
                 </div>
                 <div class="bg-canvas p-8 rounded-2xl border border-border-subtle reveal delay-200">
-                    <span class="material-symbols-outlined text-3xl mb-6">cleaning_services</span>
-                    <h3 class="text-xl font-semibold mb-2">Weekly Housekeeping</h3>
-                    <p class="text-text-secondary">Complimentary deep cleaning of your room and bathroom every week.</p>
+                    <span class="material-symbols-outlined text-3xl mb-6">build</span>
+                    <h3 class="text-xl font-semibold mb-2">On-Demand Services</h3>
+                    <p class="text-text-secondary">Request cleaning or repair services directly from your dashboard. Track progress, set deadlines, and get notified when complete.</p>
                 </div>
                 <div class="bg-canvas p-8 rounded-2xl border border-border-subtle reveal delay-300">
                     <span class="material-symbols-outlined text-3xl mb-6">kitchen</span>
@@ -245,73 +256,62 @@
 
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-5 auto-rows-[180px] md:auto-rows-[220px]">
 
-            @php $featuredType = $roomTypes->first(); @endphp
+            @php
+            $gallery = fn($file) => asset("images/gallery/{$file}");
+            @endphp
 
-            {{-- Row 1-2, Col 1-2: Large feature (2x2) --}}
+            {{-- Row 1-2, Col 1-2: Front Room (2x2) --}}
             <div class="md:col-span-2 md:row-span-2 relative rounded-[2rem] overflow-hidden group reveal">
-                @if($featuredType?->image)
-                <img src="{{ asset("storage/{$featuredType->image}") }}" alt="Room interior" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out">
-                @else
-                <img src="https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=800&auto=format&fit=crop" alt="Room interior" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out">
-                @endif
+                <img src="{{ $gallery('front-room.jpeg') }}" alt="Front Room" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out">
                 <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
                 <div class="absolute bottom-0 left-0 p-6 z-10">
-                    <span class="text-white/70 text-xs font-semibold uppercase tracking-widest">The Suite</span>
-                    <p class="text-white text-lg font-sans">{{ $featuredType?->name ?? 'Standard Room' }}</p>
+                    <span class="text-white/70 text-xs font-semibold uppercase tracking-widest">The Room</span>
+                    <p class="text-white text-lg font-sans">Spacious & Modern</p>
                 </div>
             </div>
 
-            {{-- Row 1, Col 3: Small --}}
-            <div class="relative rounded-[2rem] overflow-hidden group bg-surface reveal delay-100">
-                <img src="https://images.unsplash.com/photo-1560185007-cde436f6a4d0?w=400&auto=format&fit=crop" alt="Minimalist workspace" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out">
-                <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
-                <div class="absolute bottom-0 left-0 p-4 z-10">
-                    <p class="text-white text-sm font-medium">Workspace</p>
-                </div>
-            </div>
-
-            {{-- Row 1, Col 4: Small --}}
-            <div class="relative rounded-[2rem] overflow-hidden group bg-surface reveal delay-200">
-                <img src="https://images.unsplash.com/photo-1586105251261-72a756497a11?w=400&auto=format&fit=crop" alt="Lighting details" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out">
-                <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
-                <div class="absolute bottom-0 left-0 p-4 z-10">
-                    <p class="text-white text-sm font-medium">Ambient Light</p>
-                </div>
-            </div>
-
-            {{-- Row 2, Col 3-4: Wide landscape --}}
-            <div class="md:col-span-2 relative rounded-[2rem] overflow-hidden group bg-surface reveal delay-300">
-                <img src="https://images.unsplash.com/photo-1538688525198-9b88f6f53126?w=800&auto=format&fit=crop" alt="Common area" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out">
+            {{-- Row 1, Col 3-4: Outdoor (2x1) --}}
+            <div class="md:col-span-2 relative rounded-[2rem] overflow-hidden group reveal delay-100">
+                <img src="{{ $gallery('kost-field.jpeg') }}" alt="Outdoor" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out">
                 <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
                 <div class="absolute bottom-0 left-0 p-5 z-10">
-                    <p class="text-white text-sm font-medium">Communal Lounge</p>
+                    <p class="text-white text-sm font-medium">Outdoor Area</p>
                 </div>
             </div>
 
-            {{-- Row 3, Col 1: Small --}}
-            <div class="relative rounded-[2rem] overflow-hidden group bg-surface reveal delay-100">
-                <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=400&auto=format&fit=crop" alt="Interior detail" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out">
-                <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
-                <div class="absolute bottom-0 left-0 p-4 z-10">
-                    <p class="text-white text-sm font-medium">Details</p>
-                </div>
-            </div>
-
-            {{-- Row 3, Col 2: Small --}}
+            {{-- Row 2, Col 3: Bathroom --}}
             <div class="relative rounded-[2rem] overflow-hidden group bg-surface reveal delay-200">
-                <img src="https://images.unsplash.com/photo-1554995207-c18c203602cb?w=400&auto=format&fit=crop" alt="Smart lock" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out">
+                <img src="{{ $gallery('bathroom.jpeg') }}" alt="Bathroom" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out">
                 <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
                 <div class="absolute bottom-0 left-0 p-4 z-10">
-                    <p class="text-white text-sm font-medium">Keyless Entry</p>
+                    <p class="text-white text-sm font-medium">Bathroom</p>
                 </div>
             </div>
 
-            {{-- Row 3, Col 3-4: Wide landscape --}}
-            <div class="md:col-span-2 relative rounded-[2rem] overflow-hidden group bg-surface reveal delay-300">
-                <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&auto=format&fit=crop" alt="Hallway" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out">
+            {{-- Row 2, Col 4: Private Facility --}}
+            <div class="relative rounded-[2rem] overflow-hidden group bg-surface reveal delay-300">
+                <img src="{{ $gallery('facility.jpeg') }}" alt="Facilities" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
+                <div class="absolute bottom-0 left-0 p-4 z-10">
+                    <p class="text-white text-sm font-medium">Private Facility</p>
+                </div>
+            </div>
+
+            {{-- Row 3, Col 1-2: Kitchen (2x1) --}}
+            <div class="md:col-span-2 relative rounded-[2rem] overflow-hidden group bg-surface reveal delay-100">
+                <img src="{{ $gallery('communal-kitchen.jpeg') }}" alt="Kitchen" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out">
                 <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
                 <div class="absolute bottom-0 left-0 p-5 z-10">
-                    <p class="text-white text-sm font-medium">Hallway</p>
+                    <p class="text-white text-sm font-medium">Kitchen</p>
+                </div>
+            </div>
+
+            {{-- Row 3, Col 3-4: Parking (2x1) --}}
+            <div class="md:col-span-2 relative rounded-[2rem] overflow-hidden group bg-surface reveal delay-200">
+                <img src="{{ $gallery('parking-space.jpeg') }}" alt="Parking" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
+                <div class="absolute bottom-0 left-0 p-5 z-10">
+                    <p class="text-white text-sm font-medium">Parking Space</p>
                 </div>
             </div>
 
@@ -358,90 +358,135 @@
     </section>
 
     <section id="location" class="py-section border-t border-border-subtle">
-        <div class="max-w-7xl mx-auto px-6 md:px-12 grid grid-cols-1 lg:grid-cols-2 gap-16">
+        <div class="max-w-7xl mx-auto px-6 md:px-12">
 
-            <div class="reveal">
-                <h2 class="text-3xl font-sans mb-6">Strategic Location</h2>
-                <p class="text-text-secondary mb-8 leading-relaxed">
-                    Situated in the heart of Malang's educational district. Close enough to walk to major campuses, yet tucked away in a quiet residential street to ensure peace of mind.
-                </p>
-                <div class="space-y-6">
-                    <div class="flex items-start gap-4">
-                        <div class="w-10 h-10 rounded-full bg-surface flex items-center justify-center shrink-0">
-                            <span class="material-symbols-outlined text-sm">school</span>
-                        </div>
-                        <div>
-                            <h4 class="font-semibold">5 mins to Binus University</h4>
-                            <p class="text-sm text-text-secondary">Quick commute for students.</p>
-                        </div>
-                    </div>
-                    <div class="flex items-start gap-4">
-                        <div class="w-10 h-10 rounded-full bg-surface flex items-center justify-center shrink-0">
-                            <span class="material-symbols-outlined text-sm">local_cafe</span>
-                        </div>
-                        <div>
-                            <h4 class="font-semibold">Surrounded by Cafe & Eateries</h4>
-                            <p class="text-sm text-text-secondary">Walking distance to local coffee shops and minimarkets.</p>
-                        </div>
+            <div class="mb-16 reveal">
+                <h2 class="text-3xl font-sans mb-4">Prime Location</h2>
+                <p class="text-text-secondary max-w-xl">Nestled in the heart of Mataram, Lombok. Steps from campuses, dining, and everyday essentials.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-6 auto-rows-[minmax(240px,auto)]">
+
+                {{-- Map — full width, interactive --}}
+                <div class="md:col-span-12 relative rounded-[2rem] overflow-hidden h-[350px] md:h-[450px] reveal">
+                    <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3944.5!2d116.145345!3d-8.5853078!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dcdb900010f60d7%3A0xd5f834f341a1e248!2sARCADIA%20ROOM!5e0!3m2!1sen!2sid!4v1716800000000"
+                        width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade"
+                        class="absolute inset-0 w-full h-full grayscale-[20%]"></iframe>
+                    <div class="absolute bottom-6 left-6 md:left-8 z-10">
+                        <a href="https://www.google.com/maps/place/ARCADIA+ROOM/@-8.5853078,116.145345,17z/data=!3m1!4b1!4m6!3m5!1s0x2dcdb900010f60d7:0xd5f834f341a1e248!8m2!3d-8.5853078!4d116.145345!16s%2Fg%2F11nbh3s1vr!18m1!1e1?entry=ttu"
+                           target="_blank" rel="noopener"
+                           class="inline-flex items-center gap-2 bg-white text-primary px-5 py-3 rounded-full text-sm font-semibold hover:bg-white/90 transition-all shadow-lg">
+                            <span class="material-symbols-outlined text-lg">open_in_new</span>
+                            Open in Google Maps
+                        </a>
                     </div>
                 </div>
-            </div>
 
-            <div class="bg-surface p-10 rounded-2xl reveal delay-200">
-                <h2 class="text-2xl font-sans mb-6">House Rules</h2>
-                <p class="text-sm text-text-secondary mb-8">To maintain the premium standard and comfort for all residents, we strictly enforce these rules:</p>
-                
-                <ul class="space-y-4">
-                    <li class="flex items-start gap-3 bg-canvas p-4 rounded-xl border border-border-subtle">
-                        <span class="material-symbols-outlined text-primary">smoke_free</span>
-                        <div>
-                            <h4 class="font-semibold text-sm">Strictly Non-Smoking</h4>
-                            <p class="text-xs text-text-secondary">Inside rooms and all communal areas.</p>
-                        </div>
-                    </li>
-                    <li class="flex items-start gap-3 bg-canvas p-4 rounded-xl border border-border-subtle">
-                        <span class="material-symbols-outlined text-primary">volume_off</span>
-                        <div>
-                            <h4 class="font-semibold text-sm">Quiet Hours</h4>
-                            <p class="text-xs text-text-secondary">10:00 PM to 06:00 AM. Respect your neighbors.</p>
-                        </div>
-                    </li>
-                    <li class="flex items-start gap-3 bg-canvas p-4 rounded-xl border border-border-subtle">
-                        <span class="material-symbols-outlined text-primary">group_off</span>
-                        <div>
-                            <h4 class="font-semibold text-sm">No Overnight Guests</h4>
-                            <p class="text-xs text-text-secondary">For security and privacy reasons, guests are only allowed in the lobby until 9 PM.</p>
-                        </div>
-                    </li>
-                </ul>
-            </div>
+                {{-- District Highlights --}}
+                <div class="md:col-span-8 bg-surface p-8 md:p-10 rounded-[2rem] flex flex-col justify-center reveal delay-100">
+                    <span class="text-xs font-semibold tracking-widest text-text-secondary uppercase mb-3">Center of Mataram</span>
+                    <h2 class="text-2xl md:text-3xl font-sans mb-5">Arcadia Enclave</h2>
+                    <div class="space-y-4 text-text-secondary leading-relaxed text-sm md:text-base">
+                        <p>
+                            Located in the vibrant <strong class="text-primary">Mataram city center</strong>, Kos Arcadia sits at the crossroads of convenience and calm. Major universities, shopping districts, and healthcare facilities are all within easy reach.
+                        </p>
+                        <p>
+                            Step outside to find local eateries, coffee shops, and minimarkets. Despite the central location, the property is tucked away on a quiet street — the best of both worlds.
+                        </p>
+                    </div>
+                    <div class="mt-6 flex flex-wrap gap-2">
+                        <span class="bg-canvas px-4 py-1.5 rounded-full text-xs font-medium text-text-secondary border border-border-subtle">Shopping</span>
+                        <span class="bg-canvas px-4 py-1.5 rounded-full text-xs font-medium text-text-secondary border border-border-subtle">Education</span>
+                        <span class="bg-canvas px-4 py-1.5 rounded-full text-xs font-medium text-text-secondary border border-border-subtle">Dining</span>
+                        <span class="bg-canvas px-4 py-1.5 rounded-full text-xs font-medium text-text-secondary border border-border-subtle">Healthcare</span>
+                    </div>
+                </div>
 
+                {{-- Proximity --}}
+                <div class="md:col-span-4 bg-primary text-white p-8 md:p-10 rounded-[2rem] flex flex-col justify-between reveal delay-200">
+                    <div>
+                        <h3 class="text-lg font-sans font-semibold mb-6">Walking Distance</h3>
+                        <ul class="space-y-4">
+                            <li class="flex justify-between items-center border-b border-white/15 pb-3">
+                                <div class="flex items-center gap-3">
+                                    <span class="material-symbols-outlined text-white/50 text-lg">shopping_bag</span>
+                                    <span class="text-sm">Mataram Mall</span>
+                                </div>
+                                <span class="text-xs text-white/50">5 min</span>
+                            </li>
+                            <li class="flex justify-between items-center border-b border-white/15 pb-3">
+                                <div class="flex items-center gap-3">
+                                    <span class="material-symbols-outlined text-white/50 text-lg">local_cafe</span>
+                                    <span class="text-sm">Cafe District</span>
+                                </div>
+                                <span class="text-xs text-white/50">3 min</span>
+                            </li>
+                            <li class="flex justify-between items-center border-b border-white/15 pb-3">
+                                <div class="flex items-center gap-3">
+                                    <span class="material-symbols-outlined text-white/50 text-lg">local_hospital</span>
+                                    <span class="text-sm">RS Harapan Keluarga</span>
+                                </div>
+                                <span class="text-xs text-white/50">8 min</span>
+                            </li>
+                            <li class="flex justify-between items-center border-b border-white/15 pb-3">
+                                <div class="flex items-center gap-3">
+                                    <span class="material-symbols-outlined text-white/50 text-lg">school</span>
+                                    <span class="text-sm">Universitas Mataram</span>
+                                </div>
+                                <span class="text-xs text-white/50">12 min</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <p class="text-xs text-white/40 uppercase tracking-widest mt-6">Central Access, Peaceful Living</p>
+                </div>
+
+                {{-- Bottom row: 3 info cards --}}
+                <div class="md:col-span-4 bg-surface border border-border-subtle p-8 rounded-[2rem] hover:bg-surface/70 transition-colors reveal delay-300">
+                    <span class="material-symbols-outlined text-2xl mb-4 text-primary">local_convenience_store</span>
+                    <h4 class="text-lg font-semibold mb-2">Daily Essentials</h4>
+                    <p class="text-sm text-text-secondary leading-relaxed">Minimarkets, pharmacies, and laundries all within a short walk from the property.</p>
+                </div>
+
+                <div class="md:col-span-4 bg-surface border border-border-subtle p-8 rounded-[2rem] hover:bg-surface/70 transition-colors reveal delay-400">
+                    <span class="material-symbols-outlined text-2xl mb-4 text-primary">nature_people</span>
+                    <h4 class="text-lg font-semibold mb-2">Green Spaces</h4>
+                    <p class="text-sm text-text-secondary leading-relaxed">Minutes from Taman Sangkareang and the Mataram city park for morning walks and fresh air.</p>
+                </div>
+
+                <div class="md:col-span-4 bg-surface border border-border-subtle p-8 rounded-[2rem] hover:bg-surface/70 transition-colors reveal delay-500">
+                    <span class="material-symbols-outlined text-2xl mb-4 text-primary">security</span>
+                    <h4 class="text-lg font-semibold mb-2">Secure & Gated</h4>
+                    <p class="text-sm text-text-secondary leading-relaxed">24/7 CCTV surveillance with gated entry. Peace of mind comes standard at Kos Arcadia.</p>
+                </div>
+
+            </div>
         </div>
     </section>
 
-    <section class="py-section bg-primary text-white overflow-hidden">
+    <section id="reviews" class="py-section bg-primary text-white overflow-hidden">
         <div class="max-w-7xl mx-auto px-6 md:px-12 text-center">
             <h2 class="text-3xl font-sans mb-12 reveal">Resident Stories</h2>
             @if($reviews->count())
             <div class="relative" x-data="reviewCarousel()" x-init="init()">
                 <div class="flex gap-6 overflow-x-auto snap-x snap-mandatory no-scrollbar scroll-smooth items-stretch"
-                     x-ref="track"
-                     @scroll="update()">
+                     x-ref="track">
                     @foreach($reviews as $review)
-                    <div class="min-w-[calc(100%-2rem)] md:min-w-[calc(50%-1rem)] lg:min-w-[calc(33.333%-1.25rem)] snap-start shrink-0">
-                        <div class="p-8 rounded-2xl bg-white/5 border border-white/10 h-full flex flex-col justify-between">
-                            <div>
+                    <div class="w-[calc(100%-2rem)] md:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.25rem)] snap-start shrink-0">
+                        <div class="p-8 rounded-2xl bg-white/5 border border-white/10 h-full flex flex-col justify-between min-h-[260px]">
+                            <div class="flex-1 min-w-0">
                                 <div class="flex gap-1 mb-6 text-white">
                                     @for($i = 0; $i < $review->rating; $i++)
                                     <span class="material-symbols-outlined text-sm">star</span>
                                     @endfor
                                 </div>
-                                <p class="text-white/80 leading-relaxed mb-8">{{ $review->comment }}</p>
+                                <p class="text-white/80 leading-relaxed mb-8 line-clamp-5" title="{{ $review->comment }}">{{ $review->comment }}</p>
                             </div>
-                            <div>
-                                <p class="font-semibold text-sm">{{ $review->user->name }}</p>
+                            <div class="shrink-0">
+                                <p class="font-semibold text-sm truncate">{{ $review->user->name }}</p>
                                 @if($review->user->profession)
-                                <p class="text-xs text-white/50">{{ $review->user->profession }}</p>
+                                <p class="text-xs text-white/50 truncate">{{ $review->user->profession }}</p>
                                 @endif
                             </div>
                         </div>
@@ -478,56 +523,189 @@
                 current: 0,
                 dots: [],
                 showNav: false,
+                observer: null,
+                scrolling: false,
                 init() {
-                    this.dots = Array.from(this.$refs.track.children);
-                    this.showNav = this.dots.length > 3;
-                    this.update();
-                },
-                update() {
-                    const track = this.$refs.track;
-                    const card = track.children[0];
-                    if (!card) return;
-                    const scroll = track.scrollLeft;
-                    const w = card.offsetWidth + 24; // card width + gap
-                    this.current = Math.round(scroll / w);
+                    const cards = Array.from(this.$refs.track.children);
+                    this.dots = cards;
+                    this.showNav = cards.length > 3;
+
+                    this.observer = new IntersectionObserver((entries) => {
+                        if (this.scrolling) return;
+                        const visible = entries
+                            .filter(e => e.isIntersecting)
+                            .sort((a, b) => a.boundingClientRect.left - b.boundingClientRect.left);
+                        if (visible.length) {
+                            this.current = cards.indexOf(visible[0].target);
+                        }
+                    }, { threshold: 0.6, root: this.$refs.track });
+
+                    cards.forEach(c => this.observer.observe(c));
                 },
                 go(i) {
-                    const card = this.$refs.track.children[i];
-                    if (card) card.scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' });
+                    if (i < 0 || i >= this.dots.length) return;
+                    this.current = i;
+                    this.scrolling = true;
+                    const card = this.dots[i];
+                    this.$refs.track.scrollTo({ left: card.offsetLeft, behavior: 'smooth' });
+                    setTimeout(() => { this.scrolling = false; }, 500);
                 },
                 next() {
-                    this.go(Math.min(this.current + 1, this.dots.length - 1));
+                    this.go(this.current + 1);
                 },
                 prev() {
-                    this.go(Math.max(this.current - 1, 0));
+                    this.go(this.current - 1);
                 },
             };
         }
     </script>
 
-    <footer class="bg-canvas border-t border-border-subtle pt-24 pb-10 reveal">
-        <div class="max-w-7xl mx-auto px-6 md:px-12">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 mb-24">
+    <footer class="relative bg-[#0A0A0A] text-white overflow-hidden" x-data="footerTextEffect()">
+        {{-- Background gradient --}}
+        <div class="absolute inset-0 z-0" style="background: radial-gradient(125% 125% at 50% 0%, #0F0F1166 50%, #3ca2fa22 100%);"></div>
+
+        <div class="relative z-10 max-w-7xl mx-auto px-6 md:px-12 pt-20 pb-10">
+
+            {{-- SVG Text Hover Effect --}}
+            <div class="mb-16 -mt-4">
+                <svg
+                    x-ref="svg"
+                    width="100%"
+                    height="140"
+                    viewBox="0 0 900 140"
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="select-none cursor-default"
+                    @mousemove="onMove($event)"
+                    @mouseenter="hovered = true"
+                    @mouseleave="hovered = false"
+                >
+                    <defs>
+                        <radialGradient id="footerReveal" gradientUnits="userSpaceOnUse" :cx="maskCx" :cy="maskCy" r="18%">
+                            <stop offset="0%" stop-color="white" />
+                            <stop offset="100%" stop-color="black" />
+                        </radialGradient>
+                        <mask id="footerMask">
+                            <rect x="0" y="0" width="900" height="140" fill="url(#footerReveal)" />
+                        </mask>
+                    </defs>
+
+                    {{-- Faint outline visible on hover --}}
+                    <text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle"
+                        stroke-width="1" fill="none" stroke="#ffffff"
+                        font-family="Inter, sans-serif" font-size="120" font-weight="700" letter-spacing="-2"
+                        :opacity="hovered ? 0.15 : 0">ARCADIA</text>
+
+                    {{-- Animated white stroke --}}
+                    <text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle"
+                        stroke-width="1" fill="none" stroke="#ffffff"
+                        font-family="Inter, sans-serif" font-size="120" font-weight="700" letter-spacing="-2"
+                        class="footer-stroke-draw">ARCADIA</text>
+
+                    {{-- White fill revealed by cursor mask --}}
+                    <text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle"
+                        stroke="#ffffff" stroke-width="1" fill="none"
+                        mask="url(#footerMask)"
+                        font-family="Inter, sans-serif" font-size="120" font-weight="700" letter-spacing="-2">ARCADIA</text>
+                </svg>
+            </div>
+
+            {{-- Footer Content Grid --}}
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10 mb-16">
                 <div>
-                    <h2 class="text-5xl md:text-7xl font-sans font-bold tracking-tighter uppercase mb-6">URBAN STAY.</h2>
-                    <p class="text-text-secondary text-lg max-w-sm">The new standard of premium student and professional living in Malang.</p>
+                    <h4 class="text-sm font-semibold uppercase tracking-widest text-white/40 mb-5">Kos Arcadia</h4>
+                    <p class="text-white/60 text-sm leading-relaxed max-w-xs">
+                        Premium managed boarding in the heart of Mataram, Lombok. A sanctuary for students and professionals who value peace, cleanliness, and intentional living.
+                    </p>
                 </div>
-                <div class="flex flex-col lg:items-end justify-start">
-                    <a href="mailto:hello@urbanstay.id" class="text-2xl font-sans border-b border-primary pb-1 hover:text-text-secondary hover:border-text-secondary transition-colors mb-4">hello@urbanstay.id</a>
-                    <a href="https://wa.me/6280000000" class="text-text-secondary hover:text-primary transition-colors">WhatsApp: +62 800 0000 0000</a>
+                <div>
+                    <h4 class="text-sm font-semibold uppercase tracking-widest text-white/40 mb-5">Navigate</h4>
+                    <ul class="space-y-3 text-sm text-white/60">
+                        <li><a href="#about" class="hover:text-white transition-colors">About</a></li>
+                        <li><a href="#facility" class="hover:text-white transition-colors">Facilities</a></li>
+                        <li><a href="#room" class="hover:text-white transition-colors">The Room</a></li>
+                        <li><a href="#location" class="hover:text-white transition-colors">Location</a></li>
+                        <li><a href="{{ url('/book') }}" class="hover:text-white transition-colors">Book a Room</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-sm font-semibold uppercase tracking-widest text-white/40 mb-5">Contact</h4>
+                    <ul class="space-y-3 text-sm text-white/60">
+                        <li class="flex items-center gap-2">
+                            <span class="material-symbols-outlined text-sm text-white/30">location_on</span>
+                            Mataram, Lombok, NTB
+                        </li>
+                        <li>
+                            <a href="mailto:arcadiakost@gmail.com" class="flex items-center gap-2 hover:text-white transition-colors">
+                                <span class="material-symbols-outlined text-sm text-white/30">mail</span>
+                                arcadiakost@gmail.com
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://wa.me/6280000000" class="flex items-center gap-2 hover:text-white transition-colors">
+                                <span class="material-symbols-outlined text-sm text-white/30">call</span>
+                                WhatsApp
+                            </a>
+                        </li>
+                    </ul>
                 </div>
             </div>
-            
-            <div class="flex flex-col md:flex-row justify-between items-center border-t border-border-subtle pt-8 text-xs font-semibold text-text-secondary uppercase tracking-widest gap-4">
-                <div>© 2026 URBAN STAY MALANG. ALL RIGHTS RESERVED.</div>
-                <div class="flex gap-8">
-                    <a href="#" class="hover:text-primary transition-colors">Instagram</a>
-                    <a href="#" class="hover:text-primary transition-colors">Terms</a>
-                    <a href="#" class="hover:text-primary transition-colors">Privacy</a>
+
+            {{-- Bottom bar --}}
+            <div class="flex flex-col md:flex-row justify-between items-center border-t border-white/10 pt-8 text-xs text-white/30 uppercase tracking-widest gap-4">
+                <div>&copy; {{ date('Y') }} Kos Arcadia. All rights reserved.</div>
+                <div class="flex gap-6">
+                    <a href="#" class="hover:text-white/60 transition-colors">Instagram</a>
+                    <a href="#" class="hover:text-white/60 transition-colors">Terms</a>
+                    <a href="#" class="hover:text-white/60 transition-colors">Privacy</a>
                 </div>
             </div>
         </div>
     </footer>
+
+    <script>
+        function footerTextEffect() {
+            return {
+                hovered: false,
+                maskCx: '50%',
+                maskCy: '50%',
+                onMove(e) {
+                    const rect = this.$refs.svg.getBoundingClientRect();
+                    this.maskCx = ((e.clientX - rect.left) / rect.width * 100) + '%';
+                    this.maskCy = ((e.clientY - rect.top) / rect.height * 100) + '%';
+                },
+            };
+        }
+    </script>
+
+    <script>
+        (function() {
+            const navbar = document.getElementById('navbar');
+            const links = document.querySelectorAll('.nav-link');
+            let scrolled = false;
+
+            window.addEventListener('scroll', () => {
+                const past = window.scrollY > 20;
+                if (past === scrolled) return;
+                scrolled = past;
+
+                if (past) {
+                    navbar.classList.add('bg-white/40', 'backdrop-blur-xl', 'border-white/20', 'shadow-sm', 'shadow-black/5');
+                    navbar.classList.remove('bg-transparent', 'border-transparent');
+                    links.forEach(l => {
+                        l.classList.remove('bg-white/10', 'border-white/20', 'text-white', 'hover:bg-white/30');
+                        l.classList.add('bg-white/30', 'border-white/40', 'text-primary', 'hover:bg-white/50');
+                    });
+                } else {
+                    navbar.classList.remove('bg-white/40', 'backdrop-blur-xl', 'border-white/20', 'shadow-sm', 'shadow-black/5');
+                    navbar.classList.add('bg-transparent', 'border-transparent');
+                    links.forEach(l => {
+                        l.classList.add('bg-white/10', 'border-white/20', 'text-white', 'hover:bg-white/30');
+                        l.classList.remove('bg-white/30', 'border-white/40', 'text-primary', 'hover:bg-white/50');
+                    });
+                }
+            });
+        })();
+    </script>
 
     <script>
         (function() {

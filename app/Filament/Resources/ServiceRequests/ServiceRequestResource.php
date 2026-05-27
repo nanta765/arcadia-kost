@@ -9,11 +9,13 @@ use App\Filament\Resources\ServiceRequests\Schemas\ServiceRequestForm;
 use App\Filament\Resources\ServiceRequests\Tables\ServiceRequestsTable;
 use App\Models\ServiceRequest;
 use BackedEnum;
+use Illuminate\Support\Facades\Auth;
 use Filament\Actions\BulkActionGroup;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -34,25 +36,37 @@ class ServiceRequestResource extends Resource
 
     public static function form(Schema $schema): Schema
     {
+        $isOwner = Auth::user()?->role === 'owner';
+
         return $schema
             ->schema([
                 TextInput::make('room.room_number')->label('No. Kamar')->disabled(),
                 TextInput::make('user.name')->label('Nama Anak Kost')->disabled(),
                 TextInput::make('type')
                     ->label('Jenis Permintaan')
-                    ->formatStateUsing(fn($state) => $state === 'cleaning' ? '🧹 Bersihkan Kamar' : '🛠️ Perbaikan')
+                    ->formatStateUsing(fn($state) => $state === 'cleaning' ? 'Bersihkan Kamar' : 'Perbaikan')
                     ->disabled(),
                 Textarea::make('notes')->label('Catatan dari Penghuni')->disabled()->columnSpanFull(),
 
-                // KODE KUNCI: Staff & Owner bisa mengubah status pengerjaan di sini
+                DateTimePicker::make('deadline')
+                    ->label('Tenggat Waktu')
+                    ->nullable()
+                    ->native(false)
+                    ->disabled($isOwner),
+
                 Select::make('status')
                     ->options([
-                        'pending' => '⏳ Menunggu Antrean',
-                        'in_progress' => '🏃 Sedang Dikerjakan',
-                        'completed' => '✅ Selesai',
+                        'pending' => 'Menunggu',
+                        'completed' => 'Selesai',
                     ])
                     ->required()
-                    ->label('Status Pengerjaan'),
+                    ->label('Status Pengerjaan')
+                    ->disabled($isOwner),
+
+                DateTimePicker::make('completed_at')
+                    ->label('Waktu Selesai')
+                    ->disabled()
+                    ->visible(fn($record) => $record && $record->status === 'completed'),
             ]);
     }
 
@@ -70,25 +84,34 @@ class ServiceRequestResource extends Resource
 
                 TextColumn::make('type')
                     ->label('Layanan')
-                    ->formatStateUsing(fn($state) => $state === 'cleaning' ? '🧹 Bersihkan' : '🛠️ Perbaikan'),
+                    ->formatStateUsing(fn($state) => $state === 'cleaning' ? 'Bersihkan' : 'Perbaikan'),
 
                 TextColumn::make('status')
                     ->badge()
                     ->color(fn(string $state): string => match ($state) {
                         'pending' => 'warning',
-                        'in_progress' => 'info',
                         'completed' => 'success',
                     }),
+
+                TextColumn::make('deadline')
+                    ->label('Tenggat')
+                    ->dateTime('d M Y, H:i')
+                    ->placeholder('-'),
 
                 TextColumn::make('created_at')
                     ->label('Waktu Permintaan')
                     ->dateTime('H:i - d M Y'),
+
+                TextColumn::make('completed_at')
+                    ->label('Selesai')
+                    ->dateTime('d M Y, H:i')
+                    ->placeholder('-'),
             ])
             ->filters([
                 //
             ])
             ->recordActions([
-                ActionsEditAction::make()->label('Update Status Kerja'),
+                ActionsEditAction::make()->label('Update Status'),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

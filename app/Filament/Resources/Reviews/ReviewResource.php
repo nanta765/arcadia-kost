@@ -33,8 +33,8 @@ class ReviewResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedStar;
 
-    protected static ?string $navigationLabel = 'Ulasan Kamar';
-    protected static ?string $pluralLabel = 'Ulasan';
+    protected static ?string $navigationLabel = 'Reviews';
+    protected static ?string $pluralLabel = 'Reviews';
     
     // Memastikan URL selalu konsisten
     protected static ?string $slug = 'reviews';
