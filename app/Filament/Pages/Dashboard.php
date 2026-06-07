@@ -3,6 +3,7 @@
 namespace App\Filament\Pages;
 
 use Filament\Pages\Dashboard as BaseDashboard;
+use App\Filament\Widgets\RevenueChart;
 use App\Filament\Widgets\StatsOverview;
 use App\Filament\Widgets\RecentBookings;
 use App\Filament\Widgets\ReviewStats;
@@ -19,6 +20,7 @@ class Dashboard extends BaseDashboard
         return [
             StatsOverview::class,
             ReviewStats::class,
+            RevenueChart::class,
             RecentBookings::class,
         ];
     }
