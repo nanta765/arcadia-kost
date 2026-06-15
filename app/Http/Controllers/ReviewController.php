@@ -27,18 +27,29 @@ class ReviewController extends Controller
             return redirect()->back()->with('error', 'Anda sudah memberikan ulasan untuk pesanan ini.');
         }
 
-        // Lemparkan data ke view (Nanti kita buat file view-nya di resources/views/review/create.blade.php)
-        return view('review.create', compact('booking'));
+        $durationDone = $booking->end_date && now()->startOfDay()->gte($booking->end_date);
+
+        return view('review.create', compact('booking', 'durationDone'));
     }
 
-    // Memproses data form ulasan (bintang dan komentar)
     public function store(Request $request, Booking $booking)
     {
         if ($booking->user_id !== Auth::id()) {
             abort(403);
         }
 
-        // Validasi rating wajib 1-5, komentar opsional
+        if ($booking->status !== 'completed') {
+            return redirect()->back()->with('error', 'Anda hanya bisa memberikan ulasan setelah masa tinggal selesai.');
+        }
+
+        if ($booking->review) {
+            return redirect()->back()->with('error', 'Anda sudah memberikan ulasan untuk pesanan ini.');
+        }
+
+        if ($booking->end_date && now()->startOfDay()->lt($booking->end_date)) {
+            return redirect()->back()->with('error', 'Masa tinggal Anda belum berakhir. Silakan kembali setelah ' . \Carbon\Carbon::parse($booking->end_date)->format('d M Y') . '.');
+        }
+
         $request->validate([
             'rating' => 'required|integer|min:1|max:5',
             'comment' => 'nullable|string|max:500',

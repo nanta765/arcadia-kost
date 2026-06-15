@@ -45,7 +45,7 @@
 </head>
 <body class="bg-canvas text-primary font-sans antialiased">
 
-    {{-- Navbar — same as landing page --}}
+    {{-- Navbar --}}
     <nav id="navbar" class="fixed top-0 w-full bg-white/40 backdrop-blur-xl border-b border-white/20 shadow-sm shadow-black/5 z-50 transition-all duration-300">
         <div class="max-w-7xl mx-auto px-6 md:px-12 h-20 flex items-center justify-between">
             <div class="flex items-center">
@@ -80,92 +80,149 @@
         </div>
     </nav>
 
-    <main class="max-w-lg mx-auto px-6 pt-28 pb-10">
-        <div class="mb-8">
-            <h1 class="text-2xl font-bold text-primary mb-2">Write a Review</h1>
-            <p class="text-text-secondary text-sm">Help future tenants with your honest feedback.</p>
-        </div>
+    <main class="max-w-7xl mx-auto px-6 md:px-12 pt-28 pb-16">
+        <div class="flex flex-col lg:flex-row gap-8">
 
-        {{-- Room info card --}}
-        <div class="bg-surface border border-border-subtle rounded-2xl p-5 mb-6 flex items-center justify-between">
-            <div>
-                <p class="text-xs text-text-secondary uppercase tracking-wider">Room</p>
-                <p class="text-lg font-bold text-primary">{{ $booking->room->room_number }}</p>
-            </div>
-            <div class="text-right">
-                <p class="text-xs text-text-secondary uppercase tracking-wider">Type</p>
-                <p class="text-sm font-semibold text-primary">{{ $booking->room->roomType->name }}</p>
-            </div>
-        </div>
-
-        {{-- Error messages --}}
-        @if ($errors->any())
-        <div class="mb-6 p-4 bg-red-50 text-red-600 rounded-xl text-xs">
-            <ul class="list-disc pl-4">
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-        @endif
-
-        @if(session('error'))
-        <div class="mb-6 p-4 bg-red-50 text-red-600 rounded-xl text-xs flex items-center gap-2">
-            <span class="material-symbols-outlined">error</span>
-            {{ session('error') }}
-        </div>
-        @endif
-
-        <div class="bg-white rounded-2xl border border-border-subtle shadow-sm p-6">
-            <form action="{{ route('review.store', $booking->id) }}" method="POST">
-                @csrf
-
-                {{-- Star rating --}}
-                <div class="mb-6">
-                    <label class="block text-sm font-semibold text-primary mb-4 text-center">How many stars for this room?</label>
-                    <div class="flex justify-center gap-2" id="star-rating">
-                        @for($i = 1; $i <= 5; $i++)
-                        <button type="button" class="star-btn cursor-pointer bg-transparent border-0 p-0" data-value="{{ $i }}">
-                            <span class="material-symbols-outlined text-4xl text-border-subtle transition-colors duration-150 star-icon"
-                                data-value="{{ $i }}"
-                                style="font-variation-settings: 'FILL' 0;">
-                                star
-                            </span>
-                        </button>
-                        @endfor
-                        <input type="hidden" name="rating" id="rating-input" value="{{ old('rating', '') }}" required>
-                    </div>
-                    @error('rating')
-                    <p class="text-red-500 text-xs mt-2 text-center">{{ $message }}</p>
-                    @enderror
+            {{-- Sidebar --}}
+            <aside class="w-full lg:w-64 flex-shrink-0">
+                <div class="bg-white rounded-2xl border border-border-subtle shadow-sm p-6 flex flex-col items-center text-center">
+                    <form id="photo-form" action="{{ route('profile.photo') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <label for="photo-input" class="cursor-pointer group relative">
+                            <div class="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mb-4 ring-4 ring-surface overflow-hidden group-hover:ring-primary/20 transition-all">
+                                @if(auth()->user()->profile_photo)
+                                <img src="{{ asset('storage/' . auth()->user()->profile_photo) }}" alt="Profile" class="w-full h-full object-cover group-hover:opacity-70 transition-opacity">
+                                <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <span class="material-symbols-outlined text-white text-xl bg-black/40 rounded-full p-1">photo_camera</span>
+                                </div>
+                                @else
+                                <span class="material-symbols-outlined text-4xl text-primary/40 group-hover:text-primary/60 transition-colors">person</span>
+                                <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <span class="material-symbols-outlined text-white text-xl bg-black/40 rounded-full p-1">add_a_photo</span>
+                                </div>
+                                @endif
+                            </div>
+                        </label>
+                        <input type="file" id="photo-input" name="profile_photo" accept=".jpg,.jpeg,.png" class="hidden" onchange="document.getElementById('photo-form').submit();">
+                    </form>
+                    <h3 class="text-lg font-bold text-primary">{{ auth()->user()->name }}</h3>
+                    <p class="text-xs text-text-secondary mt-1">Room {{ $booking->room->room_number }}</p>
                 </div>
 
-                {{-- Comment --}}
-                <div class="mb-6 pt-6 border-t border-border-subtle">
-                    <label for="comment" class="block text-sm font-semibold text-primary mb-2">
-                        Share your experience
-                    </label>
-                    <textarea name="comment" id="comment" rows="4" placeholder="Clean room, complete facilities, good water pressure..."
-                        class="w-full text-sm text-primary bg-surface border border-border-subtle rounded-xl p-4 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none resize-none transition-all">{{ old('comment') }}</textarea>
+                <nav class="mt-4 bg-white rounded-2xl border border-border-subtle shadow-sm p-2 flex flex-row lg:flex-col overflow-x-auto gap-1">
+                    <a href="{{ route('dashboard') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-text-secondary hover:bg-surface transition-all">
+                        <span class="material-symbols-outlined">dashboard</span>
+                        <span class="text-sm font-medium whitespace-nowrap">Dashboard</span>
+                    </a>
+                    <a href="{{ route('booking.my-bookings') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-text-secondary hover:bg-surface transition-all">
+                        <span class="material-symbols-outlined">night_shelter</span>
+                        <span class="text-sm font-medium whitespace-nowrap">My Bookings</span>
+                    </a>
+                </nav>
+            </aside>
+
+            {{-- Main Content --}}
+            <section class="flex-1 min-w-0">
+                <header class="mb-8">
+                    <h1 class="text-2xl font-bold text-primary mb-2">Write a Review</h1>
+                    <p class="text-text-secondary text-sm">Share your experience to help future tenants and improve our service.</p>
+                </header>
+
+                @if ($errors->any())
+                <div class="mb-6 p-4 bg-red-50 text-red-600 rounded-xl text-sm">
+                    <ul class="list-disc pl-4 space-y-1">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
                 </div>
+                @endif
 
-                <button type="submit"
-                    class="w-full flex items-center justify-center gap-2 bg-primary text-white text-sm font-semibold py-4 rounded-xl hover:bg-black/80 transition-all active:scale-95">
-                    <span class="material-symbols-outlined">send</span>
-                    Submit Review
-                </button>
-            </form>
-        </div>
+                @if(session('error'))
+                <div class="mb-6 p-4 bg-red-50 text-red-600 rounded-xl text-sm flex items-center gap-2">
+                    <span class="material-symbols-outlined">error</span>
+                    {{ session('error') }}
+                </div>
+                @endif
 
-        <div class="mt-6 text-center">
-            <a href="{{ route('booking.my-bookings') }}" class="inline-flex items-center gap-1 text-text-secondary hover:text-primary text-xs transition-colors">
-                <span class="material-symbols-outlined text-sm">arrow_back</span>
-                Back to My Bookings
-            </a>
+                <div class="bg-white rounded-2xl border border-border-subtle shadow-sm">
+                    <form action="{{ route('review.store', $booking->id) }}" method="POST" class="p-6 md:p-8">
+                        @csrf
+
+                        {{-- Room summary --}}
+                        <div class="mb-8 p-5 bg-surface rounded-xl border border-border-subtle">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-4">
+                                    <div class="p-3 rounded-xl bg-white text-primary">
+                                        <span class="material-symbols-outlined text-3xl">night_shelter</span>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-semibold text-primary">{{ $booking->room->roomType->name }}</p>
+                                        <p class="text-xs text-text-secondary">Room {{ $booking->room->room_number }} &middot; Stayed {{ \Carbon\Carbon::parse($booking->start_date)->format('d M') }} – {{ \Carbon\Carbon::parse($booking->end_date)->format('d M Y') }}</p>
+                                    </div>
+                                </div>
+                                <span class="px-3 py-1 rounded-full bg-green-50 text-green-700 text-xs font-medium border border-green-200">Completed</span>
+                            </div>
+                        </div>
+
+                        {{-- Star rating --}}
+                        <div class="mb-8">
+                            <label class="block text-sm font-semibold text-primary mb-4">How many stars for this room?</label>
+                            <div class="flex items-center justify-center gap-2 p-4 bg-surface rounded-xl border border-border-subtle {{ !$durationDone ? 'opacity-50 pointer-events-none select-none' : '' }}" id="star-rating">
+                                @for($i = 1; $i <= 5; $i++)
+                                <button type="button" class="star-btn cursor-pointer bg-transparent border-0 p-1" data-value="{{ $i }}">
+                                    <span class="material-symbols-outlined text-5xl text-border-subtle transition-all duration-150 star-icon"
+                                        data-value="{{ $i }}"
+                                        style="font-variation-settings: 'FILL' 0;">
+                                        star
+                                    </span>
+                                </button>
+                                @endfor
+                                <input type="hidden" name="rating" id="rating-input" value="{{ old('rating', '') }}" required>
+                            </div>
+                            @error('rating')
+                            <p class="text-red-500 text-xs mt-2 text-center">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        {{-- Comment --}}
+                        <div class="mb-8 pt-8 border-t border-border-subtle">
+                            <label for="comment" class="block text-sm font-semibold text-primary mb-2">
+                                Share your experience
+                            </label>
+                            <p class="text-text-secondary text-xs mb-3">Tell future tenants what you liked — or what could be better.</p>
+                            <textarea name="comment" id="comment" rows="4" placeholder="Clean room, complete facilities, good water pressure..."
+                                class="w-full text-sm text-primary bg-surface border border-border-subtle rounded-xl p-4 focus:ring-2 focus:ring-primary/10 focus:border-primary outline-none resize-none transition-all"
+                                @if(!$durationDone) disabled @endif>{{ old('comment') }}</textarea>
+                        </div>
+
+                        {{-- Submit --}}
+                        <div class="flex flex-col sm:flex-row items-center gap-3 pt-6 border-t border-border-subtle">
+                            @if($durationDone)
+                            <button type="submit"
+                                class="w-full sm:w-auto flex-1 flex items-center justify-center gap-2 bg-primary text-white text-sm font-semibold py-4 px-8 rounded-xl hover:bg-black/80 transition-all active:scale-95">
+                                <span class="material-symbols-outlined">send</span>
+                                Submit Review
+                            </button>
+                            @else
+                            <div class="flex-1 p-4 bg-yellow-50 border border-yellow-200 rounded-xl text-sm text-yellow-700 flex items-center gap-3">
+                                <span class="material-symbols-outlined">schedule</span>
+                                <span>Your stay ends on <strong>{{ \Carbon\Carbon::parse($booking->end_date)->format('d M Y') }}</strong>. You can submit your review after that date.</span>
+                            </div>
+                            @endif
+                            <a href="{{ route('booking.my-bookings') }}"
+                                class="w-full sm:w-auto flex items-center justify-center gap-2 text-text-secondary hover:text-primary text-sm font-medium py-4 px-6 rounded-xl hover:bg-surface transition-all">
+                                <span class="material-symbols-outlined text-sm">arrow_back</span>
+                                Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </section>
         </div>
     </main>
 
-    {{-- Footer — same as landing page --}}
+    {{-- Footer --}}
     <footer class="relative bg-[#0A0A0A] text-white overflow-hidden" x-data="footerTextEffect()">
         <div class="absolute inset-0 z-0" style="background: radial-gradient(125% 125% at 50% 0%, #0F0F1166 50%, #3ca2fa22 100%);"></div>
         <div class="relative z-10 max-w-7xl mx-auto px-6 md:px-12 pt-20 pb-10">
