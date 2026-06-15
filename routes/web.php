@@ -8,6 +8,7 @@ use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\ServiceRequestController;
+use App\Http\Controllers\UserTrackerController;
 use Illuminate\Support\Facades\Route;
 
 // ── Public ─────────────────────────────────────────────────
@@ -65,4 +66,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/{chat}/message', 'sendMessage')->name('send')->whereNumber('chat');
         Route::get('/staff', 'getStaffChats')->name('staff');
     });
+
+    // Admin User Tracker API (must not collide with Filament /admin/users resource)
+    Route::get('/admin/tracker/customers', [UserTrackerController::class, 'index'])->name('admin.tracker.customers');
+    Route::get('/admin/tracker/customers/search', [UserTrackerController::class, 'search'])->name('admin.tracker.customers.search');
+    Route::get('/admin/tracker/profit', [UserTrackerController::class, 'profit'])->name('admin.tracker.profit');
 });

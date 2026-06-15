@@ -17,9 +17,9 @@ class ReviewController extends Controller
             abort(403, 'Akses tidak sah.');
         }
 
-        // Pastikan status booking sudah 'active' (hanya penghuni sah yang bisa mengulas)
-        if ($booking->status !== 'active') {
-            return redirect()->back()->with('error', 'Anda hanya bisa memberikan ulasan untuk kamar yang sudah aktif.');
+        // Only completed stays can be reviewed
+        if ($booking->status !== 'completed') {
+            return redirect()->back()->with('error', 'Anda hanya bisa memberikan ulasan setelah masa tinggal selesai.');
         }
 
         // Cek apakah user sudah pernah memberikan ulasan untuk pesanan ini agar tidak dobel

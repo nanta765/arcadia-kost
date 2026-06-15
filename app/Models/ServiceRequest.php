@@ -23,6 +23,7 @@ class ServiceRequest extends Model
         'notes',
         'status',
         'deadline',
+        'scheduled_date',
         'completed_at',
     ];
 
@@ -30,6 +31,7 @@ class ServiceRequest extends Model
     {
         return [
             'deadline' => 'datetime',
+            'scheduled_date' => 'date',
             'completed_at' => 'datetime',
         ];
     }

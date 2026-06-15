@@ -113,13 +113,35 @@
                         <span class="material-symbols-outlined">night_shelter</span>
                         <span class="text-sm font-medium whitespace-nowrap">My Bookings</span>
                     </a>
-                    @if($activeBooking)
+                </nav>
+
+                {{-- Quick Actions in Sidebar --}}
+                @if($activeBooking)
+                <div class="mt-4 bg-white rounded-2xl border border-border-subtle shadow-sm p-2 flex flex-row lg:flex-col overflow-x-auto gap-1">
+                    <p class="px-4 pt-2 pb-1 text-[10px] font-semibold text-text-secondary uppercase tracking-wider">Quick Actions</p>
                     <a href="{{ route('service.create', $activeBooking->id) }}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-text-secondary hover:bg-surface transition-all">
-                        <span class="material-symbols-outlined">build</span>
+                        <span class="material-symbols-outlined">handyman</span>
                         <span class="text-sm font-medium whitespace-nowrap">Request Service</span>
                     </a>
-                    @endif
-                </nav>
+                    <a href="{{ route('booking.extend', $activeBooking->id) }}" onclick="event.preventDefault(); document.getElementById('extend-form').submit();" class="flex items-center gap-3 px-4 py-3 rounded-xl text-text-secondary hover:bg-surface transition-all">
+                        <span class="material-symbols-outlined">autorenew</span>
+                        <span class="text-sm font-medium whitespace-nowrap">Extend Stay</span>
+                    </a>
+                    <form id="extend-form" action="{{ route('booking.extend', $activeBooking->id) }}" method="POST" class="hidden">@csrf</form>
+                </div>
+                @endif
+
+                @if($completedWithoutReview->isNotEmpty())
+                <div class="mt-4 bg-white rounded-2xl border border-border-subtle shadow-sm p-2 flex flex-row lg:flex-col overflow-x-auto gap-1">
+                    <p class="px-4 pt-2 pb-1 text-[10px] font-semibold text-text-secondary uppercase tracking-wider">Share Feedback</p>
+                    @foreach($completedWithoutReview as $reviewable)
+                    <a href="{{ route('review.create', $reviewable->id) }}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-text-secondary hover:bg-surface transition-all">
+                        <span class="material-symbols-outlined">reviews</span>
+                        <span class="text-sm font-medium whitespace-nowrap">Review Room {{ $reviewable->room->room_number }}</span>
+                    </a>
+                    @endforeach
+                </div>
+                @endif
             </aside>
 
             {{-- Main Content --}}
@@ -141,24 +163,30 @@
 
                 {{-- Stat Cards --}}
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    {{-- Monthly Bill --}}
+                    {{-- Monthly Bill with Payment Indicator --}}
                     <div class="bg-white rounded-2xl border border-border-subtle shadow-sm p-6 hover:shadow-md transition-shadow">
                         <div class="flex justify-between items-start mb-6">
                             <div class="p-3 rounded-xl bg-red-50 text-red-500">
                                 <span class="material-symbols-outlined text-3xl">receipt_long</span>
                             </div>
-                            @if($activeBooking)
-                            @if($daysUntilDue === 0)
-                            <span class="px-3 py-1 rounded-full bg-red-100 text-red-700 text-xs font-medium">Due Today</span>
-                            @else
-                            <span class="px-3 py-1 rounded-full bg-red-50 text-red-600 text-xs font-medium">{{ $daysUntilDue }} day{{ $daysUntilDue > 1 ? 's' : '' }} left</span>
-                            @endif
+                            @if($activeBooking && $daysUntilDue !== null)
+                                @if($daysUntilDue === 0)
+                                <span class="px-3 py-1 rounded-full bg-red-100 text-red-700 text-xs font-medium animate-pulse">Due Today</span>
+                                @elseif($daysUntilDue < 0)
+                                <span class="px-3 py-1 rounded-full bg-red-100 text-red-700 text-xs font-medium">Overdue {{ abs($daysUntilDue) }} day{{ abs($daysUntilDue) > 1 ? 's' : '' }}</span>
+                                @elseif($daysUntilDue <= 3)
+                                <span class="px-3 py-1 rounded-full bg-yellow-100 text-yellow-700 text-xs font-medium">{{ $daysUntilDue }} day{{ $daysUntilDue > 1 ? 's' : '' }} left</span>
+                                @else
+                                <span class="px-3 py-1 rounded-full bg-green-50 text-green-600 text-xs font-medium">{{ $daysUntilDue }} days left</span>
+                                @endif
                             @endif
                         </div>
                         <p class="text-xs text-text-secondary uppercase tracking-wider mb-1">Monthly Bill</p>
                         @if($activeBooking)
                         <h2 class="text-2xl font-bold text-primary">Rp {{ number_format($activeBooking->room->roomType->price, 0, ',', '.') }}</h2>
-                        <p class="text-xs text-text-secondary mt-3">Due on {{ $nextDueDate->format('d F Y') }}.</p>
+                        @if($nextDueDate)
+                        <p class="text-xs text-text-secondary mt-3">Due on <span class="font-semibold text-primary">{{ $nextDueDate->format('d F Y') }}</span></p>
+                        @endif
                         @else
                         <h2 class="text-2xl font-bold text-primary">—</h2>
                         <p class="text-xs text-text-secondary mt-3">No active booking. <a href="{{ route('booking.page') }}" class="text-primary underline font-medium">Book a room</a> to get started.</p>
@@ -213,45 +241,146 @@
                     </div>
                 </div>
 
-                {{-- Quick Actions --}}
+                {{-- Payment Schedule --}}
+                @if($activeBooking && count($billingPeriods) > 0)
                 <section>
-                    <h3 class="text-lg font-bold text-primary mb-5">Quick Actions</h3>
-                    <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    <h3 class="text-lg font-bold text-primary mb-5">Payment Schedule</h3>
+                    <div class="bg-white rounded-2xl border border-border-subtle shadow-sm overflow-hidden">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left">
+                                <thead>
+                                    <tr class="bg-surface/50">
+                                        <th class="px-6 py-3 text-xs text-text-secondary uppercase tracking-wider font-medium">Period</th>
+                                        <th class="px-6 py-3 text-xs text-text-secondary uppercase tracking-wider font-medium">Month</th>
+                                        <th class="px-6 py-3 text-xs text-text-secondary uppercase tracking-wider font-medium">Due Date</th>
+                                        <th class="px-6 py-3 text-xs text-text-secondary uppercase tracking-wider font-medium">Amount</th>
+                                        <th class="px-6 py-3 text-xs text-text-secondary uppercase tracking-wider font-medium text-right">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-border-subtle">
+                                    @foreach($billingPeriods as $period)
+                                    <tr class="hover:bg-surface/50 transition-colors">
+                                        <td class="px-6 py-4 text-sm font-medium text-primary">
+                                            #{{ $period['period'] }}
+                                        </td>
+                                        <td class="px-6 py-4 text-sm text-primary font-medium">{{ $period['month_label'] }}</td>
+                                        <td class="px-6 py-4 text-sm text-text-secondary">
+                                            {{ $period['due_date']->format('d M Y') }}
+                                        </td>
+                                        <td class="px-6 py-4 text-sm font-semibold text-primary">
+                                            Rp {{ number_format($period['amount'], 0, ',', '.') }}
+                                        </td>
+                                        <td class="px-6 py-4 text-right">
+                                            @php
+                                                $badgeClasses = match ($period['status']) {
+                                                    'paid'      => 'bg-green-50 text-green-700 border border-green-200',
+                                                    'due_soon'  => 'bg-yellow-50 text-yellow-700 border border-yellow-200',
+                                                    'overdue'   => 'bg-red-50 text-red-600 border border-red-200',
+                                                    'upcoming'  => 'bg-blue-50 text-blue-600 border border-blue-200',
+                                                    default     => 'bg-surface text-text-secondary',
+                                                };
+                                                $badgeLabel = match ($period['status']) {
+                                                    'paid'      => 'Paid',
+                                                    'due_soon'  => 'Due Soon',
+                                                    'overdue'   => 'Overdue',
+                                                    'upcoming'  => 'Upcoming',
+                                                    default     => 'Unknown',
+                                                };
+                                            @endphp
+                                            <span class="px-3 py-1 rounded-full text-xs font-medium {{ $badgeClasses }}">
+                                                {{ $badgeLabel }}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+                @endif
+
+                {{-- Cleaning Schedule --}}
+                <section>
+                    <div class="flex items-center justify-between mb-5">
+                        <h3 class="text-lg font-bold text-primary">Cleaning Schedule</h3>
                         @if($activeBooking)
-                        <a href="{{ route('service.create', $activeBooking->id) }}" class="flex items-center gap-4 p-4 bg-white rounded-2xl border border-border-subtle hover:bg-surface transition-colors group">
-                            <div class="p-3 bg-surface rounded-xl text-primary group-hover:bg-primary group-hover:text-white transition-colors">
-                                <span class="material-symbols-outlined">handyman</span>
-                            </div>
-                            <span class="text-sm font-semibold text-primary">Request Service</span>
-                        </a>
-                        <a href="{{ route('review.create', $activeBooking->id) }}" class="flex items-center gap-4 p-4 bg-white rounded-2xl border border-border-subtle hover:bg-surface transition-colors group">
-                            <div class="p-3 bg-surface rounded-xl text-primary group-hover:bg-primary group-hover:text-white transition-colors">
-                                <span class="material-symbols-outlined">reviews</span>
-                            </div>
-                            <span class="text-sm font-semibold text-primary">Write Review</span>
-                        </a>
-                        <a href="{{ route('booking.extend', $activeBooking->id) }}" onclick="event.preventDefault(); document.getElementById('extend-form').submit();" class="flex items-center gap-4 p-4 bg-white rounded-2xl border border-border-subtle hover:bg-surface transition-colors group">
-                            <div class="p-3 bg-surface rounded-xl text-primary group-hover:bg-primary group-hover:text-white transition-colors">
-                                <span class="material-symbols-outlined">autorenew</span>
-                            </div>
-                            <span class="text-sm font-semibold text-primary">Extend Stay</span>
-                        </a>
-                        <form id="extend-form" action="{{ route('booking.extend', $activeBooking->id) }}" method="POST" class="hidden">@csrf</form>
-                        @else
-                        <a href="{{ route('booking.page') }}" class="flex items-center gap-4 p-4 bg-white rounded-2xl border border-border-subtle hover:bg-surface transition-colors group">
-                            <div class="p-3 bg-surface rounded-xl text-primary group-hover:bg-primary group-hover:text-white transition-colors">
-                                <span class="material-symbols-outlined">night_shelter</span>
-                            </div>
-                            <span class="text-sm font-semibold text-primary">Book a Room</span>
+                        <a href="{{ route('service.create', $activeBooking->id) }}" class="text-xs text-primary font-medium hover:underline flex items-center gap-1">
+                            <span class="material-symbols-outlined text-sm">add</span> Request Cleaning
                         </a>
                         @endif
-                        <a href="{{ route('booking.my-bookings') }}" class="flex items-center gap-4 p-4 bg-white rounded-2xl border border-border-subtle hover:bg-surface transition-colors group">
-                            <div class="p-3 bg-surface rounded-xl text-primary group-hover:bg-primary group-hover:text-white transition-colors">
-                                <span class="material-symbols-outlined">history</span>
-                            </div>
-                            <span class="text-sm font-semibold text-primary">View History</span>
-                        </a>
                     </div>
+
+                    @if($cleaningSchedules->isEmpty() && $pastCleanings->isEmpty())
+                    <div class="bg-white rounded-2xl border border-border-subtle shadow-sm p-10 text-center">
+                        <span class="material-symbols-outlined text-5xl text-text-secondary/15 mb-3">mop</span>
+                        <p class="text-text-secondary text-sm">No cleaning services scheduled yet.</p>
+                        @if($activeBooking)
+                        <p class="text-text-secondary text-xs mt-1">You can request a cleaning service and the admin will assign a date.</p>
+                        @endif
+                    </div>
+                    @else
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {{-- Upcoming --}}
+                        @foreach($cleaningSchedules as $schedule)
+                        @php
+                            $isUpcoming = $schedule->scheduled_date->isToday() || $schedule->scheduled_date->isFuture();
+                        @endphp
+                        <div class="bg-white rounded-2xl border border-border-subtle shadow-sm p-5 hover:shadow-md transition-shadow {{ $schedule->scheduled_date->isToday() ? 'ring-2 ring-green-200' : '' }}">
+                            <div class="flex items-start justify-between mb-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="p-2.5 rounded-xl {{ $schedule->scheduled_date->isToday() ? 'bg-green-100 text-green-600' : 'bg-blue-50 text-blue-500' }}">
+                                        <span class="material-symbols-outlined text-2xl">mop</span>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-semibold text-primary">Room {{ $schedule->room->room_number ?? '—' }}</p>
+                                        <p class="text-xs text-text-secondary">
+                                            {{ $schedule->scheduled_date->format('l, d F Y') }}
+                                        </p>
+                                    </div>
+                                </div>
+                                <span class="px-2.5 py-1 rounded-full text-xs font-medium
+                                    {{ $schedule->scheduled_date->isToday() ? 'bg-green-100 text-green-700' : 'bg-blue-50 text-blue-600' }}">
+                                    {{ $schedule->scheduled_date->isToday() ? 'Today' : 'Upcoming' }}
+                                </span>
+                            </div>
+                            <div class="flex items-center gap-2 text-xs text-text-secondary">
+                                <span class="material-symbols-outlined text-sm {{ $schedule->status === 'completed' ? 'text-green-500' : ($schedule->status === 'in_progress' ? 'text-blue-500' : 'text-yellow-500') }}">info</span>
+                                <span>Status: <span class="font-medium capitalize">{{ str_replace('_', ' ', $schedule->status) }}</span></span>
+                            </div>
+                            @if($schedule->notes)
+                            <p class="text-xs text-text-secondary mt-2 line-clamp-2">{{ $schedule->notes }}</p>
+                            @endif
+                        </div>
+                        @endforeach
+
+                        {{-- Past --}}
+                        @foreach($pastCleanings as $schedule)
+                        <div class="bg-white rounded-2xl border border-border-subtle shadow-sm p-5 opacity-60 hover:opacity-100 transition-opacity">
+                            <div class="flex items-start justify-between mb-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="p-2.5 rounded-xl bg-surface text-text-secondary">
+                                        <span class="material-symbols-outlined text-2xl">mop</span>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-semibold text-primary">Room {{ $schedule->room->room_number ?? '—' }}</p>
+                                        <p class="text-xs text-text-secondary">
+                                            {{ $schedule->scheduled_date->format('l, d F Y') }}
+                                        </p>
+                                    </div>
+                                </div>
+                                <span class="px-2.5 py-1 rounded-full bg-surface text-text-secondary text-xs font-medium">
+                                    Completed
+                                </span>
+                            </div>
+                            <div class="flex items-center gap-2 text-xs text-green-600">
+                                <span class="material-symbols-outlined text-sm">check_circle</span>
+                                <span>Completed on {{ $schedule->completed_at?->format('d M Y') ?? $schedule->scheduled_date->format('d M Y') }}</span>
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
+                    @endif
                 </section>
 
                 {{-- Recent Activity --}}

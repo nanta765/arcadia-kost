@@ -27,6 +27,11 @@ class Booking extends Model
         return $this->hasOne(Review::class);
     }
 
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
+
     protected static function booted()
     {
         static::deleted(function ($booking) {

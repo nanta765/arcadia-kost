@@ -7,6 +7,7 @@ use App\Models\Review;
 use App\Models\Booking;
 use App\Models\Payment;
 use App\Models\ServiceRequest;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
@@ -15,10 +16,18 @@ class DashboardController extends Controller
     {
         $user = Auth::user();
 
-        $activeBooking = Booking::with(['room.roomType'])
+        $activeBooking = Booking::with(['room.roomType', 'payments'])
             ->where('user_id', $user->id)
             ->where('status', 'active')
             ->first();
+
+        // Completed bookings that haven't been reviewed yet
+        $completedWithoutReview = Booking::with(['room.roomType'])
+            ->where('user_id', $user->id)
+            ->where('status', 'completed')
+            ->whereDoesntHave('review')
+            ->latest()
+            ->get();
 
         $bookings = Booking::with(['room.roomType'])
             ->where('user_id', $user->id)
@@ -67,44 +76,87 @@ class DashboardController extends Controller
             ->take(10)
             ->values();
 
+        // ── Billing Periods ─────────────────────────────────
+        $billingPeriods = [];
         $daysUntilDue = null;
         $nextDueDate = null;
+
         if ($activeBooking) {
-            $dueDay = (int) \Carbon\Carbon::parse($activeBooking->start_date)->day;
+            $startDate = Carbon::parse($activeBooking->start_date);
+            $dueDay = (int) $startDate->day;
             $today = now()->startOfDay();
+            $monthsPaid = $activeBooking->payments->where('status', 'success')->count();
+            $monthlyRent = (int) $activeBooking->room->roomType->price;
 
-            // Build the due date for this month; if the day doesn't exist
-            // (e.g. 31 in June), use the last day of this month.
-            $daysInMonth = $today->daysInMonth;
-            $actualDay = min($dueDay, $daysInMonth);
-            $nextDue = $today->copy()->setDay($actualDay);
+            for ($i = 0; $i < $activeBooking->duration_months; $i++) {
+                $periodStart = $startDate->copy()->addMonthsNoOverflow($i);
+                $dueDate = $periodStart->copy();
 
-            if ($nextDue->lt($today)) {
-                $nextDue->addMonthNoOverflow();
-                $daysInNext = $nextDue->daysInMonth;
-                $finalDay = min($dueDay, $daysInNext);
-                $nextDue->setDay($finalDay);
+                // Clamp day to month length (e.g. 31 → 30 for June)
+                $daysInMonth = $dueDate->daysInMonth;
+                $dueDate->setDay(min($dueDay, $daysInMonth));
+
+                if ($i < $monthsPaid) {
+                    $status = 'paid';
+                } elseif ($dueDate->lt($today)) {
+                    $status = 'overdue';
+                } elseif ($dueDate->diffInDays($today) <= 3) {
+                    $status = 'due_soon';
+                } else {
+                    $status = 'upcoming';
+                }
+
+                $billingPeriods[] = [
+                    'period'      => $i + 1,
+                    'month_label' => $periodStart->format('M Y'),
+                    'due_date'    => $dueDate->copy(),
+                    'amount'      => $monthlyRent,
+                    'status'      => $status,
+                ];
             }
 
-            if ($nextDue->isSameDay($today)) {
-                $daysUntilDue = 0;
-            } else {
-                $daysUntilDue = (int) $today->diffInDays($nextDue);
+            // Current/next pending period
+            $nextPeriod = collect($billingPeriods)->firstWhere('status', '!=', 'paid');
+            if ($nextPeriod) {
+                $nextDueDate = $nextPeriod['due_date'];
+                $dueDate = $nextPeriod['due_date'];
+                $daysUntilDue = (int) $dueDate->diffInDays($today, false);
             }
-            $nextDueDate = $nextDue;
         }
 
+        // ── Cleaning Schedule ───────────────────────────────
+        $cleaningSchedules = ServiceRequest::with('room')
+            ->where('user_id', $user->id)
+            ->where('type', 'cleaning')
+            ->whereNotNull('scheduled_date')
+            ->where('scheduled_date', '>=', now()->startOfDay())
+            ->orderBy('scheduled_date')
+            ->get();
+
+        $pastCleanings = ServiceRequest::with('room')
+            ->where('user_id', $user->id)
+            ->where('type', 'cleaning')
+            ->whereNotNull('scheduled_date')
+            ->where('scheduled_date', '<', now()->startOfDay())
+            ->orderBy('scheduled_date', 'desc')
+            ->take(3)
+            ->get();
+
         return view('pages.dashboard', [
-            'activeBooking'      => $activeBooking,
-            'bookings'           => $bookings,
-            'recentActivity'     => $recentActivity,
-            'pendingRequests'    => $serviceRequests->where('status', 'pending')->count(),
-            'availableRooms'     => Room::where('status', 'available')->count(),
-            'averageRating'      => round(Review::avg('rating') ?? 0, 1),
-            'totalReviews'       => Review::count(),
-            'wifiPassword'       => env('WIFI_PASSWORD', 'ARCADIA_2025_RES'),
-            'daysUntilDue'       => $daysUntilDue,
-            'nextDueDate'        => $nextDueDate,
+            'activeBooking'           => $activeBooking,
+            'completedWithoutReview'  => $completedWithoutReview,
+            'bookings'                => $bookings,
+            'recentActivity'          => $recentActivity,
+            'pendingRequests'         => $serviceRequests->where('status', 'pending')->count(),
+            'availableRooms'          => Room::where('status', 'available')->count(),
+            'averageRating'           => round(Review::avg('rating') ?? 0, 1),
+            'totalReviews'            => Review::count(),
+            'wifiPassword'            => env('WIFI_PASSWORD', 'ARCADIA_2025_RES'),
+            'billingPeriods'          => $billingPeriods,
+            'daysUntilDue'            => $daysUntilDue,
+            'nextDueDate'             => $nextDueDate,
+            'cleaningSchedules'       => $cleaningSchedules,
+            'pastCleanings'           => $pastCleanings,
         ]);
     }
 }

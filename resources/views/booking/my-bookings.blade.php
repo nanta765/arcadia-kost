@@ -81,142 +81,184 @@
     </nav>
 
     <main class="max-w-7xl mx-auto px-6 md:px-12 pt-28 pb-16">
-        <div class="mb-10">
-            <h1 class="text-2xl font-bold text-primary mb-2">My Bookings</h1>
-            <p class="text-text-secondary text-sm">Manage all your reservations in one place.</p>
-        </div>
+        <div class="flex flex-col lg:flex-row gap-8">
 
-        @if(session('success'))
-        <div class="mb-6 p-4 bg-green-50 text-green-700 rounded-xl text-xs flex items-center gap-2">
-            <span class="material-symbols-outlined text-lg">check_circle</span>
-            {{ session('success') }}
-        </div>
-        @endif
-
-        @if($bookings->isEmpty())
-        <div class="bg-white rounded-2xl border border-border-subtle p-16 text-center">
-            <span class="material-symbols-outlined text-6xl text-text-secondary/20 mb-4">night_shelter</span>
-            <h3 class="text-lg font-bold text-primary mb-2">No rooms booked yet</h3>
-            <p class="text-text-secondary text-sm mb-8">Start by choosing a comfortable room for your stay.</p>
-            <a href="{{ route('booking.page') }}" class="inline-flex items-center gap-2 px-8 py-4 bg-primary text-white text-sm font-semibold rounded-full hover:bg-black/80 transition-all active:scale-95">
-                <span class="material-symbols-outlined">search</span>
-                Browse Room Catalog
-            </a>
-        </div>
-        @else
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            @foreach($bookings as $booking)
-            <div class="bg-white rounded-2xl border border-border-subtle overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-
-                {{-- Status header --}}
-                <div class="px-6 py-4 border-b border-border-subtle flex justify-between items-center bg-surface/50">
-                    <span class="text-xs text-text-secondary">
-                        Booked {{ \Carbon\Carbon::parse($booking->created_at)->format('d M Y') }}
-                    </span>
-                    @if($booking->status == 'pending')
-                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-orange-50 text-orange-700 border border-orange-100">
-                            Awaiting Payment
-                        </span>
-                    @elseif($booking->status == 'review')
-                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-50 text-blue-700 border border-blue-100">
-                            Awaiting Confirmation
-                        </span>
-                    @elseif($booking->status == 'active')
-                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-50 text-green-700 border border-green-100">
-                            Active
-                        </span>
-                    @elseif($booking->status == 'completed')
-                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-50 text-green-700 border border-green-100">
-                            Completed
-                        </span>
-                    @elseif($booking->status == 'cancelled')
-                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-red-50 text-red-600 border border-red-100">
-                            Cancelled
-                        </span>
-                    @else
-                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-surface text-text-secondary border border-border-subtle">
-                            {{ ucfirst($booking->status) }}
-                        </span>
-                    @endif
-                </div>
-
-                {{-- Room details --}}
-                <div class="p-6">
-                    <div class="flex items-start justify-between mb-4">
-                        <div>
-                            <h3 class="text-lg font-bold text-primary">{{ $booking->room->roomType->name }}</h3>
-                            <p class="text-text-secondary text-sm mt-1">
-                                <span class="material-symbols-outlined text-sm align-middle">door_open</span>
-                                Room <span class="font-bold text-primary">{{ $booking->room->room_number }}</span>
-                            </p>
-                        </div>
-                        <div class="text-right">
-                            <p class="text-xs text-text-secondary">Total</p>
-                            <p class="text-lg font-bold text-primary">Rp {{ number_format($booking->total_price, 0, ',', '.') }}</p>
-                        </div>
-                    </div>
-
-                    <div class="bg-surface rounded-xl p-4 border border-border-subtle">
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <p class="text-xs text-text-secondary">Check-in</p>
-                                <p class="text-sm font-semibold text-primary">{{ \Carbon\Carbon::parse($booking->start_date)->format('d M Y') }}</p>
+            {{-- Sidebar --}}
+            <aside class="w-full lg:w-64 flex-shrink-0">
+                <div class="bg-white rounded-2xl border border-border-subtle shadow-sm p-6 flex flex-col items-center text-center">
+                    <form id="photo-form" action="{{ route('profile.photo') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <label for="photo-input" class="cursor-pointer group relative">
+                            <div class="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mb-4 ring-4 ring-surface overflow-hidden group-hover:ring-primary/20 transition-all">
+                                @if(auth()->user()->profile_photo)
+                                <img src="{{ asset('storage/' . auth()->user()->profile_photo) }}" alt="Profile" class="w-full h-full object-cover group-hover:opacity-70 transition-opacity">
+                                <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <span class="material-symbols-outlined text-white text-xl bg-black/40 rounded-full p-1">photo_camera</span>
+                                </div>
+                                @else
+                                <span class="material-symbols-outlined text-4xl text-primary/40 group-hover:text-primary/60 transition-colors">person</span>
+                                <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <span class="material-symbols-outlined text-white text-xl bg-black/40 rounded-full p-1">add_a_photo</span>
+                                </div>
+                                @endif
                             </div>
-                            <div>
-                                <p class="text-xs text-text-secondary">End Date</p>
-                                <p class="text-sm font-semibold text-primary">{{ \Carbon\Carbon::parse($booking->end_date)->format('d M Y') }}</p>
+                        </label>
+                        <input type="file" id="photo-input" name="profile_photo" accept=".jpg,.jpeg,.png" class="hidden" onchange="document.getElementById('photo-form').submit();">
+                    </form>
+                    <h3 class="text-lg font-bold text-primary">{{ auth()->user()->name }}</h3>
+                    <p class="text-xs text-text-secondary mt-1">{{ auth()->user()->email }}</p>
+                </div>
+
+                <nav class="mt-4 bg-white rounded-2xl border border-border-subtle shadow-sm p-2 flex flex-row lg:flex-col overflow-x-auto gap-1">
+                    <a href="{{ route('dashboard') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-text-secondary hover:bg-surface transition-all">
+                        <span class="material-symbols-outlined">dashboard</span>
+                        <span class="text-sm font-medium whitespace-nowrap">Dashboard</span>
+                    </a>
+                    <a href="{{ route('booking.my-bookings') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-primary/5 text-primary font-semibold transition-all">
+                        <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">night_shelter</span>
+                        <span class="text-sm font-medium whitespace-nowrap">My Bookings</span>
+                    </a>
+                    <a href="{{ route('booking.page') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-text-secondary hover:bg-surface transition-all">
+                        <span class="material-symbols-outlined">add_home</span>
+                        <span class="text-sm font-medium whitespace-nowrap">Book a Room</span>
+                    </a>
+                </nav>
+            </aside>
+
+            {{-- Main Content --}}
+            <section class="flex-1 space-y-6 min-w-0">
+                <header class="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+                    <div>
+                        <h1 class="text-2xl font-bold text-primary">My Bookings</h1>
+                        <p class="text-text-secondary text-sm mt-1">Manage all your reservations in one place.</p>
+                    </div>
+                </header>
+
+                @if(session('success'))
+                <div class="p-4 bg-green-50 text-green-700 rounded-xl text-xs flex items-center gap-2">
+                    <span class="material-symbols-outlined text-lg">check_circle</span>
+                    {{ session('success') }}
+                </div>
+                @endif
+
+                @if($bookings->isEmpty())
+                <div class="bg-white rounded-2xl border border-border-subtle p-16 text-center">
+                    <span class="material-symbols-outlined text-6xl text-text-secondary/20 mb-4">night_shelter</span>
+                    <h3 class="text-lg font-bold text-primary mb-2">No rooms booked yet</h3>
+                    <p class="text-text-secondary text-sm mb-8">Start by choosing a comfortable room for your stay.</p>
+                    <a href="{{ route('booking.page') }}" class="inline-flex items-center gap-2 px-8 py-4 bg-primary text-white text-sm font-semibold rounded-full hover:bg-black/80 transition-all active:scale-95">
+                        <span class="material-symbols-outlined">search</span>
+                        Browse Room Catalog
+                    </a>
+                </div>
+                @else
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    @foreach($bookings as $booking)
+                    <div class="bg-white rounded-2xl border border-border-subtle overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+
+                        {{-- Status header --}}
+                        <div class="px-6 py-4 border-b border-border-subtle flex justify-between items-center bg-surface/50">
+                            <span class="text-xs text-text-secondary">
+                                Booked {{ \Carbon\Carbon::parse($booking->created_at)->format('d M Y') }}
+                            </span>
+                            @if($booking->status == 'pending')
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-orange-50 text-orange-700 border border-orange-100">
+                                    Awaiting Payment
+                                </span>
+                            @elseif($booking->status == 'review')
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-50 text-blue-700 border border-blue-100">
+                                    Awaiting Confirmation
+                                </span>
+                            @elseif($booking->status == 'active')
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-50 text-green-700 border border-green-100">
+                                    Active
+                                </span>
+                            @elseif($booking->status == 'completed')
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-50 text-green-700 border border-green-100">
+                                    Completed
+                                </span>
+                            @elseif($booking->status == 'cancelled')
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-red-50 text-red-600 border border-red-100">
+                                    Cancelled
+                                </span>
+                            @else
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-surface text-text-secondary border border-border-subtle">
+                                    {{ ucfirst($booking->status) }}
+                                </span>
+                            @endif
+                        </div>
+
+                        {{-- Room details --}}
+                        <div class="p-6">
+                            <div class="flex items-start justify-between mb-4">
+                                <div>
+                                    <h3 class="text-lg font-bold text-primary">{{ $booking->room->roomType->name }}</h3>
+                                    <p class="text-text-secondary text-sm mt-1">
+                                        <span class="material-symbols-outlined text-sm align-middle">door_open</span>
+                                        Room <span class="font-bold text-primary">{{ $booking->room->room_number }}</span>
+                                    </p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-xs text-text-secondary">Total</p>
+                                    <p class="text-lg font-bold text-primary">Rp {{ number_format($booking->total_price, 0, ',', '.') }}</p>
+                                </div>
+                            </div>
+
+                            <div class="bg-surface rounded-xl p-4 border border-border-subtle">
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <p class="text-xs text-text-secondary">Check-in</p>
+                                        <p class="text-sm font-semibold text-primary">{{ \Carbon\Carbon::parse($booking->start_date)->format('d M Y') }}</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs text-text-secondary">End Date</p>
+                                        <p class="text-sm font-semibold text-primary">{{ \Carbon\Carbon::parse($booking->end_date)->format('d M Y') }}</p>
+                                    </div>
+                                </div>
+                                <div class="mt-3 pt-3 border-t border-border-subtle">
+                                    <p class="text-xs text-text-secondary">Duration <span class="font-bold text-primary">{{ $booking->duration_months }} Months</span></p>
+                                </div>
                             </div>
                         </div>
-                        <div class="mt-3 pt-3 border-t border-border-subtle">
-                            <p class="text-xs text-text-secondary">Duration <span class="font-bold text-primary">{{ $booking->duration_months }} Months</span></p>
+
+                        {{-- Single primary action --}}
+                        <div class="px-6 py-4 border-t border-border-subtle bg-surface/30">
+                            @if($booking->status == 'pending')
+                                <a href="{{ route('booking.pay', $booking->id) }}" class="flex items-center justify-center gap-2 w-full bg-primary text-white text-sm font-semibold py-3 rounded-xl hover:bg-black/80 transition-all active:scale-95">
+                                    <span class="material-symbols-outlined text-sm">payments</span>
+                                    Pay Now
+                                </a>
+                            @elseif($booking->status == 'review')
+                                <p class="text-center text-xs text-text-secondary py-2 flex items-center justify-center gap-1">
+                                    <span class="material-symbols-outlined text-sm">hourglass_top</span>
+                                    Waiting for admin confirmation
+                                </p>
+                            @elseif($booking->status == 'active')
+                                <form action="{{ route('booking.extend', $booking->id) }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="flex items-center justify-center gap-2 w-full bg-primary text-white text-sm font-semibold py-3 rounded-xl hover:bg-black/80 transition-all active:scale-95">
+                                        <span class="material-symbols-outlined text-sm">autorenew</span>
+                                        Extend Stay
+                                    </button>
+                                </form>
+                            @elseif($booking->status == 'completed')
+                                @if(!$booking->review)
+                                <a href="{{ route('review.create', $booking->id) }}" class="flex items-center justify-center gap-2 w-full bg-primary text-white text-sm font-semibold py-3 rounded-xl hover:bg-black/80 transition-all active:scale-95">
+                                    <span class="material-symbols-outlined text-sm">reviews</span>
+                                    Write Review
+                                </a>
+                                @else
+                                <p class="text-center text-xs text-text-secondary py-2">Stay completed</p>
+                                @endif
+                            @endif
                         </div>
+
                     </div>
+                    @endforeach
                 </div>
-
-                {{-- Actions --}}
-                <div class="px-6 py-4 border-t border-border-subtle bg-surface/30 flex flex-col gap-2">
-                    @if($booking->status == 'pending')
-                        <a href="{{ route('booking.pay', $booking->id) }}" class="flex items-center justify-center gap-2 w-full bg-primary text-white text-sm font-semibold py-3 rounded-xl hover:bg-black/80 transition-all active:scale-95">
-                            <span class="material-symbols-outlined text-sm">payments</span>
-                            Pay Now
-                        </a>
-                    @elseif($booking->status == 'review')
-                        <p class="text-center text-xs text-text-secondary py-2 flex items-center justify-center gap-1">
-                            <span class="material-symbols-outlined text-sm">hourglass_top</span>
-                            Waiting for admin confirmation
-                        </p>
-                    @elseif($booking->status == 'active')
-                        <form action="{{ route('booking.extend', $booking->id) }}" method="POST">
-                            @csrf
-                            <button type="submit" class="flex items-center justify-center gap-2 w-full bg-primary text-white text-sm font-semibold py-3 rounded-xl hover:bg-black/80 transition-all active:scale-95">
-                                <span class="material-symbols-outlined text-sm">autorenew</span>
-                                Extend Stay (1 Month)
-                            </button>
-                        </form>
-                        @if(!$booking->review)
-                        <a href="{{ route('review.create', $booking->id) }}" class="flex items-center justify-center gap-2 w-full border border-border-subtle text-primary text-sm font-semibold py-3 rounded-xl hover:bg-surface transition-all">
-                            <span class="material-symbols-outlined text-sm">reviews</span>
-                            Write Review
-                        </a>
-                        @endif
-                        <a href="{{ route('service.create', $booking->id) }}" class="flex items-center justify-center gap-2 w-full border border-border-subtle text-text-secondary text-xs font-medium py-2 rounded-xl hover:bg-surface transition-all">
-                            <span class="material-symbols-outlined text-sm">build</span>
-                            Request Service
-                        </a>
-                    @elseif($booking->status == 'completed')
-                        @if(!$booking->review)
-                        <a href="{{ route('review.create', $booking->id) }}" class="flex items-center justify-center gap-2 w-full bg-primary text-white text-sm font-semibold py-3 rounded-xl hover:bg-black/80 transition-all active:scale-95">
-                            <span class="material-symbols-outlined text-sm">reviews</span>
-                            Write Review
-                        </a>
-                        @endif
-                    @endif
-                </div>
-
-            </div>
-            @endforeach
+                @endif
+            </section>
         </div>
-        @endif
     </main>
 
     {{-- Footer — same as landing page --}}
