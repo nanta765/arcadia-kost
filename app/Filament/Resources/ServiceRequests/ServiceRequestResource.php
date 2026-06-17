@@ -15,9 +15,9 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
-use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Actions\EditAction;
@@ -48,11 +48,9 @@ class ServiceRequestResource extends Resource
                     ->disabled(),
                 Textarea::make('notes')->label('Catatan dari Penghuni')->disabled()->columnSpanFull(),
 
-                DateTimePicker::make('deadline')
+                TextInput::make('deadline')
                     ->label('Tenggat Waktu')
-                    ->nullable()
-                    ->native(false)
-                    ->disabled($isOwner),
+                    ->disabled(),
 
                 Select::make('status')
                     ->options([
@@ -95,7 +93,6 @@ class ServiceRequestResource extends Resource
 
                 TextColumn::make('deadline')
                     ->label('Tenggat')
-                    ->dateTime('d M Y, H:i')
                     ->placeholder('-'),
 
                 TextColumn::make('created_at')

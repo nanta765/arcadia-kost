@@ -30,7 +30,7 @@ class ServiceRequest extends Model
     protected function casts(): array
     {
         return [
-            'deadline' => 'datetime',
+            'deadline' => 'string',
             'scheduled_date' => 'date',
             'completed_at' => 'datetime',
         ];
