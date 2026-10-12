@@ -10,7 +10,9 @@ use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
+use Filament\View\PanelsRenderHook;
 use Filament\Widgets\AccountWidget;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -33,8 +35,19 @@ class AdminPanelProvider extends PanelProvider
             ->favicon(asset('images/arcadia-logo-no-bg.png'))
             ->sidebarCollapsibleOnDesktop()
             ->colors([
+                // Aksen keemasan
                 'primary' => Color::Amber,
+                // Palet "gray" dihangatkan ke krem agar nuansa putih keemasan
+                'gray' => Color::Stone,
             ])
+            // Tema "putih keemasan" untuk dashboard owner & staff.
+            // CSS disajikan dari /public (tanpa build Vite) agar mudah diubah.
+            ->renderHook(
+                PanelsRenderHook::HEAD_END,
+                fn (): string => Blade::render(
+                    '<link rel="stylesheet" href="{{ asset(\'css/admin-theme.css\') }}">'
+                ),
+            )
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
             ->pages([

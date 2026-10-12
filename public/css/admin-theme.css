@@ -1,0 +1,76 @@
+/*
+ * Tema "Putih Keemasan" untuk panel admin Filament (dashboard owner & staff).
+ * Dimuat lewat renderHook HEAD_END di AdminPanelProvider.
+ * Tujuan: latar putih bernuansa emas lembut + aksen emas agar lebih jelas.
+ * File ini disajikan langsung dari /public (tanpa build Vite) supaya mudah diubah.
+ */
+
+:root {
+    --arca-gold: 202 138 4;        /* amber-600  */
+    --arca-gold-strong: 180 120 0; /* emas lebih pekat untuk teks/garis */
+    --arca-cream: 253 250 240;     /* putih keemasan (latar utama)      */
+    --arca-cream-2: 250 243 224;   /* krem sedikit lebih dalam          */
+    --arca-border: 234 219 180;    /* garis tepi keemasan lembut        */
+}
+
+/* ===== Mode terang (owner & staff memakai ini) ===== */
+
+/* Latar utama halaman menjadi putih keemasan */
+.fi-body:not(.dark) {
+    background-color: rgb(var(--arca-cream));
+}
+
+/* Sidebar putih keemasan dengan tepi emas */
+.fi-sidebar.fi-sidebar:not(.dark .fi-sidebar) {
+    background-color: rgb(var(--arca-cream)) !important;
+    border-right: 1px solid rgb(var(--arca-border));
+}
+.fi-main-ctn:not(.dark .fi-main-ctn) {
+    background-color: rgb(var(--arca-cream));
+}
+
+/* Topbar senada */
+.fi-topbar > nav {
+    background-color: rgba(var(--arca-cream), 0.9) !important;
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid rgb(var(--arca-border));
+}
+
+/* Kartu / panel / widget: putih bersih dengan tepi emas lembut
+   agar konten tetap "terlihat jelas" di atas latar krem */
+:not(.dark) > .fi-section,
+:not(.dark) > .fi-wi,
+:not(.dark) .fi-section.fi-section,
+:not(.dark) .fi-wi-stats-overview-stat,
+:not(.dark) .fi-ta-ctn,
+:not(.dark) .fi-fo-component-ctn .fi-input-wrp {
+    background-color: #ffffff;
+    border: 1px solid rgb(var(--arca-border));
+}
+
+/* Judul & heading diberi warna emas pekat supaya menonjol */
+:not(.dark) .fi-header-heading,
+:not(.dark) .fi-section-header-heading,
+:not(.dark) .fi-wi-stats-overview-stat-value {
+    color: rgb(var(--arca-gold-strong));
+}
+
+/* Item sidebar aktif: latar krem-emas + teks emas */
+:not(.dark) .fi-sidebar-item-active .fi-sidebar-item-button {
+    background-color: rgb(var(--arca-cream-2));
+    color: rgb(var(--arca-gold-strong));
+}
+:not(.dark) .fi-sidebar-item-button:hover {
+    background-color: rgb(var(--arca-cream-2));
+}
+
+/* Header tabel sedikit krem agar baris data lebih terbaca */
+:not(.dark) .fi-ta-header-cell {
+    background-color: rgb(var(--arca-cream-2));
+    color: rgb(var(--arca-gold-strong));
+}
+
+/* Aksen garis atas tipis berwarna emas pada kartu statistik */
+:not(.dark) .fi-wi-stats-overview-stat {
+    border-top: 3px solid rgb(var(--arca-gold));
+}

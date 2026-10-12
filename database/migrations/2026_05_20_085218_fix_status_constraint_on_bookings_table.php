@@ -7,6 +7,12 @@ return new class extends Migration
 {
     public function up(): void
     {
+        // CHECK constraints di sini khusus PostgreSQL. SQLite tidak mendukung
+        // ALTER TABLE ... DROP/ADD CONSTRAINT, jadi lewati pada driver sqlite.
+        if (DB::getDriverName() !== 'pgsql') {
+            return;
+        }
+
         // 1. Hapus aturan ketat yang lama
         DB::statement('ALTER TABLE bookings DROP CONSTRAINT IF EXISTS bookings_status_check');
 
@@ -16,6 +22,10 @@ return new class extends Migration
 
     public function down(): void
     {
+        if (DB::getDriverName() !== 'pgsql') {
+            return;
+        }
+
         // Kembalikan ke asal jika migrasi di-rollback
         DB::statement('ALTER TABLE bookings DROP CONSTRAINT IF EXISTS bookings_status_check');
         DB::statement("ALTER TABLE bookings ADD CONSTRAINT bookings_status_check CHECK (status::text = ANY (ARRAY['pending'::character varying, 'active'::character varying, 'cancelled'::character varying]::text[]))");
