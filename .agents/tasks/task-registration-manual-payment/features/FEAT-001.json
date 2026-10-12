@@ -1,0 +1,26 @@
+{
+  "id": "FEAT-001",
+  "type": "fix",
+  "description": "Harden customer registration so a new customer's role can never be null and the shared login/register form always posts the register fields to /register with CSRF, landing the user on /dashboard. Root cause found during exploration: RegisteredUserController@store never sets role (it relies solely on the DB default), and resources/views/auth/login-page.blade.php defaults the form action to /login and only swaps to /register via JS (toggleAuth) — if JS does not run, register fields post to /login and silently fail. This feature is independent of FEAT-002/003 but ordered first because it is the user's primary reported bug. Reference ground truth in context.json verification_findings.registration.",
+  "status": "completed",
+  "steps": [
+    "In app/Http/Controllers/Auth/RegisteredUserController.php@store, add 'role' => 'customer' to the User::create([...]) array so role is always set explicitly. Keep the existing validation (name, email, phone_number nullable, profession nullable, password confirmed), event(new Registered($user)), Auth::login($user), and redirect to route('dashboard').",
+    "In app/Models/User.php, add a model-level default so role can never be null: protected $attributes = ['role' => 'customer']; (the DB default already exists; this is a second safety layer). Do not change $fillable, canAccessPanel(), or relations.",
+    "In resources/views/auth/login-page.blade.php, make registration robust without depending on JS: ensure that when $mode === 'register' the form's action resolves to url('/register') server-side (e.g. set the <form> action from $mode rather than hardcoding /login), keep @csrf, and make sure the register-only fields (name, phone_number, profession, password_confirmation) are submitted when in register mode. Preserve the existing login behaviour and the JS toggle for the login<->register tab switch.",
+    "Do not alter routes/auth.php or routes/web.php; the register routes and verified middleware are already correct (User does not implement MustVerifyEmail, so 'verified' passes for a null email_verified_at)."
+  ],
+  "acceptance_criteria": [
+    "A user created via POST /register has role = 'customer' (never null).",
+    "After POST /register the user is authenticated and redirected to route('dashboard').",
+    "A freshly registered (and logged-in) user gets HTTP 200 from GET /dashboard (not redirected to /login or /verify-email).",
+    "Login still works: a seeded customer reaches /dashboard and owner@arca.com reaches /admin.",
+    "Running `php artisan test --filter=RegistrationTest` passes."
+  ],
+  "verification": [
+    "php artisan test --filter=RegistrationTest",
+    "php artisan test --filter=AuthenticationTest",
+    "php artisan tinker --execute=\"$u=App\\Models\\User::factory()->make(); echo $u->role;\"  (should print 'customer' from the model default)"
+  ],
+  "blocked_reason": null,
+  "findings": "Implemented all 3 steps. (1) app/Http/Controllers/Auth/RegisteredUserController.php@store: added 'role' => 'customer' to the User::create([...]) array (inserted between 'email' and 'phone_number'); all other logic (validation, event(new Registered), Auth::login, redirect to route('dashboard')) left unchanged. (2) app/Models/User.php: added protected $attributes = ['role' => 'customer']; immediately after $hidden; $fillable, canAccessPanel() and relations untouched. (3) resources/views/auth/login-page.blade.php: changed the single <form> action from hardcoded url('/login') to a server-side ternary: ($mode ?? 'login') === 'register' ? url('/register') : url('/login'). This makes register posts hit /register even if JS does not run. @csrf already present; the register-only fields are only CSS-hidden (class 'hidden'), so they remain in the DOM and submit normally. The JS toggleAuth() tab switch still rewrites form.action for in-page tab changes and is preserved. routes/auth.php and routes/web.php were NOT touched. Verification: 'php artisan test --filter=RegistrationTest' = 2 passed; 'php artisan test --filter=AuthenticationTest' = 4 passed; tinker factory()->make()->role prints 'customer'. Note: tests run on sqlite :memory: per phpunit.xml. For later steps (FEAT-002/003): no changes made to payment/booking code; midtrans untouched; the registered customer lands on /dashboard with role 'customer'."
+}

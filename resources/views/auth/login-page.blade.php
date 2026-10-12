@@ -66,7 +66,7 @@
             </div>
 
             {{-- Form --}}
-            <form method="POST" action="{{ url('/login') }}" class="space-y-5" id="auth-form">
+            <form method="POST" action="{{ ($mode ?? 'login') === 'register' ? url('/register') : url('/login') }}" class="space-y-5" id="auth-form">
                 @csrf
                 <input type="hidden" id="auth-mode" value="{{ $mode ?? 'login' }}">
 

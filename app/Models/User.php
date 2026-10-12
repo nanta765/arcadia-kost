@@ -42,6 +42,15 @@ class User extends Authenticatable implements FilamentUser
     ];
 
     /**
+     * The model's default attribute values.
+     *
+     * @var array<string, mixed>
+     */
+    protected $attributes = [
+        'role' => 'customer',
+    ];
+
+    /**
      * Get the attributes that should be cast.
      *
      * @return array<string, string>
