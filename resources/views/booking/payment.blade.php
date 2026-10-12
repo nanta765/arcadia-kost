@@ -133,11 +133,11 @@
 
                         <div class="space-y-3">
                             <label class="relative flex items-center p-4 border border-border-subtle rounded-xl cursor-pointer hover:bg-surface transition-all has-[:checked]:border-primary has-[:checked]:bg-surface/50">
-                                <input checked class="hidden peer" name="payment_method" value="qr" type="radio">
-                                <span class="material-symbols-outlined text-primary mr-4">qr_code</span>
+                                <input checked class="hidden peer" name="payment_method" value="bank_transfer" type="radio">
+                                <span class="material-symbols-outlined text-primary mr-4">account_balance</span>
                                 <div class="flex-grow">
-                                    <span class="text-sm font-semibold text-primary block">QR Payment</span>
-                                    <span class="text-xs text-text-secondary">Scan QR code to pay instantly</span>
+                                    <span class="text-sm font-semibold text-primary block">Bank Transfer</span>
+                                    <span class="text-xs text-text-secondary">Transfer to our bank account, then upload your proof (Manual Verification)</span>
                                 </div>
                                 <div class="w-5 h-5 border-2 border-border-subtle rounded-full flex items-center justify-center peer-checked:border-primary peer-checked:bg-primary">
                                     <div class="w-2 h-2 bg-white rounded-full"></div>
@@ -145,11 +145,11 @@
                             </label>
 
                             <label class="relative flex items-center p-4 border border-border-subtle rounded-xl cursor-pointer hover:bg-surface transition-all has-[:checked]:border-primary has-[:checked]:bg-surface/50">
-                                <input class="hidden peer" name="payment_method" value="bank_transfer" type="radio">
-                                <span class="material-symbols-outlined text-primary mr-4">account_balance</span>
+                                <input class="hidden peer" name="payment_method" value="on_site" type="radio">
+                                <span class="material-symbols-outlined text-primary mr-4">storefront</span>
                                 <div class="flex-grow">
-                                    <span class="text-sm font-semibold text-primary block">Bank Transfer</span>
-                                    <span class="text-xs text-text-secondary">BCA, Mandiri, BNI (Manual Verification)</span>
+                                    <span class="text-sm font-semibold text-primary block">Pay on Site</span>
+                                    <span class="text-xs text-text-secondary">Pay directly at the kost — no upload required</span>
                                 </div>
                                 <div class="w-5 h-5 border-2 border-border-subtle rounded-full flex items-center justify-center peer-checked:border-primary peer-checked:bg-primary">
                                     <div class="w-2 h-2 bg-white rounded-full"></div>
@@ -157,12 +157,10 @@
                             </label>
                         </div>
 
-                        <div class="mt-6 flex flex-col items-center justify-center p-6 bg-surface rounded-xl border border-border-subtle" id="qr-details">
-                            <p class="text-sm font-semibold text-primary mb-4">Scan QR Code to Pay</p>
-                            <div class="bg-white rounded-xl p-4 shadow-sm border border-border-subtle">
-                                {!! $qrCode !!}
-                            </div>
-                            <div class="mt-4 space-y-2 text-center">
+                        {{-- Bank transfer details --}}
+                        <div class="mt-6 flex flex-col items-center justify-center p-6 bg-surface rounded-xl border border-border-subtle" id="bank-details">
+                            <p class="text-sm font-semibold text-primary mb-4">Transfer to the following account</p>
+                            <div class="w-full space-y-2 text-center">
                                 <p class="text-xs text-text-secondary">Bank <span class="font-bold text-primary">{{ $bankName }}</span></p>
                                 <p class="text-xs text-text-secondary">No. Rekening <span class="font-bold text-primary">{{ $bankAccount }}</span></p>
                                 <p class="text-xs text-text-secondary">A.N <span class="font-bold text-primary">{{ $bankHolder }}</span></p>
@@ -170,15 +168,23 @@
                             </div>
                             <p class="text-xs text-text-secondary mt-4 text-center">After transferring, upload your proof of payment below.</p>
                         </div>
+
+                        {{-- On site note --}}
+                        <div class="mt-6 p-6 bg-surface rounded-xl border border-border-subtle hidden" id="on-site-details">
+                            <p class="text-sm text-text-secondary text-center">
+                                Please pay <span class="font-bold text-primary">Rp {{ number_format($totalAmount, 0, ',', '.') }}</span>
+                                directly at the kost. Your booking will be marked for review and confirmed by the owner.
+                            </p>
+                        </div>
                     </section>
 
-                    {{-- Upload Proof --}}
+                    {{-- Upload Proof (bank transfer only) --}}
                     <section id="proof-upload" class="bg-white rounded-2xl p-6 border-2 border-dashed border-border-subtle">
                         <div id="upload-prompt" class="flex flex-col items-center justify-center text-center">
                             <span class="material-symbols-outlined text-primary text-4xl mb-2">cloud_upload</span>
                             <p class="text-sm font-semibold text-primary">Upload Proof of Payment</p>
-                            <p class="text-xs text-text-secondary mt-1">Upload your payment receipt here (PNG, JPG, PDF)</p>
-                            <input type="file" name="payment_receipt" id="payment_receipt" class="hidden" accept=".png, .jpg, .jpeg, .pdf">
+                            <p class="text-xs text-text-secondary mt-1">Upload your transfer receipt here (PNG, JPG)</p>
+                            <input type="file" name="payment_receipt" id="payment_receipt" class="hidden" accept="image/*">
                             <label for="payment_receipt" class="mt-4 text-sm text-primary font-semibold hover:underline cursor-pointer">Choose File</label>
                         </div>
                         <div id="upload-preview" class="hidden flex flex-col items-center text-center">
@@ -352,23 +358,31 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const qrDetails = document.getElementById('qr-details');
+            const bankDetails = document.getElementById('bank-details');
+            const onSiteDetails = document.getElementById('on-site-details');
             const proofUpload = document.getElementById('proof-upload');
             const fileInput = document.getElementById('payment_receipt');
             const fileNameDisplay = document.getElementById('file-name-display');
 
+            function applyMethod(method) {
+                if (method === 'bank_transfer') {
+                    bankDetails.style.display = 'flex';
+                    onSiteDetails.style.display = 'none';
+                    proofUpload.style.display = 'block';
+                } else {
+                    bankDetails.style.display = 'none';
+                    onSiteDetails.style.display = 'block';
+                    proofUpload.style.display = 'none';
+                }
+            }
+
             document.querySelectorAll('input[name="payment_method"]').forEach(input => {
-                input.addEventListener('change', (e) => {
-                    const selectedMethod = e.target.value;
-                    if (selectedMethod === 'qr') {
-                        qrDetails.style.display = 'flex';
-                        proofUpload.style.display = 'flex';
-                    } else {
-                        qrDetails.style.display = 'none';
-                        proofUpload.style.display = 'flex';
-                    }
-                });
+                input.addEventListener('change', (e) => applyMethod(e.target.value));
             });
+
+            // Initialise based on the pre-checked option
+            const checked = document.querySelector('input[name="payment_method"]:checked');
+            applyMethod(checked ? checked.value : 'bank_transfer');
 
             fileInput.addEventListener('change', function(e) {
                 const uploadPrompt = document.getElementById('upload-prompt');

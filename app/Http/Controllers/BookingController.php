@@ -5,12 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\RoomType;
 use App\Models\Room;
 use App\Models\Booking;
+use App\Models\Payment;
 use App\Models\ServiceRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
-use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class BookingController extends Controller
 {
@@ -93,26 +93,15 @@ class BookingController extends Controller
         $serviceFee = 0;
         $totalAmount = $booking->total_price;
 
-        // Bank info & QR
-        $bankName = 'BCA';
-        $bankAccount = '1234567890';
-        $bankHolder = 'Kost Arca Manajemen';
-
-        $qrContent = "TRANSFER KOST ARCA\n";
-        $qrContent .= "Bank: {$bankName}\n";
-        $qrContent .= "No. Rek: {$bankAccount}\n";
-        $qrContent .= "A.N: {$bankHolder}\n";
-        $qrContent .= "Nominal: Rp " . number_format($totalAmount, 0, ',', '.') . "\n";
-        $qrContent .= "Booking ID: #{$booking->id}";
-
-        $qrCode = QrCode::size(220)
-            ->backgroundColor(255, 255, 255)
-            ->color(0, 38, 42)
-            ->generate($qrContent);
+        // Dummy kost bank info for the manual transfer flow
+        $bank = config('payment.bank');
+        $bankName = $bank['name'];
+        $bankAccount = $bank['account_number'];
+        $bankHolder = $bank['account_holder'];
 
         return view('booking.payment', compact(
             'booking', 'roomName', 'duration', 'monthlyRent', 'deposit', 'serviceFee',
-            'totalAmount', 'qrCode', 'bankName', 'bankAccount', 'bankHolder'
+            'totalAmount', 'bankName', 'bankAccount', 'bankHolder'
         ));
     }
 
@@ -124,14 +113,20 @@ class BookingController extends Controller
         }
 
         $request->validate([
-            'payment_method' => 'required|in:qr,bank_transfer',
-            'payment_receipt' => 'nullable|file|mimes:png,jpg,jpeg,pdf|max:3072',
+            'payment_method' => 'required|in:bank_transfer,on_site',
         ]);
 
-        if ($request->hasFile('payment_receipt')) {
+        $method = $request->input('payment_method');
+
+        if ($method === 'bank_transfer') {
+            $request->validate([
+                'payment_receipt' => 'required|image|mimes:jpg,jpeg,png|max:4096',
+            ]);
+
             if ($booking->proof_of_payment) {
                 Storage::disk('public')->delete($booking->proof_of_payment);
             }
+
             $path = $request->file('payment_receipt')->store('proofs', 'public');
             $booking->update([
                 'proof_of_payment' => $path,
@@ -140,6 +135,13 @@ class BookingController extends Controller
         } else {
             $booking->update(['status' => 'review']);
         }
+
+        Payment::create([
+            'booking_id' => $booking->id,
+            'amount' => $booking->total_price,
+            'payment_method' => $method,
+            'status' => 'pending',
+        ]);
 
         return redirect()->route('booking.my-bookings')
             ->with('success', 'Pembayaran berhasil diproses! Silakan tunggu konfirmasi Admin.');
