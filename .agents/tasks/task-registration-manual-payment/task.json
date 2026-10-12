@@ -1,0 +1,7 @@
+{
+  "task_id": "task-registration-manual-payment",
+  "task_description": "Fix customer registration (role can never be null; register form posts correctly and lands on /dashboard) AND replace the Midtrans/QR online payment with a manual payment flow (bank transfer with dummy account + proof upload, and pay-on-site), with owner verification (approve/reject) in the Filament admin panel. Reuse booking status 'review' for awaiting-verification; record payment_method and verification on the Payment model; keep proof image on bookings.proof_of_payment. Do not change DB connection settings; do not break Filament admin access or seeders.",
+  "status": "completed",
+  "feature_order": ["FEAT-001", "FEAT-002", "FEAT-003"],
+  "blocked_reason": null
+}
