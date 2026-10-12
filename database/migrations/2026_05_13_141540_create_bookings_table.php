@@ -18,7 +18,7 @@ return new class extends Migration
             $table->date('start_date');
             $table->integer('duration_months');
             $table->integer('total_price');
-            $table->enum('status', ['pending', 'validated', 'active', 'cancelled', 'completed'])->default('pending');
+            $table->enum('status', ['pending', 'review', 'validated', 'active', 'cancelled', 'completed'])->default('pending');
             $table->timestamps();
         });
     }

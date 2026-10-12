@@ -27,9 +27,13 @@ use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Actions\BulkActionGroup;
 
 // Import Actions sesuai struktur aslimu
+use Filament\Actions\Action;
 use Filament\Actions\EditAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Schemas\Components\Section as ComponentsSection;
+use Filament\Forms\Components\Textarea;
+use Filament\Notifications\Notification;
+use Illuminate\Support\Facades\DB;
 
 class BookingResource extends Resource
 {
@@ -118,6 +122,22 @@ class BookingResource extends Resource
                     ->disk('public')
                     ->square(),
 
+                // BARU: Metode pembayaran dari Payment terakhir
+                TextColumn::make('payment_method')
+                    ->label('Metode Bayar')
+                    ->badge()
+                    ->getStateUsing(fn(Booking $record): ?string => $record->latestPayment?->payment_method)
+                    ->formatStateUsing(fn(?string $state): string => match ($state) {
+                        'bank_transfer' => 'Transfer Bank',
+                        'on_site' => 'Bayar di Tempat',
+                        default => '-',
+                    })
+                    ->color(fn(?string $state): string => match ($state) {
+                        'bank_transfer' => 'info',
+                        'on_site' => 'gray',
+                        default => 'gray',
+                    }),
+
                 TextColumn::make('start_date')
                     ->date('d M Y')
                     ->label('Mulai Sewa')
@@ -159,6 +179,67 @@ class BookingResource extends Resource
                     ])
             ])
             ->recordActions([
+                // BARU: Setujui pembayaran (hanya saat status 'review')
+                Action::make('approve')
+                    ->label('Setujui')
+                    ->icon(Heroicon::OutlinedCheckCircle)
+                    ->color('success')
+                    ->requiresConfirmation()
+                    ->visible(fn(Booking $record): bool => $record->status === 'review')
+                    ->action(function (Booking $record): void {
+                        DB::transaction(function () use ($record) {
+                            $record->update(['status' => 'active']);
+
+                            if ($record->room) {
+                                $record->room->update(['status' => 'occupied']);
+                            }
+
+                            $payment = $record->payments()->latest()->first();
+                            if ($payment) {
+                                $payment->update([
+                                    'status' => 'success',
+                                    'verified_at' => now(),
+                                ]);
+                            }
+                        });
+
+                        Notification::make()
+                            ->success()
+                            ->title('Pembayaran disetujui')
+                            ->send();
+                    }),
+
+                // BARU: Tolak pembayaran (hanya saat status 'review')
+                Action::make('reject')
+                    ->label('Tolak')
+                    ->icon(Heroicon::OutlinedXCircle)
+                    ->color('danger')
+                    ->requiresConfirmation()
+                    ->visible(fn(Booking $record): bool => $record->status === 'review')
+                    ->schema([
+                        Textarea::make('reason')
+                            ->label('Alasan Penolakan')
+                            ->nullable(),
+                    ])
+                    ->action(function (Booking $record, array $data): void {
+                        DB::transaction(function () use ($record, $data) {
+                            $record->update(['status' => 'pending']);
+
+                            $payment = $record->payments()->latest()->first();
+                            if ($payment) {
+                                $payment->update([
+                                    'status' => 'failed',
+                                    'notes' => $data['reason'] ?? null,
+                                ]);
+                            }
+                        });
+
+                        Notification::make()
+                            ->warning()
+                            ->title('Pembayaran ditolak')
+                            ->send();
+                    }),
+
                 EditAction::make()
                     ->label('Ubah Status'),
             ])
