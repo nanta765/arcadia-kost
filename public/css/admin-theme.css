@@ -1,76 +1,154 @@
 /*
- * Tema "Putih Keemasan" untuk panel admin Filament (dashboard owner & staff).
+ * Tema "Abu Kehitaman" untuk panel admin Filament (dashboard owner & staff).
  * Dimuat lewat renderHook HEAD_END di AdminPanelProvider.
- * Tujuan: latar putih bernuansa emas lembut + aksen emas agar lebih jelas.
+ * Fokus: latar gelap abu-kehitaman + SEMUA TEKS terang/terbaca + aksen emas.
  * File ini disajikan langsung dari /public (tanpa build Vite) supaya mudah diubah.
+ *
+ * Catatan: aturan memakai !important dan menyasar mode terang (:not(.dark))
+ * MAUPUN mode gelap (.dark) agar tampilannya konsisten gelap tanpa tergantung
+ * toggle tema bawaan Filament.
  */
 
 :root {
-    --arca-gold: 202 138 4;        /* amber-600  */
-    --arca-gold-strong: 180 120 0; /* emas lebih pekat untuk teks/garis */
-    --arca-cream: 253 250 240;     /* putih keemasan (latar utama)      */
-    --arca-cream-2: 250 243 224;   /* krem sedikit lebih dalam          */
-    --arca-border: 234 219 180;    /* garis tepi keemasan lembut        */
+    --arca-gold: 212 160 23;       /* emas aksen                       */
+    --arca-gold-soft: 230 190 90;  /* emas lebih terang untuk teks     */
+    --arca-bg: 24 24 27;           /* latar utama: abu sangat gelap     */
+    --arca-surface: 32 32 36;      /* kartu/panel: abu gelap            */
+    --arca-surface-2: 42 42 47;    /* elemen naik (header tabel/hover)  */
+    --arca-border: 63 63 70;       /* garis tepi abu                    */
+    --arca-text: 240 240 243;      /* teks utama: hampir putih          */
+    --arca-text-soft: 190 190 198; /* teks sekunder: abu terang         */
 }
 
-/* ===== Mode terang (owner & staff memakai ini) ===== */
-
-/* Latar utama halaman menjadi putih keemasan */
-.fi-body:not(.dark) {
-    background-color: rgb(var(--arca-cream));
+/* =========================================================
+   LATAR & KONTAINER (berlaku untuk mode terang & gelap)
+   ========================================================= */
+.fi-body,
+.fi-main-ctn,
+.fi-main {
+    background-color: rgb(var(--arca-bg)) !important;
+    color: rgb(var(--arca-text)) !important;
 }
 
-/* Sidebar putih keemasan dengan tepi emas */
-.fi-sidebar.fi-sidebar:not(.dark .fi-sidebar) {
-    background-color: rgb(var(--arca-cream)) !important;
-    border-right: 1px solid rgb(var(--arca-border));
-}
-.fi-main-ctn:not(.dark .fi-main-ctn) {
-    background-color: rgb(var(--arca-cream));
+/* =========================================================
+   KETERBACAAN TEKS — pastikan SEMUA teks terlihat di latar gelap
+   ========================================================= */
+
+/* Teks dasar di seluruh area panel */
+.fi-body,
+.fi-main,
+.fi-sidebar,
+.fi-topbar {
+    color: rgb(var(--arca-text));
 }
 
-/* Topbar senada */
+/* Naikkan semua varian abu Tailwind (yang defaultnya gelap di light-mode)
+   menjadi terang agar terbaca di latar gelap */
+.fi-body .text-gray-400,
+.fi-body .text-gray-500,
+.fi-body .fi-color-gray {
+    color: rgb(var(--arca-text-soft)) !important;
+}
+.fi-body .text-gray-600,
+.fi-body .text-gray-700,
+.fi-body .text-gray-800,
+.fi-body .text-gray-900,
+.fi-body .fi-ta-text,
+.fi-body .fi-ta-cell,
+.fi-body .fi-in-text,
+.fi-body label,
+.fi-body p,
+.fi-body span,
+.fi-body a:not(.fi-btn) {
+    color: rgb(var(--arca-text)) !important;
+}
+
+/* Judul & nilai statistik: emas terang agar menonjol */
+.fi-header-heading,
+.fi-section-header-heading,
+.fi-wi-stats-overview-stat-value {
+    color: rgb(var(--arca-gold-soft)) !important;
+}
+
+/* =========================================================
+   SIDEBAR
+   ========================================================= */
+.fi-sidebar {
+    background-color: rgb(var(--arca-surface)) !important;
+    border-right: 1px solid rgb(var(--arca-border)) !important;
+}
+.fi-sidebar-item-label,
+.fi-sidebar-group-label {
+    color: rgb(var(--arca-text)) !important;
+}
+.fi-sidebar-item-icon {
+    color: rgb(var(--arca-text-soft)) !important;
+}
+/* Item aktif: aksen emas */
+.fi-sidebar-item-active .fi-sidebar-item-button {
+    background-color: rgb(var(--arca-surface-2)) !important;
+}
+.fi-sidebar-item-active .fi-sidebar-item-label,
+.fi-sidebar-item-active .fi-sidebar-item-icon {
+    color: rgb(var(--arca-gold-soft)) !important;
+}
+.fi-sidebar-item-button:hover {
+    background-color: rgb(var(--arca-surface-2)) !important;
+}
+
+/* =========================================================
+   TOPBAR
+   ========================================================= */
 .fi-topbar > nav {
-    background-color: rgba(var(--arca-cream), 0.9) !important;
-    backdrop-filter: blur(6px);
-    border-bottom: 1px solid rgb(var(--arca-border));
+    background-color: rgb(var(--arca-surface)) !important;
+    border-bottom: 1px solid rgb(var(--arca-border)) !important;
 }
 
-/* Kartu / panel / widget: putih bersih dengan tepi emas lembut
-   agar konten tetap "terlihat jelas" di atas latar krem */
-:not(.dark) > .fi-section,
-:not(.dark) > .fi-wi,
-:not(.dark) .fi-section.fi-section,
-:not(.dark) .fi-wi-stats-overview-stat,
-:not(.dark) .fi-ta-ctn,
-:not(.dark) .fi-fo-component-ctn .fi-input-wrp {
+/* =========================================================
+   KARTU / PANEL / WIDGET / TABEL / INPUT
+   ========================================================= */
+.fi-section,
+.fi-wi-stats-overview-stat,
+.fi-ta-ctn,
+.fi-dropdown-panel,
+.fi-modal-window {
+    background-color: rgb(var(--arca-surface)) !important;
+    border: 1px solid rgb(var(--arca-border)) !important;
+}
+
+/* Input / form field */
+.fi-input-wrp,
+.fi-input,
+.fi-select-input {
+    background-color: rgb(var(--arca-surface-2)) !important;
+    color: rgb(var(--arca-text)) !important;
+    border-color: rgb(var(--arca-border)) !important;
+}
+.fi-input::placeholder {
+    color: rgb(var(--arca-text-soft)) !important;
+}
+
+/* Tabel */
+.fi-ta-header-cell {
+    background-color: rgb(var(--arca-surface-2)) !important;
+    color: rgb(var(--arca-gold-soft)) !important;
+}
+.fi-ta-row:hover {
+    background-color: rgb(var(--arca-surface-2)) !important;
+}
+
+/* Aksen garis atas emas pada kartu statistik */
+.fi-wi-stats-overview-stat {
+    border-top: 3px solid rgb(var(--arca-gold)) !important;
+}
+
+/* =========================================================
+   LOGO — selalu terlihat jelas di latar gelap
+   Logo "AR" berwarna gelap, jadi beri area latar putih.
+   ========================================================= */
+.fi-logo {
     background-color: #ffffff;
-    border: 1px solid rgb(var(--arca-border));
-}
-
-/* Judul & heading diberi warna emas pekat supaya menonjol */
-:not(.dark) .fi-header-heading,
-:not(.dark) .fi-section-header-heading,
-:not(.dark) .fi-wi-stats-overview-stat-value {
-    color: rgb(var(--arca-gold-strong));
-}
-
-/* Item sidebar aktif: latar krem-emas + teks emas */
-:not(.dark) .fi-sidebar-item-active .fi-sidebar-item-button {
-    background-color: rgb(var(--arca-cream-2));
-    color: rgb(var(--arca-gold-strong));
-}
-:not(.dark) .fi-sidebar-item-button:hover {
-    background-color: rgb(var(--arca-cream-2));
-}
-
-/* Header tabel sedikit krem agar baris data lebih terbaca */
-:not(.dark) .fi-ta-header-cell {
-    background-color: rgb(var(--arca-cream-2));
-    color: rgb(var(--arca-gold-strong));
-}
-
-/* Aksen garis atas tipis berwarna emas pada kartu statistik */
-:not(.dark) .fi-wi-stats-overview-stat {
-    border-top: 3px solid rgb(var(--arca-gold));
+    padding: 4px 8px;
+    border-radius: 8px;
+    box-shadow: 0 0 0 1px rgb(var(--arca-border));
 }

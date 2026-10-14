@@ -42,10 +42,10 @@ class AdminUserSeeder extends Seeder
 
         // --- AKUN CUSTOMER DEMO (penghuni / calon penghuni) ---
         $customers = [
-            ['name' => 'Alvin',       'email' => 'alvin@gmail.com',    'profession' => 'Mahasiswa Ilmu Komputer'],
-            ['name' => 'Budi Setiawan','email' => 'budi.set@arca.com', 'profession' => 'Mahasiswa Arsitektur'],
-            ['name' => 'Edward',      'email' => 'edward@gmail.com',   'profession' => 'Pekerja Lepas'],
-            ['name' => 'Billy',       'email' => 'billy@gmail.com',    'profession' => 'Mahasiswa Kedokteran'],
+            ['name' => 'Nanta',         'email' => 'nanta@gmail.com', 'profession' => 'Mahasiswa Ilmu Komputer'],
+            ['name' => 'Rizky Pratama', 'email' => 'rizky@gmail.com', 'profession' => 'Mahasiswa Arsitektur'],
+            ['name' => 'Sari Dewi',     'email' => 'sari@gmail.com',  'profession' => 'Pekerja Lepas'],
+            ['name' => 'Dimas Saputra', 'email' => 'dimas@gmail.com', 'profession' => 'Mahasiswa Kedokteran'],
         ];
 
         foreach ($customers as $i => $data) {

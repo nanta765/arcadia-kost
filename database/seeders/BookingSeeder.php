@@ -24,10 +24,10 @@ class BookingSeeder extends Seeder
 
         // Pasangan customer -> status booking demo
         $plan = [
-            ['email' => 'budi.set@arca.com', 'status' => 'active'],
-            ['email' => 'edward@gmail.com',  'status' => 'active'],
-            ['email' => 'billy@gmail.com',   'status' => 'completed'],
-            ['email' => 'alvin@gmail.com',   'status' => 'pending'],
+            ['email' => 'rizky@gmail.com', 'status' => 'active'],
+            ['email' => 'sari@gmail.com',  'status' => 'active'],
+            ['email' => 'dimas@gmail.com', 'status' => 'completed'],
+            ['email' => 'nanta@gmail.com', 'status' => 'pending'],
         ];
 
         $roomIndex = 0;

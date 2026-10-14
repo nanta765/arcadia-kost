@@ -12,10 +12,10 @@ class ReviewSeeder extends Seeder
     {
         // Update existing users with professions
         $users = [
-            ['email' => 'alvin@gmail.com', 'profession' => 'Mahasiswa Ilmu Komputer'],
-            ['email' => 'budi.set@arca.com', 'profession' => 'Mahasiswa Arsitektur'],
-            ['email' => 'edward@gmail.com', 'profession' => 'Pekerja Lepas'],
-            ['email' => 'billy@gmail.com', 'profession' => 'Mahasiswa Kedokteran'],
+            ['email' => 'nanta@gmail.com', 'profession' => 'Mahasiswa Ilmu Komputer'],
+            ['email' => 'rizky@gmail.com', 'profession' => 'Mahasiswa Arsitektur'],
+            ['email' => 'sari@gmail.com', 'profession' => 'Pekerja Lepas'],
+            ['email' => 'dimas@gmail.com', 'profession' => 'Mahasiswa Kedokteran'],
             ['email' => 'owner@arca.com', 'profession' => 'Pemilik Kost'],
         ];
 
@@ -38,24 +38,24 @@ class ReviewSeeder extends Seeder
         Review::where('id', 1)->update(['is_visible' => true]);
 
         // Get users
-        $budi = User::where('email', 'budi.set@arca.com')->first();
-        $edward = User::where('email', 'edward@gmail.com')->first();
-        $billy = User::where('email', 'billy@gmail.com')->first();
+        $rizky = User::where('email', 'rizky@gmail.com')->first();
+        $sari = User::where('email', 'sari@gmail.com')->first();
+        $dimas = User::where('email', 'dimas@gmail.com')->first();
 
         // Create additional sample reviews using valid booking IDs
         $samples = [
             [
-                'user' => $budi,
+                'user' => $rizky,
                 'rating' => 5,
                 'comment' => 'Desain minimalis dan kebijakan zero clutter di area bersama membuat pulang ke kost setelah seharian kuliah terasa sangat menenangkan.',
             ],
             [
-                'user' => $edward,
+                'user' => $sari,
                 'rating' => 5,
                 'comment' => 'Aturan jam tenang benar-benar ditegakkan. Rasanya seperti sanctuary pribadi, bukan kos-kosan biasa.',
             ],
             [
-                'user' => $billy,
+                'user' => $dimas,
                 'rating' => 4,
                 'comment' => 'Internet cepat dan lingkungan bersih. Cocok untuk kuliah online dan mengerjakan tugas.',
             ],

@@ -6,6 +6,7 @@ use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Enums\ThemeMode;
 use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
@@ -34,6 +35,8 @@ class AdminPanelProvider extends PanelProvider
             ->brandLogoHeight('2.5rem')
             ->favicon(asset('images/arcadia-logo-no-bg.png'))
             ->sidebarCollapsibleOnDesktop()
+            // Tema gelap abu-kehitaman sebagai default dashboard owner & staff.
+            ->defaultThemeMode(ThemeMode::Dark)
             ->colors([
                 // Aksen keemasan
                 'primary' => Color::Amber,
@@ -45,7 +48,7 @@ class AdminPanelProvider extends PanelProvider
             ->renderHook(
                 PanelsRenderHook::HEAD_END,
                 fn (): string => Blade::render(
-                    '<link rel="stylesheet" href="{{ asset(\'css/admin-theme.css\') }}">'
+                    '<link rel="stylesheet" href="{{ asset(\'css/admin-theme.css\') }}?v={{ @filemtime(public_path(\'css/admin-theme.css\')) ?: time() }}">'
                 ),
             )
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
